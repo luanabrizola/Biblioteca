@@ -1,3 +1,4 @@
+import { HiSearch } from "react-icons/hi";
 function Consulta(){
     return(
         <div className = 'flex w-full h-full'>
@@ -9,15 +10,15 @@ function Consulta(){
                     <div className="mt-12">
                         <form action="get">
                             <input 
-                                className="bg-[#956f54] rounded-xl w-7/12 h-10 ml-4 placeholder:text-[#5b3011] placeholder:pl-4" 
+                                className="bg-[#956f54] rounded-xl w-7/12 h-10 ml-4 placeholder:text-[#5b3011]" 
                                 type="text" 
                                 placeholder="Digite sua busca"
                             />
                             <select name="select" id="0" className="bg-[#956f54] rounded-xl h-10 ml-4 w-40">
                                 <option value="0">Busca livre</option>
                             </select>
-                            <button className="bg-[#956f54] rounded-[50%] h-10 w-10 ml-4">
-                                x
+                            <button className="bg-[#956f54] rounded-full h-10 w-10 ml-4">
+
                             </button>
                         </form>
                     </div>
