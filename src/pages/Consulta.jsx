@@ -2,13 +2,13 @@
 
 function Consulta(){
     return(
-        <div className = 'flex w-full h-full'>
+        <div className = 'flex w-full h-full font-poppins '>
             <div className = 'w-2/12 h-full bg-[#5b3011] flex flex-col justify-between'>
                 <button className='bg-[#dbd0b3] w-full h-10 rounded-e-xl font-bold text-white mt-48'>Consulta</button>
                 <button className='bg-[#9f6d3d] w-full h-10 font-bold text-white'>Entrar</button>
             </div>
 
-            <div className = 'bg-[#f0e7c2] w-10/12 h-full'>
+            <div className = 'bg-[#f0e7c2] w-10/12 h-full font-poppins'>
                 <div className="mt-12">
                     <form action="get" className="flex items-center justify-center gap-4 mt-12 ml-4 flex-wrap">
                         <input 
