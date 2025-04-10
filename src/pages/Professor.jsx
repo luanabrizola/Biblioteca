@@ -10,7 +10,8 @@ function Professor(){
                     <p className="border-b border-gray-300 my-4 text-3xl">Professor</p>
                     <button className="bg-[#5b3011] w-80 h-15 rounded-xl text-white text-2xl mb-2">Cadastrar</button>
                     <button className="bg-[#5b3011] w-80 h-15 rounded-xl text-white text-2xl mb-2">Editar</button>
-                    <button className="bg-[#5b3011] w-80 h-15 rounded-xl text-white text-2xl">Excluir</button>
+                    <button className="b
+                    g-[#5b3011] w-80 h-15 rounded-xl text-white text-2xl">Excluir</button>
                 </div>
             </div>
         );
