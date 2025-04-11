@@ -12,7 +12,8 @@ import Livro from './pages/Livro/Livro.jsx'
 import EditarAluno from './pages/Aluno/Editar/EditarAluno.jsx'
 import EdicaoAluno from './pages/Aluno/Editar/EdicaoAluno.jsx'
 import CadastrarProfessor from './pages/Professor/CadastrarProfessor.jsx'
-import EditarProfessor from './pages/Professor/EditarProfessor.jsx'
+import EditarProfessor from './pages/Professor/Editar/EditarProfessor.jsx'
+import EdicaoProfessor from './pages/Professor/Editar/EdicaoProfessor.jsx'
 import ExcluirProfessor from './pages/Professor/ExcluirProfessor.jsx'
 import CadastrarLivro from './pages/Livro/CadastrarLivro.jsx'
 import EditarLivro from './pages/Livro/EditarLivro.jsx'
@@ -34,6 +35,7 @@ const rotas = createBrowserRouter(
       <Route path="/professor" element={<Professor />} />
       <Route path="/cadastraprof" element={<CadastrarProfessor />} />
       <Route path="/editaprof" element={<EditarProfessor />} />
+      <Route path="/edicaoprof" element={<EdicaoProfessor />} />
       <Route path="/excluiprof" element={<ExcluirProfessor />} />
       <Route path="/cadastralivro" element={<CadastrarLivro />} />
       <Route path="/editalivro" element={<EditarLivro />} />

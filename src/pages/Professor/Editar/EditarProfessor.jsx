@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 
-function EditarAluno() {
+function EditarProfessor() {
     return (
         <div className="flex w-full h-full">
             <div className='w-2/12 h-full bg-[#5b3011] flex flex-col'>
@@ -15,7 +15,7 @@ function EditarAluno() {
             <div className="bg-[#f0e7c2] w-10/12 h-full flex flex-col items-center justify-center">
                 <div className="flex flex-col items-center space-y-4 justify-center h-120 w-120 bg-white rounded-md">
                     <div>
-                        <img src="./src/img/iconeAlunoo" alt="" />
+                        <img src="./src/img/iconeProfessorr" alt="" />
                         <h1>Editar</h1>
                     </div>
                     <div>
@@ -33,12 +33,13 @@ function EditarAluno() {
                     </div>
                     <div>
                         <Link className="bg-[#5b3011] p-2 rounded-xl text-white text-2xl mr-5">Cancelar</Link>
-                        <Link className="bg-[#5b3011] p-2 rounded-xl text-white text-2xl " to='/edicaoaluno'>Editar</Link>
+                        <Link className="bg-[#5b3011] p-2 rounded-xl text-white text-2xl " to='/edicaoprof'>Editar</Link>
                     </div>
                 </div>
             </div>
         </div>
+
     )
 }
 
-export default EditarAluno
+export default EditarProfessor
