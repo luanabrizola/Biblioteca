@@ -1,4 +1,6 @@
-function Livro(){
+import { Link } from "react-router-dom";
+
+function Professor(){
         return (
             <div className="flex w-full h-screen">
             <div className = 'w-2/12 h-full bg-[#5b3011] flex flex-col'>
@@ -12,10 +14,10 @@ function Livro(){
 
             <div className="bg-[#f0e7c2] w-10/12 h-full flex flex-col items-center justify-center">
                 <div className="flex flex-col items-center justify-center w-[80%] h-[80%] bg-white rounded-md">
-                    <p className="border-b border-gray-300 my-4 text-3xl">Livro</p>
-                    <button className="bg-[#5b3011] w-80 h-15 rounded-xl text-white text-2xl mb-2">Cadastrar</button>
-                    <button className="bg-[#5b3011] w-80 h-15 rounded-xl text-white text-2xl mb-2">Editar</button>
-                    <button className="bg-[#5b3011] w-80 h-15 rounded-xl text-white text-2xl">Excluir</button>
+                    <p className="border-b border-gray-300 my-4 text-3xl">Professor</p>
+                    <Link className="bg-[#5b3011] w-80 h-15 rounded-xl text-white text-2xl mb-2 flex justify-center items-center" to='/cadastraprof'>Cadastrar</Link>
+                    <Link className="bg-[#5b3011] w-80 h-15 rounded-xl text-white text-2xl mb-2 flex justify-center items-center" to='/editaprof'>Editar</Link>
+                    <Link className="bg-[#5b3011] w-80 h-15 rounded-xl text-white text-2xl mb-2 flex justify-center items-center" to='/excluiprof'>Excluir</Link>
                 </div>
             </div>
 
@@ -23,4 +25,4 @@ function Livro(){
         );
 }
 
-export default Livro
+export default Professor

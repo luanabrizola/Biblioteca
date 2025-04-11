@@ -13,7 +13,7 @@ function ExcluirAluno(){
             <div className="bg-[#f0e7c2] w-10/12 h-full flex flex-col items-center justify-center">
                 <div className="flex flex-col items-center space-y-4 justify-center h-120 w-120 bg-white rounded-md">
                     <div>
-                        <img src="./src/img/iconeAluno" alt="" />
+                        <img src="./src/img/iconeAlunoo" alt="" />
                         <h1>Excluir</h1>
                     </div>
                     <div>
