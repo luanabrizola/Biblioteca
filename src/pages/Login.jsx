@@ -16,7 +16,7 @@ function Login(){
                                 <p className="text-[#5b3011]">Senha</p>
                                 <input 
                                     type="text" 
-                                    className="bg-[#9f6d3d]/19 rounded-md h-10 w-80" 
+                                    className="bg-[#9f6d3d]/19 rounded-md h-10 w-80 placeholder:text-[#5b3011]/33" 
                                     placeholder="Digite sua senha"
                                 />
                             </div>
