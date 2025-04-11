@@ -7,7 +7,7 @@ function Login(){
                         <div className="flex justify-center">
                             <img src="./src/img/ajl_cortada.png" alt="" className="w-32 h-32" />
                         </div>
-                        <div className="flex flex-col">
+                        <form className="flex flex-col">
                             <div>
                                 <p className="text-[#5b3011]">Login</p>
                                 <input type="text" className="bg-[#9f6d3d]/19 rounded-md h-10 w-80"/>
@@ -21,7 +21,7 @@ function Login(){
                                 />
                             </div>
                             <a href="" className="text-[#5b3011]">Esqueceu a senha?</a>  
-                        </div>
+                        </form>
                     </div>
                     <div className="flex self-start ml-4">
                         <img className="w-16 h-48" src="./src/img/marcador.png" alt="" />
