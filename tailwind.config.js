@@ -22,5 +22,11 @@ export default {
             }
         },
     },
+
     plugins: [],
+
+}
+
+@theme{
+    --font-display: "Poppins", "sans-serif";
 }

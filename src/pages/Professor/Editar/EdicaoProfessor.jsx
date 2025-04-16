@@ -12,9 +12,9 @@ function EdicaoProfessor() {
 
             <div className="bg-[#f0e7c2] w-10/12 h-full flex flex-col items-center justify-center">
                 <div className="flex flex-col items-center space-y-4 justify-center h-[70%] w-[70%] bg-white rounded-md">
-                    <div>
-                        <img src="./src/img/iconeProfessor" alt="" className="w-56" />
-                        <h1>Editar</h1>
+                    <div className="flex items-center flex-col">
+                        <h1 className="border-b border-gray-300 my-4 text-5xl">Editar</h1>
+                        <img src="./src/img/iconeProfessorr.png" alt="" className="w-18 h-18"/>
                     </div>
                     <div>
                         <form action="">

@@ -16,8 +16,9 @@ import EditarProfessor from './pages/Professor/Editar/EditarProfessor.jsx'
 import EdicaoProfessor from './pages/Professor/Editar/EdicaoProfessor.jsx'
 import ExcluirProfessor from './pages/Professor/ExcluirProfessor.jsx'
 import CadastrarLivro from './pages/Livro/CadastrarLivro.jsx'
-import EditarLivro from './pages/Livro/EditarLivro.jsx'
+import EditarLivro from './pages/Livro/Editar/EditarLivro.jsx'
 import ExcluirLivro from './pages/Livro/ExcluirLivro.jsx'
+import EdicaoLivro from './pages/Livro/Editar/EdicaoLivro.jsx'
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 
 
@@ -39,6 +40,7 @@ const rotas = createBrowserRouter(
       <Route path="/excluiprof" element={<ExcluirProfessor />} />
       <Route path="/cadastralivro" element={<CadastrarLivro />} />
       <Route path="/editalivro" element={<EditarLivro />} />
+      <Route path="/edicaolivro" element={<EdicaoLivro />} />
       <Route path="/excluilivro" element={<ExcluirLivro />} />
       <Route path="/livro" element={<Livro />} />
 
