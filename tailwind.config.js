@@ -9,7 +9,7 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                poppins: ["Poppins", "sans-serif"]
+                body: ["Poppins", "sans-serif"],
             },
             colors: {
                 'texto-marrom': '#331a08',
@@ -27,6 +27,6 @@ export default {
 
 }
 
-@theme{
-    --font-display: "Poppins", "sans-serif";
-}
+// @theme{
+//     --font-display: "Poppins", "sans-serif";
+// }

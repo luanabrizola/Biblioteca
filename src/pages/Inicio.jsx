@@ -14,7 +14,7 @@ function Inicio(){
 
             <div className=" bg-[#f0e7c2] w-10/12 h-full">
                 <div className="flex flex-col items-center space-y-4 justify-center h-full w-full ">
-                    <Link className="bg-[#5b3011] w-120 h-20 rounded-xl text-white text-2xl flex items-center justify-center" to='/aluno'>Aluno</Link>
+                    <Link className="bg-[#5b3011] w-120 h-20 rounded-xl text-white text-2xl flex items-center justify-center" to='/aluno'>Aluna</Link>
                     <Link className="bg-[#5b3011] w-120 h-20 rounded-xl text-white text-2xl flex items-center justify-center" to='/professor'> Professor</Link>
                     <Link className="bg-[#5b3011] w-120 h-20 rounded-xl text-white text-2xl flex items-center justify-center" to='/livro'>Livro</Link>
                 </div>
