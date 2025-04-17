@@ -19,6 +19,8 @@ import CadastrarLivro from './pages/Livro/CadastrarLivro.jsx'
 import EditarLivro from './pages/Livro/Editar/EditarLivro.jsx'
 import ExcluirLivro from './pages/Livro/ExcluirLivro.jsx'
 import EdicaoLivro from './pages/Livro/Editar/EdicaoLivro.jsx'
+import Page404 from './pages/Page404.jsx'
+import Layout from './pages/Layout.jsx'
 
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 
@@ -26,29 +28,28 @@ import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } 
 const rotas = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/">
-      <Route index element={<Consulta/>} />
       <Route path="/login" element={<Login />} /> 
-      <Route path="/inicio" element={<Inicio />} />
-      <Route path="/aluno" element={<Aluno />} />
-      <Route path="/cadastraaluno" element={<CadastrarAluno />} />
-      <Route path="/excluialuno" element={<ExcluirAluno />} />
-      <Route path="/editaaluno" element={<EditarAluno />} />
-      <Route path="/edicaoaluno" element={<EdicaoAluno />} />
-      <Route path="/professor" element={<Professor />} />
-      <Route path="/cadastraprof" element={<CadastrarProfessor />} />
-      <Route path="/editaprof" element={<EditarProfessor />} />
-      <Route path="/edicaoprof" element={<EdicaoProfessor />} />
-      <Route path="/excluiprof" element={<ExcluirProfessor />} />
-      <Route path="/cadastralivro" element={<CadastrarLivro />} />
-      <Route path="/editalivro" element={<EditarLivro />} />
-      <Route path="/edicaolivro" element={<EdicaoLivro />} />
-      <Route path="/excluilivro" element={<ExcluirLivro />} />
-      <Route path="/livro" element={<Livro />} />
-
       
-      
-      
-
+      <Route element={<Layout />}>
+        <Route index element={<Consulta/>} />
+        <Route path="/inicio" element={<Inicio />} />
+        <Route path="/aluno" element={<Aluno />} />
+        <Route path="/cadastraaluno" element={<CadastrarAluno />} />
+        <Route path="/excluialuno" element={<ExcluirAluno />} />
+        <Route path="/editaaluno" element={<EditarAluno />} />
+        <Route path="/edicaoaluno" element={<EdicaoAluno />} />
+        <Route path="/professor" element={<Professor />} />
+        <Route path="/cadastraprof" element={<CadastrarProfessor />} />
+        <Route path="/editaprof" element={<EditarProfessor />} />
+        <Route path="/edicaoprof" element={<EdicaoProfessor />} />
+        <Route path="/excluiprof" element={<ExcluirProfessor />} />
+        <Route path="/cadastralivro" element={<CadastrarLivro />} />
+        <Route path="/editalivro" element={<EditarLivro />} />
+        <Route path="/edicaolivro" element={<EdicaoLivro />} />
+        <Route path="/excluilivro" element={<ExcluirLivro />} />
+        <Route path="/livro" element={<Livro />} />
+      </Route>
+    <Route path='*' element={<Page404/>} />
     </Route>
   )
 );
