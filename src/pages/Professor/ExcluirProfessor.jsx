@@ -30,7 +30,7 @@ function ExcluirProfessor() {
                         </form>
                     </div>
                     <div>
-                        <button className="bg-[#5b3011] text-white w-28 h-10 rounded-md mr-5">Cancelar</button>
+                        <Link className="bg-[#5b3011] text-white w-28 h-10 rounded-md mr-5" to="/professor">Cancelar</Link>
                         <button className="bg-[#5b3011] text-white w-28 h-10 rounded-md">Excluir</button>
                     </div>
                 </div>

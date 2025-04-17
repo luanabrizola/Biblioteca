@@ -2,7 +2,7 @@
 
 function Consulta(){
     return(
-        <div className = 'flex w-full h-full font-poppins '>
+        <div className = 'flex w-full h-full font-poppins'>
             <div className = 'w-2/12 h-full bg-[#5b3011] flex flex-col'>
                 <img src="./src/img/ajl_cortada.png" alt="" className="w-36 flex self-center mt-5 mb-5" />
                 <div className="flex flex-col flex-grow">

@@ -14,7 +14,6 @@ function Professor(){
 
             <div className="bg-[#f0e7c2] w-10/12 h-full flex flex-col items-center justify-center">
                 <div className="flex flex-col items-center justify-center w-[80%] h-[80%] bg-white rounded-md">
-                    {/* <p className="border-b border-gray-300 my-4 text-3xl">Professor</p> */}
                     <div className="flex items-center flex-col">
                         <h1 className="border-b border-gray-300 my-4 text-6xl">Professor</h1>  
                         <img src="./src/img/iconeProfessorr.png" alt="" className="w-42 h-42" />  
