@@ -32,7 +32,7 @@ function EditarProfessor() {
                         </form>
                     </div>
                     <div>
-                        <Link className="bg-[#5b3011] p-2 rounded-xl text-white text-2xl mr-5">Cancelar</Link>
+                        <Link className="bg-[#5b3011] p-2 rounded-xl text-white text-2xl mr-5" to="/livro">Cancelar</Link>
                         <Link className="bg-[#5b3011] p-2 rounded-xl text-white text-2xl " to='/edicaoprof'>Editar</Link>
                     </div>
                 </div>

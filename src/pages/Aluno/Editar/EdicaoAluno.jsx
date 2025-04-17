@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 function EdicaoAluno(){
     return(
         <div className="flex w-full h-full">
@@ -70,7 +72,7 @@ function EdicaoAluno(){
                         </form>
                     </div>
                     <div>
-                        <button className="bg-[#848484] w-28 h-10 rounded-md mr-5">Cancelar</button>
+                        <Link className="bg-[#848484] w-28 h-10 rounded-md mr-5" to="/editaaluno">Cancelar</Link>
                         <button className="bg-[#848484] w-28 h-10 rounded-md">Editar</button>
                         
                     </div>

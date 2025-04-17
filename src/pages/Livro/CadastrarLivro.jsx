@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function CadastrarLivro(){
     return(
         <div className="flex w-full h-full">
@@ -114,7 +116,7 @@ function CadastrarLivro(){
                     </form>
                 </div>
                 <div>
-                    <button className="bg-[#848484] w-28 h-10 rounded-md mr-5">Cancelar</button>
+                    <Link className="bg-[#848484] w-28 h-10 rounded-md mr-5" to="/livro">Cancelar</Link>
                     <button className="bg-[#848484] w-28 h-10 rounded-md">Cadastrar</button>
                     
                 </div>

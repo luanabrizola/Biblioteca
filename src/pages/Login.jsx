@@ -10,15 +10,25 @@ function Login(){
                         <form className="flex flex-col">
                             <div>
                                 <p className="text-[#5b3011]">Login</p>
-                                <input type="text" className="bg-[#9f6d3d]/19 rounded-md h-10 w-80"/>
+                                <div className="flex bg-[#9f6d3d]/19 rounded-md h-10 w-80 items-center text-black/19">
+                                    <label htmlFor="" className="w-[55%] ml-1">
+                                        <span className="material-icons">person</span>
+                                    </label>
+                                    <input type="text" className="h-full w-full"/>
+                                </div>
                             </div>
                             <div>
                                 <p className="text-[#5b3011]">Senha</p>
-                                <input 
-                                    type="text" 
-                                    className="bg-[#9f6d3d]/19 rounded-md h-10 w-80 placeholder:text-[#5b3011]/33" 
-                                    placeholder="Digite sua senha"
-                                />
+                                <div className="flex bg-[#9f6d3d]/19 rounded-md h-10 w-80 items-center text-black/19">
+                                    <label htmlFor="" className="w-[55%] ml-1">
+                                        <span className="material-icons">lock</span>
+                                    </label>
+                                    <input 
+                                        type="text" 
+                                        className="text-[#5b3011]/33 ml-2"
+                                        placeholder="Digite sua senha"
+                                    />
+                                </div>
                             </div>
                             <a href="" className="text-[#5b3011]">Esqueceu a senha?</a>  
                         </form>

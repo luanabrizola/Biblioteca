@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 function ExcluirProfessor() {
     return (
         <div className="flex w-full h-full">
