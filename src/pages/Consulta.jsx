@@ -14,11 +14,11 @@ function Consulta() {
                 <div className="mt-12 mb-20">
                     <form action="get" className="flex items-center justify-center gap-4 mt-12 flex-wrap">
                         <input
-                            className="bg-[#5b3011]/48 rounded-xl w-[60%] h-10 placeholder:text-[#5b3011]/44 px-3"
+                            className="bg-[#5b3011]/48 rounded-full w-[60%] h-10 placeholder:text-[#5b3011]/44 px-3"
                             type="text"
                             placeholder="O diário de Anne Frank"
                         />
-                        <select name="select" id="0" className="bg-[#5b3011]/48 text-white rounded-xl h-10 w-40 font-poppins px-3 cursor-pointer">
+                        <select name="select" id="0" className="bg-[#5b3011]/48 text-white rounded-full h-10 w-40 font-poppins px-3 cursor-pointer">
                             <option value="0">Busca livre</option>
                             <option value="1">Título</option>
                             <option value="2">Autor</option>
