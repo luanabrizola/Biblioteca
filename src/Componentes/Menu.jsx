@@ -22,11 +22,9 @@ function Menu() {
 
                 <NavLink
                     to="/inicio"
-                    className={({ isActive }) =>
-                        `w-full h-12 rounded-e-full font-bold mt-2 flex items-center justify-center ${
-                            isActive ? "bg-[#dbd0b3] text-[#5b3011]" : "text-white"
-                        }`
-                    }
+                    className={`w-full h-12 rounded-e-full font-bold mt-2 flex items-center justify-center ${
+                        location.pathname !== "/" ? "bg-[#dbd0b3] text-[#5b3011]" : "text-white"
+                    }`}
                 >
                     Início
                 </NavLink>
