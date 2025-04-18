@@ -7,7 +7,7 @@ function ExcluirAluno(){
             <div className="bg-[#f0e7c2] w-full h-full flex flex-col items-center justify-center">
                 <div className="flex flex-col items-center space-y-4 justify-center h-120 w-120 bg-white rounded-md">
                     <div className="flex items-center flex-col">
-                        <img src="./src/img/iconeAlunoo.png" alt="" className="w-18 h-18"/>
+                        <img src="/img/iconeAlunoo.png" alt="" className="w-18 h-18"/>
                         <h1 className="border-b border-gray-300 my-4 text-5xl"> Excluir</h1>
                     </div>
                     <div>
@@ -16,9 +16,9 @@ function ExcluirAluno(){
                                     <label htmlFor="">
                                         Registro:
                                     </label>
-                                    <input 
-                                        type="text" 
-                                        className="h-full w-full" 
+                                    <input
+                                        type="text"
+                                        className="h-full w-full"
                                     />
                                 </div>
                         </form>

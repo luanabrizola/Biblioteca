@@ -9,7 +9,7 @@ function EdicaoLivro() {
                 <div className="flex p-3 flex-col items-center space-y-4 justify-center h-auto w-[70%] bg-white rounded-md">
                     <div className="flex items-center flex-col">
                         <h1 className="border-b border-gray-300 my-4 text-5xl">Editar</h1>
-                        <img src="./src/img/iconeLivroo.png" alt="" className="w-18 h-18" />
+                        <img src="/img/iconeLivroo.png" alt="" className="w-18 h-18" />
                     </div>
                     <div>
                         <form action="">

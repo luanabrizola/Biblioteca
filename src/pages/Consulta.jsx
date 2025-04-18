@@ -34,7 +34,7 @@ function Consulta() {
 
                 <div className="flex flex-col items-center w-full gap-5 mt-4 mb-10">
                     <div className="flex bg-white w-[75%] h-4/12 mb-5 rounded-md">
-                        <img src="./src/img/DiarioAnneFrank.png" className="w-45 h-70 flex self-center ml-4 mt-4 mb-4" />
+                        <img src="/img/DiarioAnneFrank.png" className="w-45 h-70 flex self-center ml-4 mt-4 mb-4" />
                         <div className="ml-5 h-[90%] mt-4">
                             <h1 className="text-xl font-bold mb-2">O Diário de Anne Frank </h1>
                             <p>Autores: Anne Frank</p>
@@ -59,7 +59,7 @@ function Consulta() {
 
                     </div>
                     <div className="flex bg-white w-[75%] h-4/12 mb-5 rounded-md">
-                        <img src="./src/img/AnneFrankRed.png" className="w-45 h-70 flex self-center ml-4 mt-4 mb-4" alt="" />
+                        <img src="/img/AnneFrankRed.png" className="w-45 h-70 flex self-center ml-4 mt-4 mb-4" alt="" />
                         <div className="ml-5 mt-4">
                             <h1 className="text-xl font-bold mb-2">O Diário de Anne Frank </h1>
                             <p>Autores: Anne Frank</p>
