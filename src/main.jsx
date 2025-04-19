@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import Inicio from './pages/Inicio.jsx'
+import Inicio2 from './pages/Inicio2.jsx'
 import Consulta from './pages/Consulta.jsx'
 import Login from './pages/Login.jsx'
 import Professor from './pages/Professor/Professor.jsx'
@@ -28,11 +29,12 @@ import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } 
 const rotas = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/">
-      <Route path="/login" element={<Login />} /> 
-      
+      <Route path="/login" element={<Login />} />
+
       <Route element={<Layout />}>
         <Route index element={<Consulta/>} />
         <Route path="/inicio" element={<Inicio />} />
+        <Route path="/inicio2" element={<Inicio2 />} />
         <Route path="/aluno" element={<Aluno />} />
         <Route path="/cadastraaluno" element={<CadastrarAluno />} />
         <Route path="/excluialuno" element={<ExcluirAluno />} />
@@ -59,6 +61,6 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <RouterProvider router={rotas}/>
   </StrictMode>
-);  
+);
 
 
