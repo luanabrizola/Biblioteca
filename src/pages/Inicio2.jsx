@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom"
 
 function CardLivro({ imagem, titulo, autor, edicao, editora, categoria, subcategoria, isbn, quantidade }) {
     const [verMais, setVerMais] = useState(false)
@@ -60,7 +61,11 @@ function CardLivro({ imagem, titulo, autor, edicao, editora, categoria, subcateg
 }
 
 function CardUsuario({ registro_academico, nome, data_nascimento, email, telefone, id_tipo }) {
-    const [verMais, setVerMais] = useState(false);
+    const [verMais, setVerMais] = useState(false)
+
+    const handleClose = () => {
+        setVerMais(false)
+    }
 
     return (
         <div className="flex flex-col bg-white w-[30%] h-auto mb-5 rounded-md p-4">
@@ -69,10 +74,25 @@ function CardUsuario({ registro_academico, nome, data_nascimento, email, telefon
             <p>Data de Nascimento: {data_nascimento}</p>
 
             {verMais && (
-                <div>
-                    <p>Email: {email}</p>
-                    <p>Telefone: {telefone}</p>
-                    <p>Tipo: {id_tipo}</p>
+                <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-md w-[80%] sm:w-[60%] md:w-[40%] flex">
+                        <div className="flex-1">
+                            <h1 className="text-2xl font-bold mb-8 text-center"> {nome} </h1>
+                            <p className="mb-2">Registro Acadêmico: {registro_academico}</p>
+                            <p className="mb-2">Data de Nascimento: {data_nascimento}</p>
+                            <p className="mb-2">Email: {email}</p>
+                            <p className="mb-2">Telefone: {telefone}</p>
+                            <p className="mb-2">Curso: </p>
+                            <div className="flex justify-end mt-4">
+                                <button
+                                    onClick={handleClose}
+                                    className="bg-[#5b3011]/48 text-white rounded-full px-4 py-2"
+                                >
+                                    Fechar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             )}
 
@@ -99,6 +119,12 @@ function Inicio2() {
         { id_tipo: 2, registro_academico: "2023023412", nome: "Ana Santos", data_nascimento: "1980-02-10", email: "ana.santos@email.com", telefone: "(42) 96666-4444" },
     ]
 
+    const [cadastrar, setCadastrar] = useState(false)
+
+    const handleClose = () => {
+        setCadastrar(false)
+    }
+
     return (
         <div className="flex w-full min-h-screen font-poppins bg-[#f0e7c2]">
             <div className="w-full px-10 flex flex-col items-center justify-center">
@@ -111,28 +137,79 @@ function Inicio2() {
                     <button className="bg-[#5b3011]/48 text-white rounded-full h-12 w-12 flex items-center justify-center cursor-pointer">
                         <span className="material-icons">search</span>
                     </button>
-                    <button className="bg-[#5b3011]/48 text-white rounded-full h-12 w-40 font-poppins px-3 cursor-pointer flex items-center">
+                    <button
+                        className="bg-[#5b3011]/48 text-white rounded-full h-12 w-40 font-poppins px-3 cursor-pointer flex items-center"
+                        onClick={() => setCadastrar(true)}
+                        type="button"
+                    >
                         <span className="material-icons mr-3">add</span>
                         Cadastrar
                     </button>
                 </form>
+
+                {cadastrar && (
+                    <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center z-50">
+                        <div className="bg-white p-8 rounded-xl w-[80%] sm:w-[60%] md:w-[40%]">
+                            <h2 className="text-2xl font-bold text-center mb-6">Cadastrar</h2>
+                            <div className=" flex w-full h-full justify-center">
+                                <div className="flex flex-col items-center space-y-6 justify-center">
+                                    <Link className="bg-[#5b3011] w-80 h-20 rounded-xl text-white text-2xl flex items-center justify-center" to='/cadastraaluno'>Aluno</Link>
+                                    <Link className="bg-[#5b3011] w-80 h-20 rounded-xl text-white text-2xl flex items-center justify-center" to='/cadastraprof'> Professor</Link>
+                                    <Link className="bg-[#5b3011] w-80 h-20 rounded-xl text-white text-2xl flex items-center justify-center" to='/cadastralivro'>Livro</Link>
+                                </div>
+                            </div>
+                            <div className="flex justify-end">
+                                <button
+                                    onClick={handleClose}
+                                    className="bg-[#5b3011]/48 text-white rounded-full px-4 py-2"
+                                >
+                                    Fechar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {["Livros", "Alunos", "Professores"].map((tituloSessao, index) => (
                     <div key={index} className="flex flex-col bg-[#5b3011]/48 w-[90%] rounded-md mt-10 mb-5 p-5">
                         <h1 className="text-white font-bold text-2xl mb-4">{tituloSessao}</h1>
                         <div className="flex justify-center gap-5 flex-wrap">
                             {tituloSessao === "Livros" && (
-                                <CardLivro
-                                    imagem="/img/DiarioAnneFrank.png"
-                                    titulo="O Diário de Anne Frank"
-                                    autor="Anne Frank"
-                                    edicao="Anne 99°"
-                                    editora="Record"
-                                    categoria="Biografia"
-                                    subcategoria="Holocausto, nazismo"
-                                    isbn="8501044458"
-                                    quantidade="2 unidades"
-                                />
+                                <>
+                                    <CardLivro
+                                        imagem="/img/DiarioAnneFrank.png"
+                                        titulo="O Diário de Anne Frank"
+                                        autor="Anne Frank"
+                                        edicao="Anne 99°"
+                                        editora="Record"
+                                        categoria="Biografia"
+                                        subcategoria="Holocausto, nazismo"
+                                        isbn="8501044458"
+                                        quantidade="2 unidades"
+                                    />
+                                    <CardLivro
+                                        imagem="/img/DiarioAnneFrank.png"
+                                        titulo="O Diário de Anne Frank"
+                                        autor="Anne Frank"
+                                        edicao="Anne 99°"
+                                        editora="Record"
+                                        categoria="Biografia"
+                                        subcategoria="Holocausto, nazismo"
+                                        isbn="8501044458"
+                                        quantidade="2 unidades"
+                                    />
+                                    <CardLivro
+                                        imagem="/img/DiarioAnneFrank.png"
+                                        titulo="O Diário de Anne Frank"
+                                        autor="Anne Frank"
+                                        edicao="Anne 99°"
+                                        editora="Record"
+                                        categoria="Biografia"
+                                        subcategoria="Holocausto, nazismo"
+                                        isbn="8501044458"
+                                        quantidade="2 unidades"
+                                    />
+                                </>
                             )}
                             {tituloSessao === "Alunos" && usuarios.filter(user => user.id_tipo === 1).map(user => (
                                 <CardUsuario
