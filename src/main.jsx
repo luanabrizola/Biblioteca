@@ -25,6 +25,7 @@ import ExcluirLivro from './pages/Livro/ExcluirLivro.jsx'
 import EdicaoLivro from './pages/Livro/Editar/EdicaoLivro.jsx'
 import Page404 from './pages/Page404.jsx'
 import Layout from './pages/Layout.jsx'
+import Emprestimo from './pages/Emprestimo/Emprestimo.jsx'
 
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 
@@ -56,6 +57,7 @@ const rotas = createBrowserRouter(
         <Route path="/excluilivro" element={<ExcluirLivro />} />
         <Route path="/livro" element={<Livro />} />
         <Route path="/livros" element={<Livros />} />
+        <Route path="/emprestimos" element={<Emprestimo />} />
       </Route>
     <Route path='*' element={<Page404/>} />
     </Route>

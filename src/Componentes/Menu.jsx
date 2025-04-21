@@ -21,7 +21,7 @@ function Menu() {
                 </NavLink>
 
                 <NavLink
-                    to="/inicio"
+                    to="/inicio2"
                     className={`w-full h-12 rounded-e-full font-bold mt-2 flex items-center justify-center ${
                         location.pathname !== "/" ? "bg-[#dbd0b3] text-[#5b3011]" : "text-white"
                     }`}
