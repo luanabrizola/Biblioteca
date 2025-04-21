@@ -13,41 +13,63 @@ function CardLivro({ imagem, titulo, autor, edicao, editora, categoria, subcateg
             <img src={imagem} className="w-45 h-70 flex self-center ml-4 mt-4 mb-4" />
             <div className="ml-5 mt-4 w-full h-full overflow-hidden pb-10">
                 <h1 className="text-xl font-bold mb-2 mr-2 text-center break-words">{titulo}</h1>
-                <p>Autores: {autor}</p>
-                <p>Edição: {edicao}</p>
-                <p>Editora: {editora}</p>
-                <p>Categoria: {categoria}</p>
+                <p className="mb-2">
+                    <span className="font-bold">Autores:</span> {autor}
+                </p>
+                <p className="mb-2">
+                    <span className="font-bold">Edição:</span> {edicao}
+                </p>
+                <p className="mb-2">
+                    <span className="font-bold">Editora:</span> {editora}
+                </p>
+                <p className="mb-2">
+                    <span className="font-bold">Categoria:</span> {categoria}
+                </p>
 
                 <button
                     onClick={() => setVerMais(true)}
-                    className="text-black underline font-bold mt-2 cursor-pointer"
+                    className="text-black underline font-bold mt-2 cursor-pointer hover:text-[#5b3011] transition-colors duration-300"
                 >
                     Ver mais
                 </button>
 
                 <div className="flex space-x-3 mt-2">
-                    <span className="material-icons cursor-pointer">edit</span>
-                    <span className="material-icons cursor-pointer">delete</span>
+                    <i className="material-icons cursor-pointer hover:text-gray-500 transition-colors duration-300">edit</i>
+                    <i className="material-icons cursor-pointer hover:text-red-500 transition-colors duration-300">delete</i>
                 </div>
             </div>
 
             {verMais && (
                 <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-md w-[80%] sm:w-[60%] md:w-[40%] flex">
-                        <img src={imagem} className="w-1/3 h-auto mr-4" />
-                        <div className="flex-1">
+                    <div className="bg-white p-6 rounded-md sm:w-[60%] md:w-[40%] flex">
+                        <img src={imagem} className="w-1/3 h-auto mr-7" />
+                        <div className="flex flex-col w-full">
                             <h1 className="text-2xl font-bold mb-4"> {titulo} </h1>
-                            <p className="mb-2">Autores: {autor}</p>
-                            <p className="mb-2">Edição: {edicao}</p>
-                            <p className="mb-2">Editora: {editora}</p>
-                            <p className="mb-2">Categoria: {categoria}</p>
-                            <p className="mb-2">Subcategoria: {subcategoria}</p>
-                            <p className="mb-2">ISBN: {isbn}</p>
-                            <p className="mb-2">Quantidade disponível: {quantidade}</p>
-                            <div className="flex justify-end mt-4">
+                            <p className="mb-2">
+                                <span className="font-bold">Autores:</span> {autor}
+                            </p>
+                            <p className="mb-2">
+                                <span className="font-bold">Edição:</span> {edicao}
+                            </p>
+                            <p className="mb-2">
+                                <span className="font-bold">Editora:</span> {editora}
+                            </p>
+                            <p className="mb-2">
+                                <span className="font-bold">Categoria:</span> {categoria}
+                            </p>
+                            <p className="mb-2">
+                                <span className="font-bold">Subcategoria:</span> {subcategoria}
+                            </p>
+                            <p className="mb-2">
+                                <span className="font-bold">ISBN:</span> {isbn}
+                            </p>
+                            <p className="mb-2">
+                                <span className="font-bold">Quantidade:</span> {quantidade}
+                            </p>
+                            <div className="flex justify-end mt-5 w-full h-full items-end">
                                 <button
                                     onClick={handleClose}
-                                    className="bg-[#5b3011]/48 text-white rounded-full px-4 py-2"
+                                    className="bg-[#5b3011]/48 text-white rounded-full px-4 py-2 cursor-pointer hover:bg-[#5b3011]/80 transition-colors duration-300"
                                 >
                                     Fechar
                                 </button>
@@ -70,23 +92,39 @@ function CardUsuario({ registro_academico, nome, data_nascimento, email, telefon
     return (
         <div className="flex flex-col bg-white w-[30%] h-auto mb-5 rounded-md p-4">
             <h1 className="text-xl font-bold mb-2 text-center break-words">{nome}</h1>
-            <p>Registro Acadêmico: {registro_academico}</p>
-            <p>Data de Nascimento: {data_nascimento}</p>
+            <p>
+                <span className="font-bold">Registro Acadêmico</span> {registro_academico}
+            </p>
+            <p className="mb-2">
+                <span className="font-bold">Curso:</span>
+            </p>
 
             {verMais && (
                 <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-md w-[80%] sm:w-[60%] md:w-[40%] flex">
-                        <div className="flex-1">
+                    <div className="bg-white p-6 rounded-md sm:w-[50%] md:w-[35%] flex">
+                        <div className="flex flex-col items-center w-full">
                             <h1 className="text-2xl font-bold mb-8 text-center"> {nome} </h1>
-                            <p className="mb-2">Registro Acadêmico: {registro_academico}</p>
-                            <p className="mb-2">Data de Nascimento: {data_nascimento}</p>
-                            <p className="mb-2">Email: {email}</p>
-                            <p className="mb-2">Telefone: {telefone}</p>
-                            <p className="mb-2">Curso: </p>
-                            <div className="flex justify-end mt-4">
+                            <div className="flex flex-col">
+                                <p className="mb-2">
+                                    <span className="font-bold">Registro Acadêmico:</span> {registro_academico}
+                                </p>
+                                <p className="mb-2">
+                                    <span className="font-bold">Data de Nascimento:</span> {data_nascimento}
+                                </p>
+                                <p className="mb-2">
+                                    <span className="font-bold">Email:</span> {email}
+                                </p>
+                                <p className="mb-2">
+                                    <span className="font-bold">Telefone:</span> {telefone}
+                                </p>
+                                <p className="mb-2">
+                                    <span className="font-bold">Curso:</span>
+                                </p>
+                            </div>
+                            <div className="flex mt-5 w-full justify-end">
                                 <button
                                     onClick={handleClose}
-                                    className="bg-[#5b3011]/48 text-white rounded-full px-4 py-2"
+                                    className="bg-[#5b3011]/48 text-white rounded-full px-4 py-2 cursor-pointer hover:bg-[#5b3011]/80 transition-colors duration-300"
                                 >
                                     Fechar
                                 </button>
@@ -98,14 +136,14 @@ function CardUsuario({ registro_academico, nome, data_nascimento, email, telefon
 
             <button
                 onClick={() => setVerMais(!verMais)}
-                className="text-black underline font-bold mt-2 cursor-pointer"
+                className="text-black underline font-bold mt-2 cursor-pointer hover:text-[#5b3011] transition-colors duration-300"
             >
                 {verMais ? "Ver menos" : "Ver mais"}
             </button>
 
             <div className="flex space-x-3 mt-2">
-                <span className="material-icons cursor-pointer">edit</span>
-                <span className="material-icons cursor-pointer">delete</span>
+                <span className="material-icons cursor-pointer hover:text-gray-500 transition-colors duration-300">edit</span>
+                <span className="material-icons cursor-pointer hover:text-red-500 transition-colors duration-300">delete</span>
             </div>
         </div>
     )
@@ -130,7 +168,7 @@ function Inicio2() {
             <div className="w-full px-10 flex flex-col items-center justify-center">
                 <form className="flex w-full justify-center gap-4 mt-12 flex-wrap mb-10">
                     <input
-                        className="bg-[#5b3011]/48 rounded-full w-[74%] h-12 placeholder:text-[#5b3011]/44 px-3"
+                        className="bg-[#5b3011]/48 rounded-full w-[74%] h-12 text-white placeholder:text-[#5b3011]/44 px-3"
                         type="text"
                         placeholder="O que você procura?"
                     />
@@ -149,19 +187,28 @@ function Inicio2() {
 
                 {cadastrar && (
                     <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center z-50">
-                        <div className="bg-white p-8 rounded-xl w-[80%] sm:w-[60%] md:w-[40%]">
-                            <h2 className="text-2xl font-bold text-center mb-6">Cadastrar</h2>
+                        <div className="bg-white p-8 rounded-xl sm:w-[60%] md:w-[40%]">
+                            <h2 className="text-4xl font-bold text-center mb-10 text-[#331a08]">Cadastrar</h2>
                             <div className=" flex w-full h-full justify-center">
-                                <div className="flex flex-col items-center space-y-6 justify-center">
-                                    <Link className="bg-[#5b3011] w-80 h-20 rounded-xl text-white text-2xl flex items-center justify-center" to='/cadastraaluno'>Aluno</Link>
-                                    <Link className="bg-[#5b3011] w-80 h-20 rounded-xl text-white text-2xl flex items-center justify-center" to='/cadastraprof'> Professor</Link>
-                                    <Link className="bg-[#5b3011] w-80 h-20 rounded-xl text-white text-2xl flex items-center justify-center" to='/cadastralivro'>Livro</Link>
+                                <div className="flex flex-col items-center space-y-4 justify-center">
+                                    <Link className="bg-[#5b3011] w-80 h-20 rounded-full text-white text-lg flex items-center justify-center relative" to='/cadastraaluno'>
+                                        <i className="ph ph-student text-4xl absolute left-8"></i>
+                                        <span className="text-center">Aluno</span>
+                                    </Link>
+                                    <Link className="bg-[#5b3011] w-80 h-20 rounded-full text-white text-lg flex items-center justify-center relative" to='/cadastraprof'>
+                                        <i className="ph ph-chalkboard-teacher text-4xl absolute left-8"></i>
+                                        <span className="text-center">Professor</span>
+                                    </Link>
+                                    <Link className="bg-[#5b3011] w-80 h-20 rounded-full text-white text-lg flex items-center justify-center p-6 relative" to='/cadastralivro'>
+                                        <i className="ph ph-book-open text-4xl absolute left-8"></i>
+                                        <span className="text-center">Livro</span>
+                                    </Link>
                                 </div>
                             </div>
                             <div className="flex justify-end">
                                 <button
                                     onClick={handleClose}
-                                    className="bg-[#5b3011]/48 text-white rounded-full px-4 py-2"
+                                    className="bg-[#5b3011]/48 text-white rounded-full px-4 py-2 mt-5 cursor-pointer hover:bg-[#5b3011]/80 transition-colors duration-300"
                                 >
                                     Fechar
                                 </button>
@@ -172,7 +219,7 @@ function Inicio2() {
 
                 {["Livros", "Alunos", "Professores"].map((tituloSessao, index) => (
                     <div key={index} className="flex flex-col bg-[#5b3011]/48 w-[90%] rounded-md mt-10 mb-5 p-5">
-                        <h1 className="text-white font-bold text-2xl mb-4">{tituloSessao}</h1>
+                        <h1 className="text-white font-bold text-2xl mb-4 transition-all duration-200 hover:text-4xl cursor-pointer">{tituloSessao}</h1>
                         <div className="flex justify-center gap-5 flex-wrap">
                             {tituloSessao === "Livros" && (
                                 <>
