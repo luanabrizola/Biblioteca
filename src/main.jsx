@@ -6,10 +6,13 @@ import Inicio2 from './pages/Inicio2.jsx'
 import Consulta from './pages/Consulta.jsx'
 import Login from './pages/Login.jsx'
 import Professor from './pages/Professor/Professor.jsx'
+import Professores from './pages/Professor/Professores.jsx'
 import Aluno from './pages/Aluno/Aluno.jsx'
+import Alunos from './pages/Aluno/Alunos.jsx'
 import CadastrarAluno from './pages/Aluno/CadastrarAluno.jsx'
 import ExcluirAluno from './pages/Aluno/ExcluirAluno.jsx'
 import Livro from './pages/Livro/Livro.jsx'
+import Livros from './pages/Livro/Livros.jsx'
 import EditarAluno from './pages/Aluno/Editar/EditarAluno.jsx'
 import EdicaoAluno from './pages/Aluno/Editar/EdicaoAluno.jsx'
 import CadastrarProfessor from './pages/Professor/CadastrarProfessor.jsx'
@@ -36,11 +39,13 @@ const rotas = createBrowserRouter(
         <Route path="/inicio" element={<Inicio />} />
         <Route path="/inicio2" element={<Inicio2 />} />
         <Route path="/aluno" element={<Aluno />} />
+        <Route path="/alunos" element={<Alunos />} />
         <Route path="/cadastraaluno" element={<CadastrarAluno />} />
         <Route path="/excluialuno" element={<ExcluirAluno />} />
         <Route path="/editaaluno" element={<EditarAluno />} />
         <Route path="/edicaoaluno" element={<EdicaoAluno />} />
         <Route path="/professor" element={<Professor />} />
+        <Route path="/professores" element={<Professores />} />
         <Route path="/cadastraprof" element={<CadastrarProfessor />} />
         <Route path="/editaprof" element={<EditarProfessor />} />
         <Route path="/edicaoprof" element={<EdicaoProfessor />} />
@@ -50,6 +55,7 @@ const rotas = createBrowserRouter(
         <Route path="/edicaolivro" element={<EdicaoLivro />} />
         <Route path="/excluilivro" element={<ExcluirLivro />} />
         <Route path="/livro" element={<Livro />} />
+        <Route path="/livros" element={<Livros />} />
       </Route>
     <Route path='*' element={<Page404/>} />
     </Route>

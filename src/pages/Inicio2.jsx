@@ -164,7 +164,7 @@ function Inicio2() {
     }
 
     return (
-        <div className="flex w-full min-h-screen font-poppins bg-[#f0e7c2]">
+        <div className="flex w-full flex-1 font-poppins bg-[#f0e7c2]">
             <div className="w-full px-10 flex flex-col items-center justify-center">
                 <form className="flex w-full justify-center gap-4 mt-12 flex-wrap mb-10">
                     <input
@@ -191,15 +191,15 @@ function Inicio2() {
                             <h2 className="text-4xl font-bold text-center mb-10 text-[#331a08]">Cadastrar</h2>
                             <div className=" flex w-full h-full justify-center">
                                 <div className="flex flex-col items-center space-y-4 justify-center">
-                                    <Link className="bg-[#5b3011] w-80 h-20 rounded-full text-white text-lg flex items-center justify-center relative" to='/cadastraaluno'>
+                                    <Link className="bg-[#5b3011] w-80 h-20 rounded-full text-white text-lg flex items-center justify-center relative transition-all duration-200 transform hover:scale-110" to='/cadastraaluno'>
                                         <i className="ph ph-student text-4xl absolute left-8"></i>
                                         <span className="text-center">Aluno</span>
                                     </Link>
-                                    <Link className="bg-[#5b3011] w-80 h-20 rounded-full text-white text-lg flex items-center justify-center relative" to='/cadastraprof'>
+                                    <Link className="bg-[#5b3011] w-80 h-20 rounded-full text-white text-lg flex items-center justify-center relative transition-all duration-200 transform hover:scale-110" to='/cadastraprof'>
                                         <i className="ph ph-chalkboard-teacher text-4xl absolute left-8"></i>
                                         <span className="text-center">Professor</span>
                                     </Link>
-                                    <Link className="bg-[#5b3011] w-80 h-20 rounded-full text-white text-lg flex items-center justify-center p-6 relative" to='/cadastralivro'>
+                                    <Link className="bg-[#5b3011] w-80 h-20 rounded-full text-white text-lg flex items-center justify-center p-6 relative transition-all duration-200 transform hover:scale-110" to='/cadastralivro'>
                                         <i className="ph ph-book-open text-4xl absolute left-8"></i>
                                         <span className="text-center">Livro</span>
                                     </Link>
@@ -219,7 +219,9 @@ function Inicio2() {
 
                 {["Livros", "Alunos", "Professores"].map((tituloSessao, index) => (
                     <div key={index} className="flex flex-col bg-[#5b3011]/48 w-[90%] rounded-md mt-10 mb-5 p-5">
-                        <h1 className="text-white font-bold text-2xl mb-4 transition-all duration-200 hover:text-4xl cursor-pointer">{tituloSessao}</h1>
+                    <Link to={`/${tituloSessao.toLowerCase()}`} className="text-white font-bold text-2xl mb-4 transition-all duration-200 hover:text-4xl cursor-pointer">
+                        {tituloSessao}
+                    </Link>
                         <div className="flex justify-center gap-5 flex-wrap">
                             {tituloSessao === "Livros" && (
                                 <>
