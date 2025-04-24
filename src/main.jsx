@@ -26,6 +26,7 @@ import EdicaoLivro from './pages/Livro/Editar/EdicaoLivro.jsx'
 import Page404 from './pages/Page404.jsx'
 import Layout from './pages/Layout.jsx'
 import Emprestimo from './pages/Emprestimo/Emprestimo.jsx'
+import CadastrarEmprestimo from './pages/Emprestimo/CadastrarEmprestimo.jsx'
 
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
 
@@ -58,6 +59,7 @@ const rotas = createBrowserRouter(
         <Route path="/livro" element={<Livro />} />
         <Route path="/livros" element={<Livros />} />
         <Route path="/emprestimos" element={<Emprestimo />} />
+        <Route path="/cadastraemprestimo" element={<CadastrarEmprestimo />} />
       </Route>
     <Route path='*' element={<Page404/>} />
     </Route>

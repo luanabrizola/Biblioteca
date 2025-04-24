@@ -97,7 +97,7 @@ function Emprestimo() {
                     <button className="bg-[#5b3011]/48 text-white rounded-full h-12 w-12 flex items-center justify-center cursor-pointer">
                         <span className="material-icons">search</span>
                     </button>
-                    <Link className="bg-[#5b3011]/48 text-white rounded-full h-12 w-40 font-poppins px-3 cursor-pointer flex items-center" to='/cadastralivro'>
+                    <Link className="bg-[#5b3011]/48 text-white rounded-full h-12 w-40 font-poppins px-3 cursor-pointer flex items-center" to='/cadastraemprestimo'>
                         <i className="material-icons mr-3">add</i>
                         <span className="text-center">Cadastrar</span>
                     </Link>

@@ -3,9 +3,9 @@ import { Outlet } from 'react-router-dom'
 
 function Layout() {
   return (
-    <div className="flex h-screen overflow-y-auto">
+    <div className="flex h-screen">
       <Menu />
-      <div className="flex-1 h-full overflow-y-auto">
+      <div className="flex-1 overflow-y-auto">
         <Outlet  />
       </div>
     </div>

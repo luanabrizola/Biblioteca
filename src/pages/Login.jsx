@@ -50,7 +50,7 @@ function Login(){
 
                 </div>
                 <button
-                    className="bg-[#ad795b] text-white font-bold rounded-full h-12 w-42 mt-10 cursor-pointer"
+                    className="bg-[#ad795b] text-white font-bold rounded-full h-12 w-42 mt-4 mb-4 cursor-pointer"
                     onClick={irParaInicio}
                 >
                     Entrar

@@ -4,6 +4,8 @@ function Menu() {
     const location = useLocation();
 
     const estaNaConsulta = location.pathname === "/";
+    const estaNoInicio = location.pathname === "/inicio2";
+    const estaNoEmprestimo = location.pathname === "/emprestimos"
 
     return (
         <div className='w-[350px] overflow-y-auto bg-[#5b3011] flex flex-col'>
@@ -23,10 +25,19 @@ function Menu() {
                 <NavLink
                     to="/inicio2"
                     className={`w-full h-12 rounded-e-full font-bold mt-2 flex items-center justify-center ${
-                        location.pathname !== "/" ? "bg-[#dbd0b3] text-[#5b3011]" : "text-white"
+                        location.pathname ==="/inicio2" ? "bg-[#dbd0b3] text-[#5b3011]" : "text-white"
                     }`}
                 >
                     Início
+                </NavLink>
+
+                <NavLink
+                    to="/emprestimos"
+                    className={`w-full h-12 rounded-e-full font-bold mt-2 flex items-center justify-center ${
+                        location.pathname === "/emprestimos"? "bg-[#dbd0b3] text-[#5b3011]" : "text-white"
+                    }`}
+                >
+                    Empréstimo
                 </NavLink>
 
                 <NavLink

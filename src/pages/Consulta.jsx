@@ -9,7 +9,7 @@ function Consulta() {
     return (
         <div className='flex w-full h-full font-poppins'>
 
-            <div className='bg-[#f0e7c2] w-full h-full font-poppins'>
+            <div className='bg-[#f0e7c2] w-full h-full font-poppins  border-4 border-red-500'>
                 <div className="mt-12 mb-20">
                     <form action="get" className="flex items-center justify-center gap-4 mt-12 flex-wrap">
                         <input
