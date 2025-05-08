@@ -4,7 +4,7 @@ function Login(){
     const navigate = useNavigate()
 
     const irParaInicio = () => {
-        navigate("/inicio")
+        navigate("/inicio2")
     }
 
     return(

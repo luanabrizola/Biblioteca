@@ -7,17 +7,17 @@ function Consulta() {
     const [verMais2, setVerMais2] = useState(false);
 
     return (
-        <div className='flex w-full h-full font-poppins'>
+        <div className='flex w-full flex-1 font-poppins'>
 
-            <div className='bg-[#f0e7c2] w-full h-full font-poppins  border-4 border-red-500'>
-                <div className="mt-12 mb-20">
-                    <form action="get" className="flex items-center justify-center gap-4 mt-12 flex-wrap">
+            <div className='bg-[#f0e7c2] w-full h-full font-poppins'>
+                <div className="mb-20 w-full px-10 flex flex-col items-center justify-center">
+                    <form action="get" className="flex w-full justify-center gap-4 mt-12 flex-wrap">
                         <input
-                            className="bg-[#5b3011]/48 rounded-full w-[60%] h-10 placeholder:text-[#5b3011]/44 px-3"
+                            className="bg-[#5b3011]/48 rounded-full w-[74%] h-12 placeholder:text-[#5b3011]/44 px-3"
                             type="text"
                             placeholder="O diário de Anne Frank"
                         />
-                        <select name="select" id="0" className="bg-[#5b3011]/48 text-white rounded-full h-10 w-40 font-poppins px-3 cursor-pointer">
+                        <select name="select" id="0" className="bg-[#5b3011]/48 text-white rounded-full h-12 w-40 font-poppins px-3 cursor-pointer">
                             <option value="0">Busca livre</option>
                             <option value="1">Título</option>
                             <option value="2">Autor</option>
@@ -25,7 +25,7 @@ function Consulta() {
                             <option value="4">Categoria</option>
                             <option value="5">Subcategoria</option>
                         </select>
-                        <button className="bg-[#5b3011]/48 text-white rounded-full h-10 w-10 flex items-center justify-center cursor-pointer">
+                        <button className="bg-[#5b3011]/48 text-white rounded-full h-12 w-12 flex items-center justify-center cursor-pointer">
                             <span className="material-icons">search</span>
                         </button>
                     </form>
