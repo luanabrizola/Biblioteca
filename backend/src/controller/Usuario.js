@@ -1,4 +1,4 @@
-import modelUsuario from '../model/Usuario.js';
+import modelUsuario from "../model/Usuario.js"
 
 async function criar(req, res) {
   const usuario = req.body;
@@ -38,7 +38,7 @@ async function criar(req, res) {
 
 async function mostrar(req, res) {
   try {
-    const usuarios = await modelUsuario.list();
+    const usuarios = await modelUsuario.mostrar();
     res.status(200).json({ usuarios });
   } catch (error) {
     res.status(500).json({ error: 'Erro ao listar usuários' });
