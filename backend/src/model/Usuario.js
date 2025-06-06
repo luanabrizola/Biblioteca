@@ -1,4 +1,4 @@
-import { sql } from "../../db.js";
+import { sql } from "../db.js";
 
 export async function criar() {
     try {
@@ -28,5 +28,3 @@ export async function mostrar() {
         throw error;
     }
 }
-
-export default { criar, mostrar };
