@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom"
 
-function CardUsuario({ registro_academico, nome, data_nascimento, email, telefone, id_tipo }) {
+function CardUsuario({ registro_academico, nome, data_nascimento, email, telefone }) {
     const [verMais, setVerMais] = useState(false)
 
     const handleClose = () => {
@@ -9,10 +9,10 @@ function CardUsuario({ registro_academico, nome, data_nascimento, email, telefon
     }
 
     return (
-        <div className="flex flex-col bg-white w-[30%] h-auto mb-5 rounded-md p-4">
+        <div className="flex flex-col bg-white w-[33%] h-auto mb-5 rounded-md p-4">
             <h1 className="text-xl font-bold mb-2 text-center break-words">{nome}</h1>
             <p>
-                <span className="font-bold">Registro Acadêmico</span> {registro_academico}
+                <span className="font-bold">Registro Acadêmico:</span> {registro_academico}
             </p>
             <p className="mb-2">
                 <span className="font-bold">Curso:</span>
@@ -70,12 +70,22 @@ function CardUsuario({ registro_academico, nome, data_nascimento, email, telefon
 
 
 function Alunos() {
-    const usuarios = [
-        { id_tipo: 1, registro_academico: "2023012345", nome: "João da Silva", data_nascimento: "2005-07-12", email: "joao.silva@email.com", telefone: "(42) 99999-8888" },
-        { id_tipo: 1, registro_academico: "2023019876", nome: "Maria Oliveira", data_nascimento: "2006-03-25", email: "maria.oliveira@email.com", telefone: "(42) 98888-7777" },
-        { id_tipo: 1, registro_academico: "2023014321", nome: "Carlos Pereira", data_nascimento: "2004-11-05", email: "carlos.pereira@email.com", telefone: "(42) 97777-5555" },
-        { id_tipo: 1, registro_academico: "2023023412", nome: "Ana Santos", data_nascimento: "1980-02-10", email: "ana.santos@email.com", telefone: "(42) 96666-4444" },
-    ]
+    const [usuarios, setUsuarios] = useState([])
+
+    useEffect(() => {
+        async function carregarAlunos() {
+            try {
+                const resposta = await fetch("http://localhost:3333/listarUsuarios")
+                if (!resposta.ok) throw new Error("Erro ao buscar alunos")
+                const dados = await resposta.json()
+                setUsuarios(dados);
+            } catch (erro) {
+                console.error("Erro ao carregar alunos:", erro)
+            }
+        }
+
+        carregarAlunos()
+    }, [])
 
     return (
         <div className="flex flex-1 min-h-screen font-poppins bg-[#f0e7c2]">
@@ -106,17 +116,20 @@ function Alunos() {
                 {["Alunos"].map((tituloSessao, index) => (
                     <div key={index} className="flex flex-col w-[90%] rounded-md mt-10 mb-5">
                         <div className="flex justify-center gap-5 flex-wrap">
-                        {tituloSessao === "Alunos" && usuarios.filter(user => user.id_tipo === 1).map(user => (
-                                <CardUsuario
-                                    key={user.registro_academico}
-                                    registro_academico={user.registro_academico}
-                                    nome={user.nome}
-                                    data_nascimento={user.data_nascimento}
-                                    email={user.email}
-                                    telefone={user.telefone}
-                                    id_tipo="Aluno"
-                                />
-                            ))}
+                            {tituloSessao === "Alunos" &&
+                                usuarios
+                                    .filter(user => user.tipo === "aluno")
+                                    .map(user => (
+                                        <CardUsuario
+                                            key={user.registro_academico}
+                                            registro_academico={user.registro_academico}
+                                            nome={user.nome}
+                                            data_nascimento={user.data_nascimento}
+                                            email={user.email}
+                                            telefone={user.telefone}
+                                            id_tipo="Aluno"
+                                        />
+                                    ))}
                         </div>
                     </div>
                 ))}

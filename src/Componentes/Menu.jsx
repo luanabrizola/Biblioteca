@@ -8,7 +8,7 @@ function Menu() {
     const estaNoEmprestimo = location.pathname === "/emprestimos"
 
     return (
-        <div className='w-[350px] overflow-y-auto bg-[#5b3011] flex flex-col'>
+        <div className='w-[300px] overflow-y-auto bg-[#5b3011] flex flex-col'>
             <img src="/img/ajl_cortada.png" alt="Logo da Biblioteca" className="w-36 self-center mt-10 mb-18" />
             <div className="flex flex-col flex-grow">
                 <NavLink
