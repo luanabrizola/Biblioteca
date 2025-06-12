@@ -9,9 +9,9 @@ function Aluno() {
     useEffect(() => {
         async function carregarAlunos() {
             try {
-                const resposta = await fetch("http://localhost:3333/listarUsuarios"); // ajuste sua rota aqui se for diferente
+                const resposta = await fetch("http://localhost:3333/listarUsuarios");
                 const dados = await resposta.json();
-                setAlunos(dados.filter(user => user.tipo === "aluno")); // filtra só os alunos
+                setAlunos(dados.filter(user => user.tipo === "aluno"));
             } catch (erro) {
                 console.error("Erro ao buscar alunos:", erro);
             }
@@ -28,12 +28,14 @@ function Aluno() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ id_usuario: alunoSelecionado })
             });
-
-            if (!resposta.ok) throw new Error("Erro ao excluir");
-
-            // Remove da lista atual sem precisar recarregar
+    
+            const json = await resposta.json();
+            console.log("Resposta do back-end:", json);
+    
+            // Se der certo, remova da lista localmente
             setAlunos(prev => prev.filter(aluno => aluno.id_usuario !== alunoSelecionado));
             setMostrarConfirmacao(false);
+            setAlunoSelecionado(null);
         } catch (erro) {
             console.error("Erro ao excluir aluno:", erro);
             alert("Erro ao excluir.");
@@ -45,23 +47,29 @@ function Aluno() {
             <div className="bg-[#f0e7c2] w-full h-full flex flex-col items-center justify-center">
                 <div className="flex flex-col items-center justify-center w-[80%] h-[90%] bg-white rounded-md overflow-y-auto p-6">
                     <h1 className="text-5xl mb-6">Alunos</h1>
-                    {alunos.map(aluno => (
-                        <div key={aluno.id_usuario} className="w-full mb-3 p-4 border rounded-md flex justify-between items-center">
-                            <div>
-                                <p className="text-xl font-semibold">{aluno.nome}</p>
-                                <p className="text-sm text-gray-500">{aluno.email}</p>
+
+                    {alunos.length === 0 ? (
+                        <p className="text-gray-500">Nenhum aluno encontrado.</p>
+                    ) : (
+                        alunos.map(aluno => (
+                            <div key={aluno.id_usuario} className="w-full mb-3 p-4 border rounded-md flex justify-between items-center">
+                                <div>
+                                    <p className="text-xl font-semibold">{aluno.nome}</p>
+                                    <p className="text-sm text-gray-500">{aluno.email}</p>
+                                </div>
+                                <button
+                                    onClick={() => {
+                                        console.log("Aluno selecionado para exclusão:", aluno.id_usuario);
+                                        setAlunoSelecionado(aluno.id_usuario);
+                                        setMostrarConfirmacao(true);
+                                    }}
+                                    className="bg-red-600 text-white px-4 py-2 rounded-xl"
+                                >
+                                    Excluir
+                                </button>
                             </div>
-                            <button
-                                onClick={() => {
-                                    setAlunoSelecionado(aluno.id_usuario);
-                                    setMostrarConfirmacao(true);
-                                }}
-                                className="bg-red-600 text-white px-4 py-2 rounded-xl"
-                            >
-                                Excluir
-                            </button>
-                        </div>
-                    ))}
+                        ))
+                    )}
 
                     {mostrarConfirmacao && (
                         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -75,7 +83,10 @@ function Aluno() {
                                         Sim, excluir
                                     </button>
                                     <button
-                                        onClick={() => setMostrarConfirmacao(false)}
+                                        onClick={() => {
+                                            setMostrarConfirmacao(false);
+                                            setAlunoSelecionado(null);
+                                        }}
                                         className="bg-gray-400 text-white px-6 py-2 rounded"
                                     >
                                         Cancelar
