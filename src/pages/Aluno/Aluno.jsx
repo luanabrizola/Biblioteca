@@ -5,7 +5,6 @@ function Aluno() {
     const [alunoSelecionado, setAlunoSelecionado] = useState(null);
     const [mostrarConfirmacao, setMostrarConfirmacao] = useState(false);
 
-    // Buscar alunos ao carregar
     useEffect(() => {
         async function carregarAlunos() {
             try {
@@ -20,7 +19,6 @@ function Aluno() {
         carregarAlunos();
     }, []);
 
-    // Lidar com exclusão
     const handleExcluir = async () => {
         try {
             const resposta = await fetch("http://localhost:3333/removerUsuario", {
@@ -32,7 +30,6 @@ function Aluno() {
             const json = await resposta.json();
             console.log("Resposta do back-end:", json);
     
-            // Se der certo, remova da lista localmente
             setAlunos(prev => prev.filter(aluno => aluno.id_usuario !== alunoSelecionado));
             setMostrarConfirmacao(false);
             setAlunoSelecionado(null);
