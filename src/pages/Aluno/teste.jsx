@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-// Componente CardUsuario permanece igual
+// Componente CardUsuario com funcionalidades de ver mais, editar e excluir
 function CardUsuario({
   id_usuario,
   registro_academico,
@@ -9,8 +9,7 @@ function CardUsuario({
   data_nascimento,
   email,
   telefone,
-  tipo,
-  is_ativo,
+  is_ativo, // adiciona aqui
   onExcluir,
   onAtualizar,
 }) {
@@ -20,22 +19,24 @@ function CardUsuario({
   const [form, setForm] = useState({
     nome,
     registro_academico,
-    data_nascimento: data_nascimento?.split("T")[0] || "",
+    data_nascimento,
     email,
     telefone,
-    is_ativo,
-    tipo,
+    is_ativo, // inicializa aqui
   });
 
+  // Fecha modal de detalhes
   const handleClose = () => {
     setVerMais(false);
   };
 
+  // Atualiza o estado do formulário
   function handleChange(e) {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   }
 
+  // Salvar alterações feitas no usuário
   async function handleSalvar() {
     try {
       const resposta = await fetch("http://localhost:3333/atualizarUsuario", {
@@ -150,6 +151,16 @@ function CardUsuario({
               placeholder="Telefone"
               className="border p-2 rounded"
             />
+            {/* Se quiser controlar ativo/inativo no form, pode adicionar um checkbox aqui */}
+            {/* <label>
+              Ativo:
+              <input
+                type="checkbox"
+                name="is_ativo"
+                checked={form.is_ativo}
+                onChange={(e) => setForm(prev => ({ ...prev, is_ativo: e.target.checked }))}
+              />
+            </label> */}
             <div className="flex justify-end gap-3 mt-3">
               <button
                 onClick={() => setEditar(false)}
@@ -198,10 +209,9 @@ function CardUsuario({
   );
 }
 
-// Componente principal que lista e gerencia alunos com busca implementada
+// Componente principal que lista e gerencia alunos
 function Alunos() {
   const [usuarios, setUsuarios] = useState([]);
-  const [busca, setBusca] = useState("");
 
   useEffect(() => {
     async function carregarAlunos() {
@@ -251,38 +261,16 @@ function Alunos() {
     );
   };
 
-  // Filtra usuários do tipo aluno pelo termo de busca em vários campos
-  const usuariosFiltrados = usuarios.filter((user) => {
-    if (user.tipo !== "aluno") return false;
-
-    const termo = busca.toLowerCase();
-
-    return (
-      user.nome.toLowerCase().includes(termo) ||
-      user.registro_academico.toLowerCase().includes(termo) ||
-      (user.email && user.email.toLowerCase().includes(termo)) ||
-      (user.telefone && user.telefone.toLowerCase().includes(termo))
-    );
-  });
-
   return (
     <div className="flex flex-1 min-h-screen font-poppins bg-[#f0e7c2]">
       <div className="w-full px-10 flex flex-col items-center">
-        <form
-          className="flex w-full justify-center gap-4 mt-12 mb-14"
-          onSubmit={(e) => e.preventDefault()}
-        >
+        <form className="flex w-full justify-center gap-4 mt-12 mb-14">
           <input
             className="bg-[#5b3011]/48 rounded-full w-[74%] h-12 text-white placeholder:text-[#5b3011]/44 px-3"
             type="text"
             placeholder="O que você procura?"
-            value={busca}
-            onChange={(e) => setBusca(e.target.value)}
           />
-          <button
-            type="submit"
-            className="bg-[#5b3011]/48 text-white rounded-full h-12 w-12 flex items-center justify-center cursor-pointer"
-          >
+          <button className="bg-[#5b3011]/48 text-white rounded-full h-12 w-12 flex items-center justify-center cursor-pointer">
             <span className="material-icons">search</span>
           </button>
           <Link
@@ -304,8 +292,9 @@ function Alunos() {
 
         <div className="flex flex-col w-[90%] rounded-md mt-10 mb-5">
           <div className="flex justify-center gap-5 flex-wrap">
-            {usuariosFiltrados.length > 0 ? (
-              usuariosFiltrados.map((user) => (
+            {usuarios
+              .filter((user) => user.tipo === "aluno")
+              .map((user) => (
                 <CardUsuario
                   key={user.id_usuario}
                   id_usuario={user.id_usuario}
@@ -314,15 +303,11 @@ function Alunos() {
                   data_nascimento={user.data_nascimento}
                   email={user.email}
                   telefone={user.telefone}
-                  is_ativo={user.is_ativo}
-                  tipo={user.tipo}
+                  is_ativo={user.is_ativo} // passa o is_ativo aqui também
                   onExcluir={handleExcluirUsuario}
                   onAtualizar={handleAtualizarUsuario}
                 />
-              ))
-            ) : (
-              <p className="text-center w-full text-gray-600 mt-8">Nenhum aluno encontrado.</p>
-            )}
+              ))}
           </div>
         </div>
       </div>
