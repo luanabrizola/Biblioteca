@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-// Componente CardUsuario permanece igual
 function CardUsuario({
   id_usuario,
   registro_academico,
@@ -198,7 +197,6 @@ function CardUsuario({
   );
 }
 
-// Componente principal que lista e gerencia alunos com busca implementada
 function Alunos() {
   const [usuarios, setUsuarios] = useState([]);
   const [busca, setBusca] = useState("");
@@ -218,7 +216,6 @@ function Alunos() {
     carregarAlunos();
   }, []);
 
-  // Excluir usuário da lista e do backend
   const handleExcluirUsuario = async (id_usuario) => {
     const confirmar = window.confirm("Tem certeza que deseja excluir este aluno?");
     if (!confirmar) return;
@@ -242,7 +239,6 @@ function Alunos() {
     }
   };
 
-  // Atualiza o usuário na lista após edição
   const handleAtualizarUsuario = (usuarioAtualizado) => {
     setUsuarios((prev) =>
       prev.map((user) =>
@@ -251,7 +247,6 @@ function Alunos() {
     );
   };
 
-  // Filtra usuários do tipo aluno pelo termo de busca em vários campos
   const usuariosFiltrados = usuarios.filter((user) => {
     if (user.tipo !== "aluno") return false;
 

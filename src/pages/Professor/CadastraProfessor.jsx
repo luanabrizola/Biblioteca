@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 
-function CadastrarProfessor(){
+function CadastraProfessor(){
     return(
         <div className="flex w-full h-full">
 
@@ -73,5 +73,5 @@ function CadastrarProfessor(){
     )
 }
 
-export default CadastrarProfessor
+export default CadastraProfessor
 

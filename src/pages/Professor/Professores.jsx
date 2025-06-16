@@ -1,129 +1,328 @@
-import { useState } from "react";
-import { Link } from "react-router-dom"
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
-function CardUsuario({ registro_academico, nome, data_nascimento, email, telefone, id_tipo }) {
-    const [verMais, setVerMais] = useState(false)
+function CardUsuario({
+  id_usuario,
+  nome,
+  registro_academico, 
+  data_nascimento,
+  email,
+  telefone,
+  tipo,
+  is_ativo,
+  onExcluir,
+  onAtualizar,
+}) {
+  const [verMais, setVerMais] = useState(false);
+  const [editar, setEditar] = useState(false);
 
-    const handleClose = () => {
-        setVerMais(false)
+  const [form, setForm] = useState({
+    nome,
+    registro_academico,
+    data_nascimento: data_nascimento?.split("T")[0] || "",
+    email,
+    telefone,
+    is_ativo,
+    tipo,
+  });
+
+  const handleClose = () => {
+    setVerMais(false);
+  };
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  }
+
+  async function handleSalvar() {
+    try {
+      const resposta = await fetch("http://localhost:3333/atualizarUsuario", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id_usuario,
+          ...form,
+        }),
+      });
+
+      if (!resposta.ok) throw new Error("Erro ao atualizar usuário");
+
+      const dados = await resposta.json();
+      onAtualizar(dados.usuario);
+      setEditar(false);
+      setVerMais(false);
+    } catch (erro) {
+      alert("Erro ao atualizar usuário");
+      console.error(erro);
     }
+  }
 
-    return (
-        <div className="flex flex-col bg-white w-[30%] h-auto mb-5 rounded-md p-4">
-            <h1 className="text-xl font-bold mb-2 text-center break-words">{nome}</h1>
-            <p>
-                <span className="font-bold">Registro Acadêmico</span> {registro_academico}
-            </p>
-            <p className="mb-2">
-                <span className="font-bold">Curso:</span>
-            </p>
+  return (
+    <div className="flex flex-col bg-white w-[33%] h-auto mb-5 rounded-md p-4">
+      <h1 className="text-xl font-bold mb-2 text-center break-words">{nome}</h1>
+      <p>
+        <span className="font-bold">Registro Acadêmico:</span> {registro_academico}
+      </p>
+      <p className="mb-2">
+        <span className="font-bold">Curso:</span>
+      </p>
 
-            {verMais && (
-                <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-md sm:w-[50%] md:w-[35%] flex">
-                        <div className="flex flex-col items-center w-full">
-                            <h1 className="text-2xl font-bold mb-8 text-center"> {nome} </h1>
-                            <div className="flex flex-col">
-                                <p className="mb-2">
-                                    <span className="font-bold">Registro Acadêmico:</span> {registro_academico}
-                                </p>
-                                <p className="mb-2">
-                                    <span className="font-bold">Data de Nascimento:</span> {data_nascimento}
-                                </p>
-                                <p className="mb-2">
-                                    <span className="font-bold">Email:</span> {email}
-                                </p>
-                                <p className="mb-2">
-                                    <span className="font-bold">Telefone:</span> {telefone}
-                                </p>
-                                <p className="mb-2">
-                                    <span className="font-bold">Curso:</span>
-                                </p>
-                            </div>
-                            <div className="flex mt-5 w-full justify-end">
-                                <button
-                                    onClick={handleClose}
-                                    className="bg-[#5b3011]/48 text-white rounded-full px-4 py-2 cursor-pointer hover:bg-[#5b3011]/80 transition-colors duration-300"
-                                >
-                                    Fechar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            <button
-                onClick={() => setVerMais(!verMais)}
-                className="text-black underline font-bold mt-2 cursor-pointer hover:text-[#5b3011] transition-colors duration-300"
-            >
-                {verMais ? "Ver menos" : "Ver mais"}
-            </button>
-
-            <div className="flex space-x-3 mt-2">
-                <span className="material-icons cursor-pointer hover:text-gray-500 transition-colors duration-300">edit</span>
-                <span className="material-icons cursor-pointer hover:text-red-500 transition-colors duration-300">delete</span>
+      {verMais && !editar && (
+        <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-md sm:w-[50%] md:w-[35%] flex">
+            <div className="flex flex-col items-center w-full">
+              <h1 className="text-2xl font-bold mb-8 text-center">{nome}</h1>
+              <div className="flex flex-col">
+                <p className="mb-2">
+                  <span className="font-bold">Registro Acadêmico:</span> {registro_academico}
+                </p>
+                <p className="mb-2">
+                  <span className="font-bold">Data de Nascimento:</span> {data_nascimento}
+                </p>
+                <p className="mb-2">
+                  <span className="font-bold">Email:</span> {email}
+                </p>
+                <p className="mb-2">
+                  <span className="font-bold">Telefone:</span> {telefone}
+                </p>
+                <p className="mb-2">
+                  <span className="font-bold">Curso:</span>
+                </p>
+              </div>
+              <div className="flex mt-5 w-full justify-end">
+                <button
+                  onClick={handleClose}
+                  className="bg-[#5b3011]/48 text-white rounded-full px-4 py-2 cursor-pointer hover:bg-[#5b3011]/80 transition-colors duration-300"
+                >
+                  Fechar
+                </button>
+              </div>
             </div>
+          </div>
         </div>
-    )
+      )}
+
+      {editar && (
+        <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-md sm:w-[50%] md:w-[35%] flex flex-col gap-3">
+            <h2 className="text-xl font-bold mb-4 text-center">Editar Usuário</h2>
+            <input
+              type="text"
+              name="nome"
+              value={form.nome}
+              onChange={handleChange}
+              placeholder="Nome"
+              className="border p-2 rounded"
+            />
+            <input
+              type="text"
+              name="registro_academico"
+              value={form.registro_academico}
+              onChange={handleChange}
+              placeholder="Registro Acadêmico"
+              className="border p-2 rounded"
+            />
+            <input
+              type="date"
+              name="data_nascimento"
+              value={form.data_nascimento}
+              onChange={handleChange}
+              placeholder="Data de Nascimento"
+              className="border p-2 rounded"
+            />
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              placeholder="Email"
+              className="border p-2 rounded"
+            />
+            <input
+              type="tel"
+              name="telefone"
+              value={form.telefone}
+              onChange={handleChange}
+              placeholder="Telefone"
+              className="border p-2 rounded"
+            />
+            <div className="flex justify-end gap-3 mt-3">
+              <button
+                onClick={() => setEditar(false)}
+                className="bg-gray-400 text-white px-4 py-2 rounded"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleSalvar}
+                className="bg-green-600 text-white px-4 py-2 rounded"
+              >
+                Salvar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <button
+        onClick={() => setVerMais(!verMais)}
+        className="text-black underline font-bold mt-2 cursor-pointer hover:text-[#5b3011] transition-colors duration-300"
+      >
+        {verMais ? "Ver menos" : "Ver mais"}
+      </button>
+
+      <div className="flex space-x-3 mt-2">
+        <span
+          className="material-icons cursor-pointer hover:text-gray-500 transition-colors duration-300"
+          onClick={() => {
+            setEditar(true);
+            setVerMais(false);
+          }}
+          title="Editar"
+        >
+          edit
+        </span>
+        <span
+          className="material-icons cursor-pointer hover:text-pink-500 transition-colors duration-300"
+          onClick={() => onExcluir(id_usuario)}
+          title="Excluir"
+        >
+          delete
+        </span>
+      </div>
+    </div>
+  );
 }
 
-
 function Professores() {
-    const usuarios = [
-        { id_tipo: 2, registro_academico: "2023012345", nome: "João da Silva", data_nascimento: "2005-07-12", email: "joao.silva@email.com", telefone: "(42) 99999-8888" },
-        { id_tipo: 2, registro_academico: "2023019876", nome: "Maria Oliveira", data_nascimento: "2006-03-25", email: "maria.oliveira@email.com", telefone: "(42) 98888-7777" },
-        { id_tipo: 2, registro_academico: "2023014321", nome: "Carlos Pereira", data_nascimento: "2004-11-05", email: "carlos.pereira@email.com", telefone: "(42) 97777-5555" },
-        { id_tipo: 2, registro_academico: "2023023412", nome: "Ana Santos", data_nascimento: "1980-02-10", email: "ana.santos@email.com", telefone: "(42) 96666-4444" },
-    ]
+  const [usuarios, setUsuarios] = useState([]);
+  const [busca, setBusca] = useState("");
+
+  useEffect(() => {
+    async function carregarProfessores() {
+      try {
+        const resposta = await fetch("http://localhost:3333/listarUsuarios");
+        if (!resposta.ok) throw new Error("Erro ao buscar Professores");
+        const dados = await resposta.json();
+        setUsuarios(dados);
+      } catch (erro) {
+        console.error("Erro ao carregar Professores:", erro);
+      }
+    }
+
+    carregarProfessores();
+  }, []);
+
+  const handleExcluirUsuario = async (id_usuario) => {
+    const confirmar = window.confirm("Tem certeza que deseja excluir este professor?");
+    if (!confirmar) return;
+
+    try {
+      const resposta = await fetch("http://localhost:3333/removerUsuario", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id_usuario }),
+      });
+
+      const json = await resposta.json();
+      console.log("Usuário excluído:", json);
+
+      setUsuarios((prev) => prev.filter((user) => user.id_usuario !== id_usuario));
+    } catch (erro) {
+      console.error("Erro ao excluir professor:", erro);
+      alert("Erro ao excluir professor.");
+    }
+  };
+
+  const handleAtualizarUsuario = (usuarioAtualizado) => {
+    setUsuarios((prev) =>
+      prev.map((user) =>
+        user.id_usuario === usuarioAtualizado.id_usuario ? usuarioAtualizado : user
+      )
+    );
+  };
+
+  const usuariosFiltrados = usuarios.filter((user) => {
+    if (user.tipo !== "professor") return false;
+
+    const termo = busca.toLowerCase();
 
     return (
-        <div className="flex flex-1 min-h-screen font-poppins bg-[#f0e7c2]">
-            <div className="w-full px-10 flex flex-col items-center">
-                <form className="flex w-full justify-center gap-4 mt-12 mb-14">
-                    <input
-                        className="bg-[#5b3011]/48 rounded-full w-[74%] h-12 text-white placeholder:text-[#5b3011]/44 px-3"
-                        type="text"
-                        placeholder="O que você procura?"
-                    />
-                    <button className="bg-[#5b3011]/48 text-white rounded-full h-12 w-12 flex items-center justify-center cursor-pointer">
-                        <span className="material-icons">search</span>
-                    </button>
-                    <Link className="bg-[#5b3011]/48 text-white rounded-full h-12 w-40 font-poppins px-3 cursor-pointer flex items-center" to='/cadastraprof'>
-                        <i className="material-icons mr-3">add</i>
-                        <span className="text-center">Cadastrar</span>
-                    </Link>
-                </form>
+      user.nome.toLowerCase().includes(termo) ||
+      user.registro_academico.toLowerCase().includes(termo) ||
+      (user.email && user.email.toLowerCase().includes(termo)) ||
+      (user.telefone && user.telefone.toLowerCase().includes(termo))
+    );
+  });
 
-                <div>
-                    <button>Nome</button>
-                    <button>Curso</button>
-                    <button>Data de Nascimento</button>
-                    <button>Email</button>
-                    <button></button>
-                </div>
+  return (
+    <div className="flex flex-1 min-h-screen font-poppins bg-[#f0e7c2]">
+      <div className="w-full px-10 flex flex-col items-center">
+        <form
+          className="flex w-full justify-center gap-4 mt-12 mb-14"
+          onSubmit={(e) => e.preventDefault()}
+        >
+          <input
+            className="bg-[#5b3011]/48 rounded-full w-[74%] h-12 text-white placeholder:text-[#5b3011]/44 px-3"
+            type="text"
+            placeholder="O que você procura?"
+            value={busca}
+            onChange={(e) => setBusca(e.target.value)}
+          />
+          <button
+            type="submit"
+            className="bg-[#5b3011]/48 text-white rounded-full h-12 w-12 flex items-center justify-center cursor-pointer"
+          >
+            <span className="material-icons">search</span>
+          </button>
+          <Link
+            className="bg-[#5b3011]/48 text-white rounded-full h-12 w-40 font-poppins px-3 cursor-pointer flex items-center"
+            to="/cadastraProf"
+          >
+            <i className="material-icons mr-3">add</i>
+            <span className="text-center">Cadastrar</span>
+          </Link>
+        </form>
 
-                {["Professores"].map((tituloSessao, index) => (
-                    <div key={index} className="flex flex-col w-[90%] rounded-md mt-10 mb-5">
-                        <div className="flex justify-center gap-5 flex-wrap">
-                        {tituloSessao === "Professores" && usuarios.filter(user => user.id_tipo === 2).map(user => (
-                                <CardUsuario
-                                    key={user.registro_academico}
-                                    registro_academico={user.registro_academico}
-                                    nome={user.nome}
-                                    data_nascimento={user.data_nascimento}
-                                    email={user.email}
-                                    telefone={user.telefone}
-                                    id_tipo="Aluno"
-                                />
-                            ))}
-                        </div>
-                    </div>
-                ))}
-            </div>
+        <div className="flex gap-4 mb-4 font-semibold">
+          <button>Nome</button>
+          <button>Curso</button>
+          <button>Data de Nascimento</button>
+          <button>Email</button>
+          <button></button>
         </div>
-    )
+
+        <div className="flex flex-col w-[90%] rounded-md mt-10 mb-5">
+          <div className="flex justify-center gap-5 flex-wrap">
+            {usuariosFiltrados.length > 0 ? (
+              usuariosFiltrados.map((user) => (
+                <CardUsuario
+                  key={user.id_usuario}
+                  id_usuario={user.id_usuario}
+                  registro_academico={user.registro_academico}
+                  nome={user.nome}
+                  data_nascimento={user.data_nascimento}
+                  email={user.email}
+                  telefone={user.telefone}
+                  is_ativo={user.is_ativo}
+                  tipo={user.tipo}
+                  onExcluir={handleExcluirUsuario}
+                  onAtualizar={handleAtualizarUsuario}
+                />
+              ))
+            ) : (
+              <p className="text-center w-full text-gray-600 mt-8">Nenhum professor encontrado.</p>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default Professores;
-
