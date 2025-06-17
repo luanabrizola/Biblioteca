@@ -186,7 +186,7 @@ function CardUsuario({
           edit
         </span>
         <span
-          className="material-icons cursor-pointer hover:text-pink-500 transition-colors duration-300"
+          className="material-icons cursor-pointer hover:text-red-500 transition-colors duration-300"
           onClick={() => onExcluir(id_usuario)}
           title="Excluir"
         >
