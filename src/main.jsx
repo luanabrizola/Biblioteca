@@ -2,12 +2,9 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import Inicio from './pages/Inicio.jsx'
-import Inicio2 from './pages/Inicio2.jsx'
 import Consulta from './pages/Consulta.jsx'
 import Login from './pages/Login.jsx'
-import Professor from './pages/Professor/Professor.jsx'
 import Professores from './pages/Professor/Professores.jsx'
-import Aluno from './pages/Aluno/Aluno.jsx'
 import Alunos from './pages/Aluno/Alunos.jsx'
 import CadastrarAluno from './pages/Aluno/CadastrarAluno.jsx'
 import ExcluirAluno from './pages/Aluno/ExcluirAluno.jsx'
@@ -38,15 +35,12 @@ const rotas = createBrowserRouter(
 
       <Route element={<Layout />}>
         <Route index element={<Consulta/>} />
-        <Route path="/inicio" element={<Inicio />} />
-        <Route path="/inicio2" element={<Inicio2 />} />
-        <Route path="/aluno" element={<Aluno />} />
+        <Route path="/inicio2" element={<Inicio />} />
         <Route path="/alunos" element={<Alunos />} />
         <Route path="/cadastraaluno" element={<CadastrarAluno />} />
         <Route path="/excluialuno" element={<ExcluirAluno />} />
         <Route path="/editaaluno" element={<EditarAluno />} />
         <Route path="/edicaoaluno" element={<EdicaoAluno />} />
-        <Route path="/professor" element={<Professor />} />
         <Route path="/professores" element={<Professores />} />
         <Route path="/cadastraprof" element={<CadastraProfessor />} />
         <Route path="/editaprof" element={<EditarProfessor />} />

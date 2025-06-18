@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom"
 
 function CardLivro({ imagem, titulo, autor, edicao, editora, categoria, subcategoria, isbn, quantidade }) {
@@ -153,19 +153,21 @@ function CardUsuario({ registro_academico, nome, data_nascimento, email, telefon
     )
 }
 
-function Inicio2() {
-    const usuarios = [
-        { id_tipo: 1, registro_academico: "2023012345", nome: "João da Silva", data_nascimento: "2005-07-12", email: "joao.silva@email.com", telefone: "(42) 99999-8888" },
-        { id_tipo: 2, registro_academico: "2023019876", nome: "Maria Oliveira", data_nascimento: "2006-03-25", email: "maria.oliveira@email.com", telefone: "(42) 98888-7777" },
-        { id_tipo: 1, registro_academico: "2023014321", nome: "Carlos Pereira", data_nascimento: "2004-11-05", email: "carlos.pereira@email.com", telefone: "(42) 97777-5555" },
-        { id_tipo: 2, registro_academico: "2023023412", nome: "Ana Santos", data_nascimento: "1980-02-10", email: "ana.santos@email.com", telefone: "(42) 96666-4444" },
-    ]
+function Inicio() {
+    const [usuarios, setUsuarios] = useState([])
 
     const [cadastrar, setCadastrar] = useState(false)
 
     const handleClose = () => {
         setCadastrar(false)
     }
+
+    useEffect(() => {
+        fetch("http://localhost:3333/listarUsuarios")
+            .then(response => response.json())
+            .then(data => setUsuarios(data))
+            .catch(error => console.error("Erro ao buscar usuários:", error))
+    }, [])
 
     return (
         <div className="flex w-full flex-1 font-poppins bg-[#f0e7c2]">
@@ -264,18 +266,22 @@ function Inicio2() {
                                     />
                                 </>
                             )}
-                            {tituloSessao === "Alunos" && usuarios.filter(user => user.id_tipo === 1).map(user => (
+                            {tituloSessao === "Alunos" && usuarios .filter(user => user.tipo === "aluno") 
+                                    .slice(0, 3)
+                                    .map(user => (
                                 <CardUsuario
-                                    key={user.registro_academico}
+                                    key={user.id_usuario}
                                     registro_academico={user.registro_academico}
                                     nome={user.nome}
                                     data_nascimento={user.data_nascimento}
                                     email={user.email}
                                     telefone={user.telefone}
-                                    id_tipo="Aluno"
+                                    tipo="aluno"
                                 />
                             ))}
-                            {tituloSessao === "Professores" && usuarios.filter(user => user.id_tipo === 2).map(user => (
+                            {tituloSessao === "Professores" && usuarios.filter(user => user.tipo === "professor")
+                                    .slice(0, 3)
+                                    .map(user => (
                                 <CardUsuario
                                     key={user.registro_academico}
                                     registro_academico={user.registro_academico}
@@ -294,4 +300,4 @@ function Inicio2() {
     )
 }
 
-export default Inicio2;
+export default Inicio;
