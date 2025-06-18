@@ -141,8 +141,6 @@ function Livros() {
 
         console.log("Dados recebidos da API:", dados);
 
-        // Caso o backend retorne { livros: [...] }, descomente a linha abaixo e comente a próxima
-        // setLivros(dados.livros);
         setLivros(dados);
       } catch (erro) {
         console.error("Erro ao carregar livros:", erro);
@@ -180,16 +178,6 @@ function Livros() {
       )
     );
   };
-
-  // Para facilitar o teste, filtro desativado temporariamente
-  // const livrosFiltrados = livros.filter((livro) => {
-  //   const termo = busca.toLowerCase();
-  //   return (
-  //     livro.titulo.toLowerCase().includes(termo) ||
-  //     (livro.isbn && livro.isbn.toLowerCase().includes(termo)) ||
-  //     (livro.edicao && livro.edicao.toLowerCase().includes(termo))
-  //   );
-  // });
 
   const livrosFiltrados = livros;
 
