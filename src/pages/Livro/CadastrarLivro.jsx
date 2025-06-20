@@ -7,28 +7,31 @@ function CadastrarLivro() {
   const [qtdeDisponivel, setQtdeDisponivel] = useState("");
   const [isbn, setIsbn] = useState("");
   const [edicao, setEdicao] = useState("");
-  const [fotoCapa, setFotoCapa] = useState("");
+  const [fotoCapa, setFotoCapa] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const formData = new FormData();
+    formData.append("titulo", titulo);
+    formData.append("qtde_disponivel", qtdeDisponivel);
+    formData.append("isbn", isbn);
+    formData.append("edicao", edicao);
+    formData.append("is_ativo", true);
+    if (fotoCapa) {
+      formData.append("imagem", fotoCapa);
+    }
+
     try {
       const resposta = await fetch("http://localhost:3333/cadastrarLivro", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          titulo,
-          qtde_disponivel: qtdeDisponivel,
-          isbn,
-          edicao,
-          caminho_foto_capa: fotoCapa,
-          is_ativo: true,
-        }),
+        body: formData,
       });
 
-      if (!resposta.ok) throw new Error("Erro ao cadastrar livro");
+      if (!resposta.ok) {
+        const errorMsg = await resposta.text()
+        throw new Error(errorMsg || "Erro ao cadastrar livro");
+      }
 
       const dados = await resposta.json();
       console.log("Livro cadastrado com sucesso:", dados);
@@ -95,9 +98,9 @@ function CadastrarLivro() {
                 <label className="mr-2">Foto da capa:</label>
                 <input
                   type="file"
+                  accept="image/*"
                   className="h-full w-full bg-transparent outline-none"
-                  value={fotoCapa}
-                  onChange={(e) => setFotoCapa(e.target.value)}
+                  onChange={(e) => setFotoCapa(e.target.files[0])}
                 />
               </div>
 
