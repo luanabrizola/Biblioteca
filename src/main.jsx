@@ -8,7 +8,6 @@ import Professores from './pages/Professor/Professores.jsx'
 import Alunos from './pages/Aluno/Alunos.jsx'
 import CadastrarAluno from './pages/Aluno/CadastrarAluno.jsx'
 import ExcluirAluno from './pages/Aluno/ExcluirAluno.jsx'
-import Livro from './pages/Livro/Livro.jsx'
 import Livros from './pages/Livro/Livros.jsx'
 import EditarAluno from './pages/Aluno/Editar/EditarAluno.jsx'
 import EdicaoAluno from './pages/Aluno/Editar/EdicaoAluno.jsx'
@@ -35,7 +34,7 @@ const rotas = createBrowserRouter(
 
       <Route element={<Layout />}>
         <Route index element={<Consulta/>} />
-        <Route path="/inicio2" element={<Inicio />} />
+        <Route path="/inicio" element={<Inicio />} />
         <Route path="/alunos" element={<Alunos />} />
         <Route path="/cadastraaluno" element={<CadastrarAluno />} />
         <Route path="/excluialuno" element={<ExcluirAluno />} />
@@ -50,7 +49,6 @@ const rotas = createBrowserRouter(
         <Route path="/editalivro" element={<EditarLivro />} />
         <Route path="/edicaolivro" element={<EdicaoLivro />} />
         <Route path="/excluilivro" element={<ExcluirLivro />} />
-        <Route path="/livro" element={<Livro />} />
         <Route path="/livros" element={<Livros />} />
         <Route path="/emprestimos" element={<Emprestimo />} />
         <Route path="/cadastraemprestimo" element={<CadastrarEmprestimo />} />

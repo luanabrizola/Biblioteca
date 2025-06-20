@@ -4,7 +4,7 @@ function Menu() {
     const location = useLocation();
 
     const estaNaConsulta = location.pathname === "/";
-    const estaNoInicio = location.pathname === "/inicio2";
+    const estaNoInicio = location.pathname === "/inicio";
     const estaNoEmprestimo = location.pathname === "/emprestimos"
 
     return (
@@ -23,7 +23,7 @@ function Menu() {
                 </NavLink>
 
                 <NavLink
-                    to="/inicio2"
+                    to="/inicio"
                     className={`w-full h-12 rounded-e-full font-bold mt-2 flex items-center justify-center ${
                         location.pathname ==="/inicio2" ? "bg-[#dbd0b3] text-[#5b3011]" : "text-white"
                     }`}

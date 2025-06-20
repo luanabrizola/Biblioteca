@@ -89,7 +89,7 @@ function CardLivro({
             <input type="number" name="qtde_disponivel" value={form.qtde_disponivel} onChange={handleChange} placeholder="Quantidade Disponível" className="border p-2 rounded" />
             <input type="text" name="isbn" value={form.isbn} onChange={handleChange} placeholder="ISBN" className="border p-2 rounded" />
             <input type="text" name="edicao" value={form.edicao} onChange={handleChange} placeholder="Edição" className="border p-2 rounded" />
-            <input type="text" name="caminho_foto_capa" value={form.caminho_foto_capa} onChange={handleChange} placeholder="Caminho da Capa" className="border p-2 rounded" />
+            <input type="file" name="caminho_foto_capa" value={form.caminho_foto_capa} onChange={handleChange} placeholder="Caminho da Capa" className="border p-2 rounded" />
             <div className="flex justify-end gap-3 mt-3">
               <button onClick={() => setEditar(false)} className="bg-gray-400 text-white px-4 py-2 rounded">Cancelar</button>
               <button onClick={handleSalvar} className="bg-green-600 text-white px-4 py-2 rounded">Salvar</button>

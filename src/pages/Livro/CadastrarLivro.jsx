@@ -94,7 +94,7 @@ function CadastrarLivro() {
               <div className="bg-[#9f6d3d]/19 rounded-full h-10 w-[100%] mt-5 flex items-center px-5">
                 <label className="mr-2">Foto da capa:</label>
                 <input
-                  type="text"
+                  type="file"
                   className="h-full w-full bg-transparent outline-none"
                   value={fotoCapa}
                   onChange={(e) => setFotoCapa(e.target.value)}
