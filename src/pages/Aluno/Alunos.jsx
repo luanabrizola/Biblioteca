@@ -19,7 +19,7 @@ function CardUsuario({
   const [form, setForm] = useState({
     nome,
     registro_academico,
-    data_nascimento: data_nascimento?.split("T")[0] || "",
+    data_nascimento,
     email,
     telefone,
     is_ativo,
@@ -61,7 +61,7 @@ function CardUsuario({
   }
 
   return (
-    <div className="flex flex-col bg-white w-[33%] h-auto mb-5 rounded-md p-4">
+    <div className="flex flex-col bg-white w-[28%] h-auto mb-5 rounded-md p-4">
       <h1 className="text-xl font-bold mb-2 text-center break-words">{nome}</h1>
       <p>
         <span className="font-bold">Registro Acadêmico:</span> {registro_academico}
@@ -107,58 +107,78 @@ function CardUsuario({
 
       {editar && (
         <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-md sm:w-[50%] md:w-[35%] flex flex-col gap-3">
-            <h2 className="text-xl font-bold mb-4 text-center">Editar Usuário</h2>
-            <input
-              type="text"
-              name="nome"
-              value={form.nome}
-              onChange={handleChange}
-              placeholder="Nome"
-              className="border p-2 rounded"
-            />
-            <input
-              type="text"
-              name="registro_academico"
-              value={form.registro_academico}
-              onChange={handleChange}
-              placeholder="Registro Acadêmico"
-              className="border p-2 rounded"
-            />
-            <input
-              type="date"
-              name="data_nascimento"
-              value={form.data_nascimento}
-              onChange={handleChange}
-              placeholder="Data de Nascimento"
-              className="border p-2 rounded"
-            />
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              placeholder="Email"
-              className="border p-2 rounded"
-            />
-            <input
-              type="tel"
-              name="telefone"
-              value={form.telefone}
-              onChange={handleChange}
-              placeholder="Telefone"
-              className="border p-2 rounded"
-            />
-            <div className="flex justify-end gap-3 mt-3">
+          <div className="bg-white p-6 rounded-md sm:w-[50%] md:w-[35%] flex flex-col items-center gap-3">
+            <div className="flex items-center mt-2">
+                <img src="/img/iconeAlunoo.png" alt="" className="w-18 h-18 mr-4" />
+                <h1 className="border-b border-gray-300 my-4 text-4xl text-[#331a08] font-semibold">Editar</h1>
+            </div>
+            <div className="w-full px-16 mb-4">
+              <div className="bg-[#9f6d3d]/19 rounded-full h-10 w-full flex items-center px-5 mb-2">
+                  <label className="mr-2">Nome:</label>
+                  <input
+                    type="text"
+                    name="nome"
+                    value={form.nome}
+                    onChange={handleChange}
+                    placeholder="Nome"
+                    className="h-full w-full bg-transparent outline-none"
+                  />
+              </div>
+              <div className="bg-[#9f6d3d]/19 rounded-full h-10 w-full flex items-center px-5 mb-2">
+                  <label className="mr-2">Registro:</label>
+                  <input
+                    type="text"
+                    name="registro_academico"
+                    value={form.registro_academico}
+                    onChange={handleChange}
+                    placeholder="Registro Acadêmico"
+                    className="h-full w-full bg-transparent outline-none"
+                  />
+              </div>
+              <div className="bg-[#9f6d3d]/19 rounded-full h-10 w-full flex items-center px-5 mb-2">
+                  <label className="mr-2 w-[25%]">Data Nasc:</label>
+                  <input
+                    type="date"
+                    name="data_nascimento"
+                    value={form.data_nascimento}
+                    onChange={handleChange}
+                    placeholder="Data de Nascimento"
+                    className="h-full w-full bg-transparent outline-none"
+                  />
+              </div>
+              <div className="bg-[#9f6d3d]/19 rounded-full h-10 w-full flex items-center px-5 mb-2">
+                  <label className="mr-2">Email:</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    placeholder="Email"
+                    className="h-full w-full bg-transparent outline-none"
+                  />
+              </div>
+              <div className="bg-[#9f6d3d]/19 rounded-full h-10 w-full flex items-center px-5">
+                  <label className="mr-2">Telefone:</label>
+                  <input
+                    type="tel"
+                    name="telefone"
+                    value={form.telefone}
+                    onChange={handleChange}
+                    placeholder="Telefone"
+                    className="h-full w-full bg-transparent outline-none"
+                  />
+              </div>
+            </div>
+            <div className="flex justify-end gap-3 mt-2">
               <button
                 onClick={() => setEditar(false)}
-                className="bg-gray-400 text-white px-4 py-2 rounded"
+                className="bg-gray-500 text-white w-28 h-10 rounded-full cursor-pointer hover:bg-gray-400 transition-colors duration-300"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleSalvar}
-                className="bg-green-600 text-white px-4 py-2 rounded"
+                className="bg-[#5b3011]/80 text-white w-28 h-10 rounded-full cursor-pointer hover:bg-[#5b3011]/40 transition-colors duration-300"
               >
                 Salvar
               </button>
@@ -261,7 +281,7 @@ function Alunos() {
   });
 
   return (
-    <div className="flex flex-1 min-h-screen font-poppins bg-[#f0e7c2]">
+    <div className="flex flex-1 w-full font-poppins bg-[#f0e7c2]">
       <div className="w-full px-10 flex flex-col items-center">
         <form
           className="flex w-full justify-center gap-4 mt-12 mb-14"
@@ -297,8 +317,8 @@ function Alunos() {
           <button></button>
         </div>
 
-        <div className="flex flex-col w-[90%] rounded-md mt-10 mb-5">
-          <div className="flex justify-center gap-5 flex-wrap">
+        <div className="flex flex-col w-full rounded-md mt-10 mb-5">
+          <div className="flex justify-center gap-5 flex-wrap w-full">
             {usuariosFiltrados.length > 0 ? (
               usuariosFiltrados.map((user) => (
                 <CardUsuario

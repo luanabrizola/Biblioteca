@@ -7,7 +7,7 @@ function Consulta() {
     const [verMais2, setVerMais2] = useState(false);
 
     return (
-        <div className='flex w-full flex-1 font-poppins'>
+        <div className='flex w-full flex-1 h-full font-poppins'>
 
             <div className='bg-[#f0e7c2] w-full h-full font-poppins'>
                 <div className="mb-20 w-full px-10 flex flex-col items-center justify-center">
