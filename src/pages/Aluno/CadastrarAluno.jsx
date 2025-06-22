@@ -37,7 +37,6 @@ function CadastrarAluno() {
             const dados = await resposta.json();
             const id_usuario = dados.id_usuario;
 
-            // ✅ associar curso ao usuário
             const associacao = await fetch("http://localhost:3333/associarCursoAoUsuario", {
                 method: "POST",
                 headers: {
