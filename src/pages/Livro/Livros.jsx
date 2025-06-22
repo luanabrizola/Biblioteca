@@ -9,6 +9,9 @@ function CardLivro({
   edicao,
   caminho_foto_capa,
   is_ativo,
+  autores = [],
+  categorias = [],
+  editora,
   onExcluir,
   onAtualizar,
 }) {
@@ -59,23 +62,52 @@ function CardLivro({
 
       {verMais && !editar && (
         <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-md sm:w-[50%] md:w-[35%] flex">
-            <div className="flex flex-col items-center w-full">
-              <h1 className="text-2xl font-bold mb-8 text-center">{titulo}</h1>
-              <div className="flex flex-col">
-                <p className="mb-2"><span className="font-bold">Quantidade:</span> {qtde_disponivel}</p>
-                <p className="mb-2"><span className="font-bold">ISBN:</span> {isbn}</p>
-                <p className="mb-2"><span className="font-bold">Edição:</span> {edicao}</p>
-                <p className="mb-2"><span className="font-bold">Capa:</span> {caminho_foto_capa}</p>
-              </div>
-              <div className="flex mt-5 w-full justify-end">
-                <button
-                  onClick={handleClose}
-                  className="bg-[#5b3011]/48 text-white rounded-full px-4 py-2 hover:bg-[#5b3011]/80"
-                >
-                  Fechar
-                </button>
-              </div>
+          <div className="bg-white p-6 rounded-md sm:w-[50%] md:w-[35%] flex flex-col overflow-auto max-h-[80vh]">
+            <h1 className="text-2xl font-bold mb-4 text-center">{titulo}</h1>
+
+            <p><span className="font-bold">Quantidade:</span> {qtde_disponivel}</p>
+            <p><span className="font-bold">ISBN:</span> {isbn}</p>
+            <p><span className="font-bold">Edição:</span> {edicao}</p>
+            <p><span className="font-bold">Capa:</span> {caminho_foto_capa}</p>
+
+            <div className="mt-4">
+              <h3 className="font-semibold">Autores:</h3>
+              {autores.length > 0 ? (
+                autores.map((autor) => (
+                  <p key={autor.id_autor}>{autor.nome_autor}</p> // ajuste aqui
+                ))
+              ) : (
+                <p>Sem autores cadastrados</p>
+              )}
+            </div>
+
+            <div className="mt-4">
+              <h3 className="font-semibold">Categorias:</h3>
+              {categorias.length > 0 ? (
+                categorias.map((categoria) => (
+                  <p key={categoria.id_categoria}>{categoria.nome_categoria}</p> // ajuste aqui
+                ))
+              ) : (
+                <p>Sem categorias cadastradas</p>
+              )}
+            </div>
+
+            <div className="mt-4">
+              <h3 className="font-semibold">Editora:</h3>
+              {editora ? (
+                <p>{editora.nome}</p>
+              ) : (
+                <p>Sem editora cadastrada</p>
+              )}
+            </div>
+
+            <div className="flex mt-5 w-full justify-end">
+              <button
+                onClick={handleClose}
+                className="bg-[#5b3011]/48 text-white rounded-full px-4 py-2 hover:bg-[#5b3011]/80"
+              >
+                Fechar
+              </button>
             </div>
           </div>
         </div>
@@ -89,7 +121,7 @@ function CardLivro({
             <input type="number" name="qtde_disponivel" value={form.qtde_disponivel} onChange={handleChange} placeholder="Quantidade Disponível" className="border p-2 rounded" />
             <input type="text" name="isbn" value={form.isbn} onChange={handleChange} placeholder="ISBN" className="border p-2 rounded" />
             <input type="text" name="edicao" value={form.edicao} onChange={handleChange} placeholder="Edição" className="border p-2 rounded" />
-            <input type="file" name="caminho_foto_capa" value={form.caminho_foto_capa} onChange={handleChange} placeholder="Caminho da Capa" className="border p-2 rounded" />
+            <input type="file" name="caminho_foto_capa" onChange={handleChange} placeholder="Caminho da Capa" className="border p-2 rounded" />
             <div className="flex justify-end gap-3 mt-3">
               <button onClick={() => setEditar(false)} className="bg-gray-400 text-white px-4 py-2 rounded">Cancelar</button>
               <button onClick={handleSalvar} className="bg-green-600 text-white px-4 py-2 rounded">Salvar</button>
@@ -135,11 +167,9 @@ function Livros() {
   useEffect(() => {
     async function carregarLivros() {
       try {
-        const resposta = await fetch("http://localhost:3333/listarLivros");
+        const resposta = await fetch("http://localhost:3333/livrosCompletos");
         if (!resposta.ok) throw new Error("Erro ao buscar livros");
         const dados = await resposta.json();
-
-        console.log("Dados recebidos da API:", dados);
 
         setLivros(dados);
       } catch (erro) {
@@ -179,7 +209,9 @@ function Livros() {
     );
   };
 
-  const livrosFiltrados = livros;
+  const livrosFiltrados = livros.filter((livro) =>
+    livro.titulo.toLowerCase().includes(busca.toLowerCase())
+  );
 
   return (
     <div className="flex flex-1 min-h-screen font-poppins bg-[#f0e7c2]">
