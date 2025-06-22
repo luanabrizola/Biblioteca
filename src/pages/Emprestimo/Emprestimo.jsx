@@ -9,22 +9,26 @@ function CardEmprestimo({ imagem, titulo, autor, edicao, editora, categoria, sub
     }
 
     return (
-        <div className="flex bg-white w-[30%] h-auto mb-5 rounded-md relative">
-            <img src={imagem} className="w-45 h-70 flex self-center ml-4 mt-4 mb-4" />
-            <div className="ml-5 mt-4 w-full h-full overflow-hidden pb-10">
-                <h1 className="text-xl font-bold mb-2 mr-2 text-center break-words">{titulo}</h1>
-                <p className="mb-2">
-                    <span className="font-bold">Autores:</span> {autor}
-                </p>
-                <p className="mb-2">
-                    <span className="font-bold">Edição:</span> {edicao}
-                </p>
-                <p className="mb-2">
-                    <span className="font-bold">Editora:</span> {editora}
-                </p>
-                <p className="mb-2">
-                    <span className="font-bold">Categoria:</span> {categoria}
-                </p>
+        <div className="flex flex-col bg-white w-[30%] h-auto mb-5 rounded-md p-4 ">
+        <h1 className="text-xl font-bold mb-4 text-center break-words">{titulo}</h1>
+        <div className="w-full h-full overflow-hidden flex flex-col">
+            <div className="flex items-start ">
+                <img src={imagem} className="w-45 h-50 flex self-center mt-4 mb-4" />
+                <div className="flex flex-col ml-3">              
+                    <p className="mb-2">
+                        <span className="font-bold">Autores:</span> {autor}
+                    </p>
+                    <p className="mb-2">
+                        <span className="font-bold">Edição:</span> {edicao}
+                    </p>
+                    <p className="mb-2">
+                        <span className="font-bold">Editora:</span> {editora}
+                    </p>
+                    <p className="mb-2">
+                        <span className="font-bold">Categoria:</span> {categoria}
+                    </p>
+                </div>
+            </div>
 
                 <button
                     onClick={() => setVerMais(true)}
