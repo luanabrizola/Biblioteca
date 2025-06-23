@@ -55,7 +55,7 @@ function CardLivro({
   }
 
   return (
-    <div className="flex flex-col bg-white w-[33%] h-auto mb-5 rounded-md p-4">
+    <div className="flex flex-col bg-white w-[30%] h-auto mb-5 rounded-md p-4">
       <h1 className="text-xl font-bold mb-2 text-center break-words">{titulo}</h1>
       <p><span className="font-bold">ISBN:</span> {isbn}</p>
       <p className="mb-2"><span className="font-bold">Edição:</span> {edicao}</p>
@@ -163,6 +163,16 @@ function CardLivro({
 function Livros() {
   const [livros, setLivros] = useState([]);
   const [busca, setBusca] = useState("");
+  const [tipoBusca, setTipoBusca] = useState("titulo");
+  const [buscaFinal, setBuscaFinal] = useState("");
+
+  useEffect(() => {
+    if (busca.trim() === "") {
+      setBuscaFinal("");
+    }
+  }, [busca]);
+
+
 
   useEffect(() => {
     async function carregarLivros() {
@@ -209,16 +219,44 @@ function Livros() {
     );
   };
 
-  const livrosFiltrados = livros.filter((livro) =>
-    livro.titulo.toLowerCase().includes(busca.toLowerCase())
-  );
+  const removerAcentos = (texto) => {
+    // texto.normalize("NFD").replace(/[^a-zA-Z\s]/g, "");
+    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  }
+
+  const livrosFiltrados = livros.filter((livro) => {
+    const buscaLower = removerAcentos(buscaFinal.toLowerCase());
+
+    switch (tipoBusca) {
+      case "titulo":
+        return removerAcentos(livro.titulo).includes(buscaLower);
+
+      case "autor":
+        return livro.autores?.some((autor) =>
+          removerAcentos(autor.nome_autor).includes(buscaLower)
+        );
+
+      case "categoria":
+        return livro.categorias?.some((categoria) =>
+          removerAcentos(categoria.nome_categoria).includes(buscaLower)
+        );
+
+      default:
+        return false;
+    }
+    
+  });
+
 
   return (
     <div className="flex flex-1 min-h-screen font-poppins bg-[#f0e7c2]">
       <div className="w-full px-10 flex flex-col items-center">
         <form
-          className="flex w-full justify-center gap-4 mt-12 mb-14"
-          onSubmit={(e) => e.preventDefault()}
+          className="flex w-full justify-center gap-4 mt-12 mb-8"
+          onSubmit={(e) => {
+            e.preventDefault();
+            setBuscaFinal(busca);
+          }}
         >
           <input
             className="bg-[#5b3011]/48 rounded-full w-[74%] h-12 text-white placeholder:text-[#5b3011]/44 px-3"
@@ -229,7 +267,7 @@ function Livros() {
           />
           <button
             type="submit"
-            className="bg-[#5b3011]/48 text-white rounded-full h-12 w-12 flex items-center justify-center"
+            className="bg-[#5b3011]/48 text-white rounded-full h-12 w-12 flex items-center justify-center cursor-pointer"
           >
             <span className="material-icons">search</span>
           </button>
@@ -243,10 +281,30 @@ function Livros() {
         </form>
 
         <div className="flex gap-4 mb-4 font-semibold">
-          <button>Título</button>
-          <button>ISBN</button>
-          <button>Edição</button>
-          <button>Quantidade</button>
+          <button
+            onClick={() => setTipoBusca("titulo")}
+            className={`w-30 py-2 rounded-full border-none ${
+              tipoBusca === "titulo" ? "bg-[#5b3011]/60 text-white" : "bg-white text-black"
+            }`}
+          >
+            Título
+          </button>
+          <button
+            onClick={() => setTipoBusca("autor")}
+            className={`w-30 py-2 rounded-full border-none ${
+              tipoBusca === "autor" ? "bg-[#5b3011]/60 text-white" : "bg-white text-black"
+            }`}
+          >
+            Autor
+          </button>
+          <button
+            onClick={() => setTipoBusca("categoria")}
+            className={`w-30 py-2 rounded-full border-none ${
+              tipoBusca === "categoria" ? "bg-[#5b3011]/60 text-white" : "bg-white text-black"
+            }`}
+          >
+            Categoria
+          </button>
         </div>
 
         <div className="flex flex-col w-[90%] rounded-md mt-10 mb-5">
