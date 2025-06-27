@@ -9,6 +9,7 @@ function CardUsuario({
   email,
   telefone,
   tipo,
+  cursos = [],
   is_ativo,
   onExcluir,
   onAtualizar,
@@ -67,7 +68,8 @@ function CardUsuario({
         <span className="font-bold">Registro Acadêmico:</span> {registro_academico}
       </p>
       <p className="mb-2">
-        <span className="font-bold">Curso:</span>
+        <span className="font-bold">Curso(s):</span>{" "}
+        {cursos.length > 0 ? cursos.map(c => c.nome).join(", ") : "Nenhum curso cadastrado"}
       </p>
 
       {verMais && !editar && (
@@ -89,7 +91,8 @@ function CardUsuario({
                   <span className="font-bold">Telefone:</span> {telefone}
                 </p>
                 <p className="mb-2">
-                  <span className="font-bold">Curso:</span>
+                  <span className="font-bold">Curso(s):</span>{" "}
+                  {cursos.length > 0 ? cursos.map(c => c.nome).join(", ") : "Nenhum curso cadastrado"}
                 </p>
               </div>
               <div className="flex mt-5 w-full justify-end">
@@ -109,64 +112,59 @@ function CardUsuario({
         <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-md sm:w-[50%] md:w-[35%] flex flex-col items-center gap-3">
             <div className="flex items-center mt-2">
-                <img src="/img/iconeAlunoo.png" alt="" className="w-18 h-18 mr-4" />
-                <h1 className="border-b border-gray-300 my-4 text-4xl text-[#331a08] font-semibold">Editar</h1>
+              <img src="/img/iconeAlunoo.png" alt="" className="w-18 h-18 mr-4" />
+              <h1 className="border-b border-gray-300 my-4 text-4xl text-[#331a08] font-semibold">Editar</h1>
             </div>
             <div className="w-full px-16 mb-4">
               <div className="bg-[#9f6d3d]/19 rounded-full h-10 w-full flex items-center px-5 mb-2">
-                  <label className="mr-2">Nome:</label>
-                  <input
-                    type="text"
-                    name="nome"
-                    value={form.nome}
-                    onChange={handleChange}
-                    placeholder="Nome"
-                    className="h-full w-full bg-transparent outline-none"
-                  />
+                <label className="mr-2">Nome:</label>
+                <input
+                  type="text"
+                  name="nome"
+                  value={form.nome}
+                  onChange={handleChange}
+                  className="h-full w-full bg-transparent outline-none"
+                />
               </div>
               <div className="bg-[#9f6d3d]/19 rounded-full h-10 w-full flex items-center px-5 mb-2">
-                  <label className="mr-2">Registro:</label>
-                  <input
-                    type="text"
-                    name="registro_academico"
-                    value={form.registro_academico}
-                    onChange={handleChange}
-                    placeholder="Registro Acadêmico"
-                    className="h-full w-full bg-transparent outline-none"
-                  />
+                <label className="mr-2">Registro:</label>
+                <input
+                  type="text"
+                  name="registro_academico"
+                  value={form.registro_academico}
+                  onChange={handleChange}
+                  className="h-full w-full bg-transparent outline-none"
+                />
               </div>
               <div className="bg-[#9f6d3d]/19 rounded-full h-10 w-full flex items-center px-5 mb-2">
-                  <label className="mr-2 w-[25%]">Data Nasc:</label>
-                  <input
-                    type="date"
-                    name="data_nascimento"
-                    value={form.data_nascimento}
-                    onChange={handleChange}
-                    placeholder="Data de Nascimento"
-                    className="h-full w-full bg-transparent outline-none"
-                  />
+                <label className="mr-2 w-[25%]">Data Nasc:</label>
+                <input
+                  type="date"
+                  name="data_nascimento"
+                  value={form.data_nascimento}
+                  onChange={handleChange}
+                  className="h-full w-full bg-transparent outline-none"
+                />
               </div>
               <div className="bg-[#9f6d3d]/19 rounded-full h-10 w-full flex items-center px-5 mb-2">
-                  <label className="mr-2">Email:</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={form.email}
-                    onChange={handleChange}
-                    placeholder="Email"
-                    className="h-full w-full bg-transparent outline-none"
-                  />
+                <label className="mr-2">Email:</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  className="h-full w-full bg-transparent outline-none"
+                />
               </div>
               <div className="bg-[#9f6d3d]/19 rounded-full h-10 w-full flex items-center px-5">
-                  <label className="mr-2">Telefone:</label>
-                  <input
-                    type="tel"
-                    name="telefone"
-                    value={form.telefone}
-                    onChange={handleChange}
-                    placeholder="Telefone"
-                    className="h-full w-full bg-transparent outline-none"
-                  />
+                <label className="mr-2">Telefone:</label>
+                <input
+                  type="tel"
+                  name="telefone"
+                  value={form.telefone}
+                  onChange={handleChange}
+                  className="h-full w-full bg-transparent outline-none"
+                />
               </div>
             </div>
             <div className="flex justify-end gap-3 mt-2">
@@ -281,7 +279,7 @@ function Alunos() {
   });
 
   return (
-    <div className="flex flex-1 w-full h-full font-poppins bg-[#f0e7c2]">
+    <div className="flex flex-1 w-[100%] min-h-screen font-poppins bg-[#f0e7c2]">
       <div className="w-full px-10 flex flex-col items-center">
         <form
           className="flex w-full justify-center gap-4 mt-12 mb-14"
@@ -331,6 +329,7 @@ function Alunos() {
                   telefone={user.telefone}
                   is_ativo={user.is_ativo}
                   tipo={user.tipo}
+                  cursos={user.cursos || []}
                   onExcluir={handleExcluirUsuario}
                   onAtualizar={handleAtualizarUsuario}
                 />
