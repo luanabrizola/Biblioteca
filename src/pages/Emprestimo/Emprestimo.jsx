@@ -111,7 +111,7 @@ function Emprestimo() {
   });
 
   return (
-    <div className="flex flex-1 w-full font-poppins bg-[#f0e7c2]">
+    <div className="flex flex-1 w-full min-h-screen font-poppins bg-[#f0e7c2]">
       <div className="w-full px-10 flex flex-col items-center">
         <form
           className="flex w-full justify-center gap-4 mt-12 mb-14"
