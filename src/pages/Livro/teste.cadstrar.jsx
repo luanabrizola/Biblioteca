@@ -13,8 +13,6 @@ function CadastrarLivro() {
 
 
 
-
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -40,7 +38,7 @@ function CadastrarLivro() {
             }
 
             const dados = await resposta.json();
-            const id_livro = dados.id_livro;
+            const id_usuario = dados.id_usuario;
 
             const associacao = await fetch("http://localhost:3333/associarCategoriaAoLivro", {
                 method: "POST",
@@ -136,13 +134,13 @@ function CadastrarLivro() {
                                 <select
                                     className="h-full w-full bg-transparent outline-none"
                                     value={categoriaSelecionada}
-                                    onChange={(e) => setCategoriaSelecionada(e.target.value)}
+                                    onChange={(e) => setcategoriaSelecionada(e.target.value)}
                                     required
                                 >
                                     <option value="">Selecione uma categoria</option>
                                     {categorias.map((categorias) => (
-                                        <option key={categorias.id_categoria} value={categorias.id_categoria}>
-                                            {categorias.nome_categoria}
+                                        <option key={categoria.id_categoria} value={categoria.id_categoria}>
+                                            {categoria.nome_categoria}
                                         </option>
                                     ))}
                                 </select>

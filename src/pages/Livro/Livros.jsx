@@ -61,54 +61,65 @@ function CardLivro({
       <p className="mb-2"><span className="font-bold">Edição:</span> {edicao}</p>
 
       {verMais && !editar && (
-        <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-md sm:w-[50%] md:w-[35%] flex flex-col overflow-auto max-h-[80vh]">
-            <h1 className="text-2xl font-bold mb-4 text-center">{titulo}</h1>
+        <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center flex-col z-50">
+          <div className="bg-white p-6 rounded-md sm:w-[50%] md:w-[55%] flex  overflow-auto max-h-[80vh]">
+            <img src= {`http://localhost:3333/imagens/${id_livro}.${caminho_foto_capa}`} alt="Capa do Livro" />
+            <div className="ml-5 h-[90%] mt-4 flex flex-col ml-8">
+              <h1 className="text-2xl font-bold mb-4 text-center">{titulo}</h1> <br/>
 
-            <p><span className="font-bold">Quantidade:</span> {qtde_disponivel}</p>
-            <p><span className="font-bold">ISBN:</span> {isbn}</p>
-            <p><span className="font-bold">Edição:</span> {edicao}</p>
-            <p><span className="font-bold">Capa:</span> {caminho_foto_capa}</p>
+              <p><span className="font-bold">Quantidade:</span> {qtde_disponivel}</p> <br/>
 
-            <div className="mt-4">
-              <h3 className="font-semibold">Autores:</h3>
-              {autores.length > 0 ? (
-                autores.map((autor) => (
-                  <p key={autor.id_autor}>{autor.nome_autor}</p> // ajuste aqui
-                ))
-              ) : (
-                <p>Sem autores cadastrados</p>
-              )}
+              <p><span className="font-bold">ISBN:</span> {isbn}</p> <br/>
+
+              <p><span className="font-bold">Edição:</span> {edicao}</p>
+
+              <p>
+                <span className="font-bold">Categoria(as):</span>{""}
+                {categorias.length > 0 ? categorias.map(c => c.nome).join(", ") : "Nenhum categoria cadastrado"}
+              </p>
+
+
+              <div className="mt-4">
+                <h3 className="font-semibold">Autores:</h3>
+                {autores.length > 0 ? (
+                  autores.map((autor) => (
+                    <p key={autor.id_autor}>{autor.nome_autor}</p> 
+                  ))
+                ) : (
+                  <p>Sem autores cadastrados</p>
+                )}
+              </div>
+
+              <div className="mt-4">
+                <h3 className="font-semibold">Categorias:</h3>
+                {categorias.length > 0 ? (
+                  categorias.map((categoria) => (
+                    <p key={categoria.id_categoria}>{categoria.nome_categoria}</p> 
+                  ))
+                ) : (
+                  <p>Sem categorias cadastradas</p>
+                )}
+              </div>
+
+              <div className="mt-4">
+                <h3 className="font-semibold">Editora:</h3>
+                {editora ? (
+                  <p>{editora.nome}</p>
+                ) : (
+                  <p>Sem editora cadastrada</p>
+                )}
+              </div>
+
+              <div className="flex mt-5 w-full justify-end aling-end self-end items-end">
+                <button
+                  onClick={handleClose}
+                  className="bg-[#5b3011]/48 text-white rounded-full px-4 py-2 hover:bg-[#5b3011]/80 self-end"
+                >
+                  Fechar
+                </button>
+              </div>
             </div>
 
-            <div className="mt-4">
-              <h3 className="font-semibold">Categorias:</h3>
-              {categorias.length > 0 ? (
-                categorias.map((categoria) => (
-                  <p key={categoria.id_categoria}>{categoria.nome_categoria}</p> // ajuste aqui
-                ))
-              ) : (
-                <p>Sem categorias cadastradas</p>
-              )}
-            </div>
-
-            <div className="mt-4">
-              <h3 className="font-semibold">Editora:</h3>
-              {editora ? (
-                <p>{editora.nome}</p>
-              ) : (
-                <p>Sem editora cadastrada</p>
-              )}
-            </div>
-
-            <div className="flex mt-5 w-full justify-end">
-              <button
-                onClick={handleClose}
-                className="bg-[#5b3011]/48 text-white rounded-full px-4 py-2 hover:bg-[#5b3011]/80"
-              >
-                Fechar
-              </button>
-            </div>
           </div>
         </div>
       )}
@@ -316,6 +327,7 @@ function Livros() {
                   {...livro}
                   onExcluir={handleExcluirLivro}
                   onAtualizar={handleAtualizarLivro}
+                  categorias={livro.categorias || []}
                 />
               ))
             ) : (
