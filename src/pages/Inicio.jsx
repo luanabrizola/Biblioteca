@@ -1,83 +1,171 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom"
 
-function CardLivro({ imagem, titulo, autor, edicao, editora, categoria, subcategoria, isbn, quantidade }) {
-    const [verMais, setVerMais] = useState(false)
+function CardLivro({
+    id_livro,
+    titulo,
+    qtde_disponivel,
+    isbn,
+    edicao,
+    caminho_foto_capa,
+    is_ativo,
+    autores = [],
+    categorias = [],
+    editora,
+    onExcluir,
+    onAtualizar,
+}) {
+    const [verMais, setVerMais] = useState(false);
+    const [editar, setEditar] = useState(false);
 
-    const handleClose = () => {
-        setVerMais(false)
+    const [form, setForm] = useState({
+        titulo,
+        qtde_disponivel,
+        isbn,
+        edicao,
+        caminho_foto_capa,
+        is_ativo,
+    });
+
+    const handleClose = () => setVerMais(false);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setForm((prev) => ({ ...prev, [name]: value }));
+    };
+
+    async function handleSalvar() {
+        try {
+            const resposta = await fetch("http://localhost:3333/atualizarLivro", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id_livro, ...form }),
+            });
+
+            if (!resposta.ok) throw new Error("Erro ao atualizar livro");
+
+            const dados = await resposta.json();
+            onAtualizar(dados.livro);
+            setEditar(false);
+            setVerMais(false);
+        } catch (erro) {
+            alert("Erro ao atualizar livro");
+            console.error(erro);
+        }
     }
 
     return (
-        <div className="flex flex-col bg-white w-[30%] h-auto mb-5 rounded-md p-4 ">
-            <h1 className="text-xl font-bold mb-4 text-center break-words">{titulo}</h1>
-            <div className="w-full h-full overflow-hidden flex flex-col">
-                <div className="flex items-start ">
-                    <img src={imagem} className="w-45 h-50 flex self-center mt-4 mb-4" />
-                    <div className="flex flex-col ml-3">              
-                        <p className="mb-2">
-                            <span className="font-bold">Autores:</span> {autor}
-                        </p>
-                        <p className="mb-2">
-                            <span className="font-bold">Edição:</span> {edicao}
-                        </p>
-                        <p className="mb-2">
-                            <span className="font-bold">Editora:</span> {editora}
-                        </p>
-                        <p className="mb-2">
-                            <span className="font-bold">Categoria:</span> {categoria}
-                        </p>
+        <div className="flex flex-col bg-white w-[45%] h-auto mb-5 rounded-md p-4">
+            <div className="flex">
+                <img src={`http://localhost:3333/imagens/${id_livro}.${caminho_foto_capa}`} alt="Capa do Livro" className="max-h-[300px] h-auto w-auto max-w-[250px]" />
+                <div className="ml-5 h-[90%] mt-4 flex flex-col ml-8">
+                    <h1 className="text-xl font-bold mb-2 text-center break-words">{titulo}</h1>
+                    <p><span className="font-bold">ISBN:</span> {isbn}</p>
+                    <p className="mb-2"><span className="font-bold">Edição:</span> {edicao}</p>
+                    <p><span className="font-bold">Quantidade Disponível:</span> {qtde_disponivel}</p> <br />
+
+                    <div className="flex flex-col justify-end h-full">
+                        <button
+                            onClick={() => setVerMais(!verMais)}
+                            className="text-black underline font-bold flex justify-center mt-2 hover:text-[#5b3011]"
+                        >
+                            {verMais ? "Ver menos" : "Ver mais"}
+                        </button>
+
+                        <div className="flex justify-end space-x-3">
+                            <span
+                                className="material-icons cursor-pointer hover:text-gray-500"
+                                onClick={() => {
+                                    setEditar(true);
+                                    setVerMais(false);
+                                }}
+                                title="Editar"
+                            >
+                                edit
+                            </span>
+                            <span
+                                className="material-icons cursor-pointer hover:text-red-500"
+                                onClick={() => onExcluir(id_livro)}
+                                title="Excluir"
+                            >
+                                delete
+                            </span>
+                        </div>
                     </div>
-                </div>
 
-                <button
-                    onClick={() => setVerMais(true)}
-                    className="text-black underline font-bold mt-2 cursor-pointer hover:text-[#5b3011] transition-colors duration-300"
-                >
-                    Ver mais
-                </button>
-
-                <div className="flex space-x-3 mt-4 self-end">
-                    <i className="material-icons cursor-pointer hover:text-gray-500 transition-colors duration-300">edit</i>
-                    <i className="material-icons cursor-pointer hover:text-red-500 transition-colors duration-300">delete</i>
                 </div>
             </div>
 
-            {verMais && (
-                <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-md sm:w-[60%] md:w-[40%] flex">
-                        <img src={imagem} className="w-1/3 h-auto mr-7" />
-                        <div className="flex flex-col w-full">
-                            <h1 className="text-2xl font-bold mb-4"> {titulo} </h1>
-                            <p className="mb-2">
-                                <span className="font-bold">Autores:</span> {autor}
-                            </p>
-                            <p className="mb-2">
-                                <span className="font-bold">Edição:</span> {edicao}
-                            </p>
-                            <p className="mb-2">
-                                <span className="font-bold">Editora:</span> {editora}
-                            </p>
-                            <p className="mb-2">
-                                <span className="font-bold">Categoria:</span> {categoria}
-                            </p>
-                            <p className="mb-2">
-                                <span className="font-bold">Subcategoria:</span> {subcategoria}
-                            </p>
-                            <p className="mb-2">
-                                <span className="font-bold">ISBN:</span> {isbn}
-                            </p>
-                            <p className="mb-2">
-                                <span className="font-bold">Quantidade:</span> {quantidade}
-                            </p>
-                            <div className="flex justify-end mt-5 w-full h-full items-end">
+            {verMais && !editar && (
+                <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center flex-col z-50">
+                    <div className="bg-white p-6 rounded-md sm:w-[50%] md:w-[55%] flex overflow-auto max-h-[80vh]">
+                        <img src={`http://localhost:3333/imagens/${id_livro}.${caminho_foto_capa}`} alt="Capa do Livro" />
+                        <div className="ml-5 h-[90%] mt-4 flex flex-col ml-8">
+                            <h1 className="text-2xl font-bold mb-4 text-center">{titulo}</h1> <br />
+
+                            <p><span className="font-bold">Quantidade Disponível:</span> {qtde_disponivel}</p> <br />
+
+                            <p><span className="font-bold">ISBN:</span> {isbn}</p> <br />
+
+                            <p><span className="font-bold">Edição:</span> {edicao}</p>
+
+
+                            <div className="mt-4">
+                                <h3 className="font-semibold">Autores:</h3>
+                                {autores.length > 0 ? (
+                                    autores.map((autor) => (
+                                        <p key={autor.id_autor}>{autor.nome_autor}</p>
+                                    ))
+                                ) : (
+                                    <p>Sem autores cadastrados</p>
+                                )}
+                            </div>
+
+                            <div className="mt-4">
+                                <h3 className="font-semibold">Categorias:</h3>
+                                {categorias.length > 0 ? (
+                                    categorias.map((categoria) => (
+                                        <p key={categoria.id_categoria}>{categoria.nome_categoria}</p>
+                                    ))
+                                ) : (
+                                    <p>Sem categorias cadastradas</p>
+                                )}
+                            </div>
+
+                            <div className="mt-4">
+                                <h3 className="font-semibold">Editora:</h3>
+                                {editora ? (
+                                    <p>{editora.nome}</p>
+                                ) : (
+                                    <p>Sem editora cadastrada</p>
+                                )}
+                            </div>
+
+                            <div className="flex mt-5 w-full justify-end self-end items-end">
                                 <button
                                     onClick={handleClose}
-                                    className="bg-[#5b3011]/48 text-white rounded-full px-4 py-2 cursor-pointer hover:bg-[#5b3011]/80 transition-colors duration-300"
+                                    className="bg-[#5b3011]/48 text-white rounded-full px-4 py-2 hover:bg-[#5b3011]/80 self-end"
                                 >
                                     Fechar
                                 </button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {editar && (
+                <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-md sm:w-[50%] md:w-[35%] flex flex-col gap-3">
+                        <h2 className="text-xl font-bold mb-4 text-center">Editar Livro</h2>
+                        <input type="text" name="titulo" value={form.titulo} onChange={handleChange} placeholder="Título" className="border p-2 rounded" />
+                        <input type="number" name="qtde_disponivel" value={form.qtde_disponivel} onChange={handleChange} placeholder="Quantidade Disponível" className="border p-2 rounded" />
+                        <input type="text" name="isbn" value={form.isbn} onChange={handleChange} placeholder="ISBN" className="border p-2 rounded" />
+                        <input type="text" name="edicao" value={form.edicao} onChange={handleChange} placeholder="Edição" className="border p-2 rounded" />
+                        <input type="file" name="caminho_foto_capa" onChange={handleChange} placeholder="Caminho da Capa" className="border p-2 rounded" />
+                        <div className="flex justify-end gap-3 mt-3">
+                            <button onClick={() => setEditar(false)} className="bg-gray-400 text-white px-4 py-2 rounded">Cancelar</button>
+                            <button onClick={handleSalvar} className="bg-green-600 text-white px-4 py-2 rounded">Salvar</button>
                         </div>
                     </div>
                 </div>
@@ -169,6 +257,93 @@ function Inicio() {
             .catch(error => console.error("Erro ao buscar usuários:", error))
     }, [])
 
+    const [livros, setLivros] = useState([]);
+    const [busca, setBusca] = useState("");
+    const [tipoBusca, setTipoBusca] = useState("titulo");
+    const [buscaFinal, setBuscaFinal] = useState("");
+
+    useEffect(() => {
+        if (busca.trim() === "") {
+            setBuscaFinal("");
+        }
+    }, [busca]);
+
+
+
+    useEffect(() => {
+        async function carregarLivros() {
+            try {
+                const resposta = await fetch("http://localhost:3333/livrosCompletos");
+                if (!resposta.ok) throw new Error("Erro ao buscar livros");
+                const dados = await resposta.json();
+
+                setLivros(dados);
+            } catch (erro) {
+                console.error("Erro ao carregar livros:", erro);
+            }
+        }
+
+        carregarLivros();
+    }, []);
+
+    const handleExcluirLivro = async (id_livro) => {
+        const confirmar = window.confirm("Tem certeza que deseja excluir este livro?");
+        if (!confirmar) return;
+
+        try {
+            const resposta = await fetch("http://localhost:3333/removerLivro", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id_livro }),
+            });
+
+            const json = await resposta.json();
+            console.log("Livro excluído:", json);
+
+            setLivros((prev) => prev.filter((livro) => livro.id_livro !== id_livro));
+        } catch (erro) {
+            console.error("Erro ao excluir livro:", erro);
+            alert("Erro ao excluir livro.");
+        }
+    };
+
+    const handleAtualizarLivro = (livroAtualizado) => {
+        setLivros((prev) =>
+            prev.map((livro) =>
+                livro.id_livro === livroAtualizado.id_livro ? livroAtualizado : livro
+            )
+        );
+    };
+
+
+    const removerAcentos = (texto) => {
+        // texto.normalize("NFD").replace(/[^a-zA-Z\s]/g, "");
+        return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    }
+
+    const livrosFiltrados = livros.filter((livro) => {
+        const buscaLower = removerAcentos(buscaFinal.toLowerCase());
+
+        switch (tipoBusca) {
+            case "titulo":
+                return removerAcentos(livro.titulo).includes(buscaLower);
+
+            case "autor":
+                return livro.autores?.some((autor) =>
+                    removerAcentos(autor.nome_autor).includes(buscaLower)
+                );
+
+            case "categoria":
+                return livro.categorias?.some((categoria) =>
+                    removerAcentos(categoria.nome_categoria).includes(buscaLower)
+                );
+
+            default:
+                return false;
+        }
+
+    });
+
     return (
         <div className="flex w-full flex-1 font-poppins bg-[#f0e7c2]">
             <div className="w-full px-10 flex flex-col items-center justify-center">
@@ -225,73 +400,56 @@ function Inicio() {
 
                 {["Livros", "Alunos", "Professores"].map((tituloSessao, index) => (
                     <div key={index} className="flex flex-col bg-[#5b3011]/48 w-[90%] rounded-md mt-10 mb-5 p-5">
-                    <Link to={`/${tituloSessao.toLowerCase()}`} className="text-white font-bold text-2xl mb-4 transition-all duration-200 hover:text-4xl cursor-pointer">
-                        {tituloSessao}
-                    </Link>
+                        <Link to={`/${tituloSessao.toLowerCase()}`} className="text-white font-bold text-2xl mb-4 transition-all duration-200 hover:text-4xl cursor-pointer">
+                            {tituloSessao}
+                        </Link>
                         <div className="flex justify-center gap-5 flex-wrap">
                             {tituloSessao === "Livros" && (
-                                <>
-                                    <CardLivro
-                                        imagem="/img/DiarioAnneFrank.png"
-                                        titulo="O Diário de Anne Frank"
-                                        autor="Anne Frank"
-                                        edicao="Anne 99°"
-                                        editora="Record"
-                                        categoria="Biografia"
-                                        subcategoria="Holocausto, nazismo"
-                                        isbn="8501044458"
-                                        quantidade="2 unidades"
-                                    />
-                                    <CardLivro
-                                        imagem="/img/DiarioAnneFrank.png"
-                                        titulo="O Diário de Anne Frank"
-                                        autor="Anne Frank"
-                                        edicao="Anne 99°"
-                                        editora="Record"
-                                        categoria="Biografia"
-                                        subcategoria="Holocausto, nazismo"
-                                        isbn="8501044458"
-                                        quantidade="2 unidades"
-                                    />
-                                    <CardLivro
-                                        imagem="/img/DiarioAnneFrank.png"
-                                        titulo="O Diário de Anne Frank"
-                                        autor="Anne Frank"
-                                        edicao="Anne 99°"
-                                        editora="Record"
-                                        categoria="Biografia"
-                                        subcategoria="Holocausto, nazismo"
-                                        isbn="8501044458"
-                                        quantidade="2 unidades"
-                                    />
-                                </>
+                                <div className="flex flex-col w-[90%] rounded-md mt-10 mb-5">
+                                    <div className="flex justify-center gap-5 flex-wrap">
+                                        {livrosFiltrados.length > 0 ? (
+                                            livrosFiltrados.slice(0, 2)
+                                            .map((livro) => (
+                                                <CardLivro
+                                                    key={livro.id_livro}
+                                                    {...livro}
+                                                    onExcluir={handleExcluirLivro}
+                                                    onAtualizar={handleAtualizarLivro}
+                                                    categorias={livro.categorias || []}
+                                                />
+                                            ))
+                                        ) : (
+                                            <p className="text-center w-full text-gray-600 mt-8">Nenhum livro encontrado.</p>
+                                        )}
+                                    </div>
+                                </div>
                             )}
-                            {tituloSessao === "Alunos" && usuarios .filter(user => user.tipo === "aluno") 
-                                    .slice(0, 3)
-                                    .map(user => (
-                                <CardUsuario
-                                    key={user.id_usuario}
-                                    registro_academico={user.registro_academico}
-                                    nome={user.nome}
-                                    data_nascimento={user.data_nascimento}
-                                    email={user.email}
-                                    telefone={user.telefone}
-                                    tipo="aluno"
-                                />
-                            ))}
+                            {tituloSessao === "Alunos" && usuarios.filter(user => user.tipo === "aluno")
+                                .slice(0, 3)
+                                .map(user => (
+                                    <CardUsuario
+                                        key={user.id_usuario}
+                                        registro_academico={user.registro_academico}
+                                        nome={user.nome}
+                                        data_nascimento={user.data_nascimento}
+                                        email={user.email}
+                                        telefone={user.telefone}
+                                        tipo="aluno"
+                                    />
+                                ))}
                             {tituloSessao === "Professores" && usuarios.filter(user => user.tipo === "professor")
-                                    .slice(0, 3)
-                                    .map(user => (
-                                <CardUsuario
-                                    key={user.registro_academico}
-                                    registro_academico={user.registro_academico}
-                                    nome={user.nome}
-                                    data_nascimento={user.data_nascimento}
-                                    email={user.email}
-                                    telefone={user.telefone}
-                                    id_tipo="Professor"
-                                />
-                            ))}
+                                .slice(0, 3)
+                                .map(user => (
+                                    <CardUsuario
+                                        key={user.registro_academico}
+                                        registro_academico={user.registro_academico}
+                                        nome={user.nome}
+                                        data_nascimento={user.data_nascimento}
+                                        email={user.email}
+                                        telefone={user.telefone}
+                                        id_tipo="Professor"
+                                    />
+                                ))}
                         </div>
                     </div>
                 ))}

@@ -55,35 +55,66 @@ function CardLivro({
   }
 
   return (
-    <div className="flex flex-col bg-white w-[30%] h-auto mb-5 rounded-md p-4">
-      <h1 className="text-xl font-bold mb-2 text-center break-words">{titulo}</h1>
-      <p><span className="font-bold">ISBN:</span> {isbn}</p>
-      <p className="mb-2"><span className="font-bold">Edição:</span> {edicao}</p>
+    <div className="flex flex-col bg-white w-[45%] h-auto mb-5 rounded-md p-4">
+      <div className="flex">
+        <img src={`http://localhost:3333/imagens/${id_livro}.${caminho_foto_capa}`} alt="Capa do Livro" className="max-h-[300px] h-auto w-auto max-w-[250px]" />
+        <div className="ml-5 h-[90%] mt-4 flex flex-col ml-8">
+          <h1 className="text-xl font-bold mb-2 text-center break-words">{titulo}</h1>
+          <p><span className="font-bold">ISBN:</span> {isbn}</p>
+          <p className="mb-2"><span className="font-bold">Edição:</span> {edicao}</p>
+          <p><span className="font-bold">Quantidade Disponível:</span> {qtde_disponivel}</p> <br />
+
+          <div className="flex flex-col justify-end h-full">
+            <button
+              onClick={() => setVerMais(!verMais)}
+              className="text-black underline font-bold flex justify-center mt-2 hover:text-[#5b3011]"
+            >
+              {verMais ? "Ver menos" : "Ver mais"}
+            </button>
+
+            <div className="flex justify-end space-x-3">
+              <span
+                className="material-icons cursor-pointer hover:text-gray-500"
+                onClick={() => {
+                  setEditar(true);
+                  setVerMais(false);
+                }}
+                title="Editar"
+              >
+                edit
+              </span>
+              <span
+                className="material-icons cursor-pointer hover:text-red-500"
+                onClick={() => onExcluir(id_livro)}
+                title="Excluir"
+              >
+                delete
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </div>
 
       {verMais && !editar && (
         <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center flex-col z-50">
-          <div className="bg-white p-6 rounded-md sm:w-[50%] md:w-[55%] flex  overflow-auto max-h-[80vh]">
-            <img src= {`http://localhost:3333/imagens/${id_livro}.${caminho_foto_capa}`} alt="Capa do Livro" />
+          <div className="bg-white p-6 rounded-md sm:w-[50%] md:w-[55%] flex overflow-auto max-h-[80vh]">
+            <img src={`http://localhost:3333/imagens/${id_livro}.${caminho_foto_capa}`} alt="Capa do Livro" />
             <div className="ml-5 h-[90%] mt-4 flex flex-col ml-8">
-              <h1 className="text-2xl font-bold mb-4 text-center">{titulo}</h1> <br/>
+              <h1 className="text-2xl font-bold mb-4 text-center">{titulo}</h1> <br />
 
-              <p><span className="font-bold">Quantidade:</span> {qtde_disponivel}</p> <br/>
+              <p><span className="font-bold">Quantidade Disponível:</span> {qtde_disponivel}</p> <br />
 
-              <p><span className="font-bold">ISBN:</span> {isbn}</p> <br/>
+              <p><span className="font-bold">ISBN:</span> {isbn}</p> <br />
 
               <p><span className="font-bold">Edição:</span> {edicao}</p>
-
-              <p>
-                <span className="font-bold">Categoria(as):</span>{""}
-                {categorias.length > 0 ? categorias.map(c => c.nome).join(", ") : "Nenhum categoria cadastrado"}
-              </p>
 
 
               <div className="mt-4">
                 <h3 className="font-semibold">Autores:</h3>
                 {autores.length > 0 ? (
                   autores.map((autor) => (
-                    <p key={autor.id_autor}>{autor.nome_autor}</p> 
+                    <p key={autor.id_autor}>{autor.nome_autor}</p>
                   ))
                 ) : (
                   <p>Sem autores cadastrados</p>
@@ -94,7 +125,7 @@ function CardLivro({
                 <h3 className="font-semibold">Categorias:</h3>
                 {categorias.length > 0 ? (
                   categorias.map((categoria) => (
-                    <p key={categoria.id_categoria}>{categoria.nome_categoria}</p> 
+                    <p key={categoria.id_categoria}>{categoria.nome_categoria}</p>
                   ))
                 ) : (
                   <p>Sem categorias cadastradas</p>
@@ -110,7 +141,7 @@ function CardLivro({
                 )}
               </div>
 
-              <div className="flex mt-5 w-full justify-end aling-end self-end items-end">
+              <div className="flex mt-5 w-full justify-end self-end items-end">
                 <button
                   onClick={handleClose}
                   className="bg-[#5b3011]/48 text-white rounded-full px-4 py-2 hover:bg-[#5b3011]/80 self-end"
@@ -119,7 +150,6 @@ function CardLivro({
                 </button>
               </div>
             </div>
-
           </div>
         </div>
       )}
@@ -140,33 +170,6 @@ function CardLivro({
           </div>
         </div>
       )}
-
-      <button
-        onClick={() => setVerMais(!verMais)}
-        className="text-black underline font-bold mt-2 hover:text-[#5b3011]"
-      >
-        {verMais ? "Ver menos" : "Ver mais"}
-      </button>
-
-      <div className="flex space-x-3 mt-2">
-        <span
-          className="material-icons cursor-pointer hover:text-gray-500"
-          onClick={() => {
-            setEditar(true);
-            setVerMais(false);
-          }}
-          title="Editar"
-        >
-          edit
-        </span>
-        <span
-          className="material-icons cursor-pointer hover:text-red-500"
-          onClick={() => onExcluir(id_livro)}
-          title="Excluir"
-        >
-          delete
-        </span>
-      </div>
     </div>
   );
 }
@@ -255,7 +258,7 @@ function Livros() {
       default:
         return false;
     }
-    
+
   });
 
 
@@ -294,25 +297,22 @@ function Livros() {
         <div className="flex gap-4 mb-4 font-semibold">
           <button
             onClick={() => setTipoBusca("titulo")}
-            className={`w-30 py-2 rounded-full border-none ${
-              tipoBusca === "titulo" ? "bg-[#5b3011]/60 text-white" : "bg-white text-black"
-            }`}
+            className={`w-30 py-2 rounded-full border-none ${tipoBusca === "titulo" ? "bg-[#5b3011]/60 text-white" : "bg-white text-black"
+              }`}
           >
             Título
           </button>
           <button
             onClick={() => setTipoBusca("autor")}
-            className={`w-30 py-2 rounded-full border-none ${
-              tipoBusca === "autor" ? "bg-[#5b3011]/60 text-white" : "bg-white text-black"
-            }`}
+            className={`w-30 py-2 rounded-full border-none ${tipoBusca === "autor" ? "bg-[#5b3011]/60 text-white" : "bg-white text-black"
+              }`}
           >
             Autor
           </button>
           <button
             onClick={() => setTipoBusca("categoria")}
-            className={`w-30 py-2 rounded-full border-none ${
-              tipoBusca === "categoria" ? "bg-[#5b3011]/60 text-white" : "bg-white text-black"
-            }`}
+            className={`w-30 py-2 rounded-full border-none ${tipoBusca === "categoria" ? "bg-[#5b3011]/60 text-white" : "bg-white text-black"
+              }`}
           >
             Categoria
           </button>
