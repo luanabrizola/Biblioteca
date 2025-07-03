@@ -8,9 +8,11 @@ function CadastrarEmprestimo() {
   const [livros, setLivros] = useState([]);
 
   const [usuarioSelecionado, setUsuarioSelecionado] = useState("");
+  const [tipoUsuario, setTipoUsuario] = useState("");
   const [livroSelecionado, setLivroSelecionado] = useState("");
   const [data, setData] = useState("");
-  const [devolucao, setDevolucao] = useState("");
+  const [dataDevolucaoCalculada, setDataDevolucaoCalculada] = useState("");
+
 
   useEffect(() => {
     async function carregarUsuariosELivros() {
@@ -26,14 +28,42 @@ function CadastrarEmprestimo() {
         console.error("Erro ao carregar dados:", erro);
       }
     }
-
     carregarUsuariosELivros();
   }, []);
+
+  // Atualiza o tipo do usuário ao selecionar um usuário
+  const handleUsuarioChange = (e) => {
+    const registro = e.target.value;
+    setUsuarioSelecionado(registro);
+  
+    const usuario = usuarios.find((u) => u.registro_academico === registro);
+    if (usuario) {
+      setTipoUsuario(usuario.tipo); // já é minúsculo, segundo você
+    } else {
+      setTipoUsuario("");
+    }
+  };
+  useEffect(() => {
+    if (!data || !tipoUsuario) {
+      setDataDevolucaoCalculada("");
+      return;
+    }
+
+    const dataEmprestimo = new Date(data);
+    const devolucao = new Date(dataEmprestimo);
+
+    const diasPrazo = tipoUsuario === "professor" ? 30 : 14;
+    devolucao.setDate(devolucao.getDate() + diasPrazo);
+
+    const formatada = devolucao.toISOString().split("T")[0];
+    setDataDevolucaoCalculada(formatada);
+  }, [data, tipoUsuario]);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!usuarioSelecionado || !data || !livroSelecionado || !devolucao) {
+    if (!usuarioSelecionado || !data || !livroSelecionado) {
       alert("Por favor, preencha todos os campos.");
       return;
     }
@@ -43,18 +73,25 @@ function CadastrarEmprestimo() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          id_usuario: usuarioSelecionado,
+          registro_academico: usuarioSelecionado,
           id_livro: livroSelecionado,
           data_emprestimo: data,
-          data_devolucao: devolucao,
-          is_ativo: true,
+          data_devolucao: dataDevolucaoCalculada,
         }),
       });
 
+      const respostaJson = await resposta.json();
+
       if (!resposta.ok) {
-        const texto = await resposta.text();
-        console.error("Erro na resposta da API:", texto);
-        alert("Erro ao cadastrar empréstimo.");
+        const msg =
+          respostaJson.erro ||
+          (Array.isArray(respostaJson) ? respostaJson[0] : "Erro ao cadastrar empréstimo.");
+        alert(msg);
+        return;
+      }
+
+      if (Array.isArray(respostaJson) && respostaJson.length > 0) {
+        alert(respostaJson[0]);
         return;
       }
 
@@ -78,12 +115,12 @@ function CadastrarEmprestimo() {
                 <select
                   className="h-full w-full bg-transparent outline-none"
                   value={usuarioSelecionado}
-                  onChange={(e) => setUsuarioSelecionado(e.target.value)}
+                  onChange={handleUsuarioChange}
                   required
                 >
                   <option value="">Selecione um usuário</option>
                   {usuarios.map((usuario) => (
-                    <option key={usuario.id_usuario} value={usuario.id_usuario}>
+                    <option key={usuario.id_usuario} value={usuario.registro_academico}>
                       {usuario.registro_academico} - {usuario.nome}
                     </option>
                   ))}
@@ -112,7 +149,7 @@ function CadastrarEmprestimo() {
                 >
                   <option value="">Selecione um livro</option>
                   {livros.map((livro) => (
-                    <option key={livro.id_livro} value={livro.id_livro}>
+                    <option key={livro.id_livro} value={livro.isbn}>
                       {livro.isbn} - {livro.titulo}
                     </option>
                   ))}
@@ -124,10 +161,10 @@ function CadastrarEmprestimo() {
                 <input
                   type="date"
                   id="devolucao"
-                  value={devolucao}
-                  onChange={(e) => setDevolucao(e.target.value)}
-                  className="h-full w-full bg-transparent outline-none"
-                  required
+                  value={dataDevolucaoCalculada}
+                  disabled
+                  readOnly
+                  className="h-full w-full bg-transparent outline-none text-gray-600"
                 />
               </div>
 
