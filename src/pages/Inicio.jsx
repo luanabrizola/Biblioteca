@@ -18,6 +18,8 @@ function CardLivro({
     const [verMais, setVerMais] = useState(false);
     const [editar, setEditar] = useState(false);
 
+    const [fotoCapa, setFotoCapa] = useState(null);
+
     const [form, setForm] = useState({
         titulo,
         qtde_disponivel,
@@ -36,16 +38,25 @@ function CardLivro({
 
     async function handleSalvar() {
         try {
+            const formData = new FormData();
+            formData.append("id_livro", id_livro);
+            formData.append("titulo", form.titulo);
+            formData.append("qtde_disponivel", form.qtde_disponivel);
+            formData.append("isbn", form.isbn);
+            formData.append("edicao", form.edicao);
+            formData.append("is_ativo", true);
+            if (fotoCapa) {
+                formData.append("imagem", fotoCapa);
+            }
+
             const resposta = await fetch("http://localhost:3333/atualizarLivro", {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ id_livro, ...form }),
+                body: formData,
             });
 
             if (!resposta.ok) throw new Error("Erro ao atualizar livro");
 
             const dados = await resposta.json();
-            console.log("Resposta da API ao salvar:", dados)
             onAtualizar(dados.livro);
             setEditar(false);
             setVerMais(false);
@@ -54,7 +65,6 @@ function CardLivro({
             console.error(erro);
         }
     }
-
     return (
         <div className="flex flex-col bg-white w-[45%] h-auto mb-5 rounded-md p-4">
             <div className="flex">
@@ -208,7 +218,7 @@ function CardLivro({
                                 <input
                                     type="file"
                                     name="caminho_foto_capa"
-                                    onChange={handleChange}
+                                    onChange={(e) => setFotoCapa(e.target.files[0])}
                                     className="h-full w-full bg-transparent outline-none"
                                 />
                             </div>
@@ -368,6 +378,10 @@ function Inicio() {
     };
 
     const handleAtualizarLivro = (livroAtualizado) => {
+        if (!livroAtualizado || !livroAtualizado.id_livro) {
+            console.warn("Livro atualizado inválido:", livroAtualizado);
+            return;
+        }
         setLivros((prev) =>
             prev.map((livro) =>
                 livro.id_livro === livroAtualizado.id_livro ? livroAtualizado : livro
