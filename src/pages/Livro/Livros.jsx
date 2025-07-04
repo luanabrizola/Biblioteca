@@ -15,8 +15,6 @@ function CardLivro({
   onExcluir,
   onAtualizar,
 }) {
-  const [verMais, setVerMais] = useState(false);
-  const [editar, setEditar] = useState(false);
 
   const [form, setForm] = useState({
     titulo,
@@ -27,6 +25,11 @@ function CardLivro({
     is_ativo,
   });
 
+  const [verMais, setVerMais] = useState(false);
+  const [editar, setEditar] = useState(false);
+
+  const [fotoCapa, setFotoCapa] = useState(null);
+
   const handleClose = () => setVerMais(false);
 
   const handleChange = (e) => {
@@ -36,10 +39,17 @@ function CardLivro({
 
   async function handleSalvar() {
     try {
+      const formData = new FormData();
+      formData.append("id_livro", id_livro);
+      formData.append("edicao", form.edicao);
+      formData.append("is_ativo", true);
+      if (fotoCapa) {
+        formData.append("imagem", fotoCapa);
+      }
+
       const resposta = await fetch("http://localhost:3333/atualizarLivro", {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id_livro, ...form }),
+        body: formData,
       });
 
       if (!resposta.ok) throw new Error("Erro ao atualizar livro");
@@ -58,7 +68,7 @@ function CardLivro({
     <div className="flex flex-col bg-white w-[45%] h-auto mb-5 rounded-md p-4">
       <div className="flex">
         <img src={`http://localhost:3333/imagens/${id_livro}.${caminho_foto_capa}`} alt="Capa do Livro" className="max-h-[300px] h-auto w-auto max-w-[250px]" />
-        <div className="ml-5 h-[90%] mt-4 flex flex-col ml-8">
+        <div className="ml-5 h-[90%] mt-4 flex flex-col">
           <h1 className="text-xl font-bold mb-2 text-center break-words">{titulo}</h1>
           <p><span className="font-bold">ISBN:</span> {isbn}</p>
           <p className="mb-2"><span className="font-bold">Edição:</span> {edicao}</p>
@@ -100,7 +110,7 @@ function CardLivro({
         <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center flex-col z-50">
           <div className="bg-white p-6 rounded-md sm:w-[50%] md:w-[55%] flex overflow-auto max-h-[80vh]">
             <img src={`http://localhost:3333/imagens/${id_livro}.${caminho_foto_capa}`} alt="Capa do Livro" />
-            <div className="ml-5 h-[90%] mt-4 flex flex-col ml-8">
+            <div className="ml-5 h-[90%] mt-4 flex flex-col">
               <h1 className="text-2xl font-bold mb-4 text-center">{titulo}</h1> <br />
 
               <p><span className="font-bold">Quantidade Disponível:</span> {qtde_disponivel}</p> <br />
@@ -162,7 +172,12 @@ function CardLivro({
             <input type="number" name="qtde_disponivel" value={form.qtde_disponivel} onChange={handleChange} placeholder="Quantidade Disponível" className="border p-2 rounded" />
             <input type="text" name="isbn" value={form.isbn} onChange={handleChange} placeholder="ISBN" className="border p-2 rounded" />
             <input type="text" name="edicao" value={form.edicao} onChange={handleChange} placeholder="Edição" className="border p-2 rounded" />
-            <input type="file" name="caminho_foto_capa" onChange={handleChange} placeholder="Caminho da Capa" className="border p-2 rounded" />
+            <input
+              type="file"
+              name="caminho_foto_capa"
+              onChange={(e) => setFotoCapa(e.target.files[0])}
+              className="border p-2 rounded"
+            />
             <div className="flex justify-end gap-3 mt-3">
               <button onClick={() => setEditar(false)} className="bg-gray-400 text-white px-4 py-2 rounded">Cancelar</button>
               <button onClick={handleSalvar} className="bg-green-600 text-white px-4 py-2 rounded">Salvar</button>
@@ -185,8 +200,6 @@ function Livros() {
       setBuscaFinal("");
     }
   }, [busca]);
-
-
 
   useEffect(() => {
     async function carregarLivros() {
@@ -226,6 +239,10 @@ function Livros() {
   };
 
   const handleAtualizarLivro = (livroAtualizado) => {
+    if (!livroAtualizado || !livroAtualizado.id_livro) {
+      console.warn("Livro atualizado inválido:", livroAtualizado);
+      return;
+    }
     setLivros((prev) =>
       prev.map((livro) =>
         livro.id_livro === livroAtualizado.id_livro ? livroAtualizado : livro
@@ -261,7 +278,8 @@ function Livros() {
 
   });
 
-
+  console.log('livros:', livros);
+  console.log('livrosFiltrados:', livrosFiltrados);
   return (
     <div className="flex flex-1 min-h-screen font-poppins bg-[#f0e7c2]">
       <div className="w-full px-10 flex flex-col items-center">

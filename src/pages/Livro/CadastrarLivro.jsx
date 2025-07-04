@@ -12,9 +12,6 @@ function CadastrarLivro() {
     const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
 
 
-
-
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
