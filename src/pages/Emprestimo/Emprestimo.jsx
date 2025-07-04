@@ -45,11 +45,11 @@ function CardEmprestimo({
   const status = definirStatus();
 
   return (
-    <div className="flex flex-col bg-white w-[28%] h-auto mb-5 rounded-md p-4">
+    <div className="flex flex-col bg-white w-[30%] h-auto mb-5 rounded-md p-4">
       <h1 className="text-xl font-bold mb-2 text-center break-words">{registro_academico}</h1>
       <p><span className="font-bold">Livro:</span> {titulo}</p>
-      <p><span className="font-bold">Data Empréstimo:</span> {data_emprestimo}</p>
-      <p><span className="font-bold">Data Devolução:</span> {data_devolucao}</p>
+      <p><span className="font-bold">Data Empréstimo:</span> {data_emprestimo.split('T')[0]}</p>
+      <p><span className="font-bold">Data Devolução:</span> {data_devolucao.split('T')[0]}</p>
       <p>
         <span className="font-bold">Status:</span>{" "}
         {status === "Concluído" ? (
@@ -106,6 +106,7 @@ function CardEmprestimo({
 function Emprestimo() {
   const [emprestimos, setEmprestimos] = useState([]);
   const [busca, setBusca] = useState("");
+  const [tipoBusca, setTipoBusca] = useState("isbn");
 
   useEffect(() => {
     async function carregarEmprestimos() {
@@ -122,7 +123,6 @@ function Emprestimo() {
     carregarEmprestimos();
   }, []);
 
-  // *** DECLARAÇÃO CORRETA DE emprestimosFiltrados ***
   const emprestimosFiltrados = emprestimos.filter((emp) => {
     const termo = busca.toLowerCase();
     return (
@@ -208,10 +208,29 @@ function Emprestimo() {
         </form>
 
         <div className="flex gap-4 mb-4 font-semibold">
-          <button>Título</button>
-          <button>Registro</button>
-          <button>Data</button>
+          <button
+            onClick={() => setTipoBusca("isbn")}
+            className={`w-30 py-2 rounded-full border-none ${tipoBusca === "isbn" ? "bg-[#5b3011]/60 text-white" : "bg-white text-black"
+              }`}
+          >
+            ISBN
+          </button>
+          <button
+            onClick={() => setTipoBusca("registro")}
+            className={`w-50 py-2 rounded-full border-none ${tipoBusca === "registro" ? "bg-[#5b3011]/60 text-white" : "bg-white text-black"
+              }`}
+          >
+            Registro Acadêmico
+          </button>
+          <button
+            onClick={() => setTipoBusca("data")}
+            className={`w-30 py-2 rounded-full border-none ${tipoBusca === "data" ? "bg-[#5b3011]/60 text-white" : "bg-white text-black"
+              }`}
+          >
+            Data
+          </button>
         </div>
+
 
         <div className="flex flex-col w-full rounded-md mt-10 mb-5">
           <div className="flex justify-center gap-5 flex-wrap w-full">
