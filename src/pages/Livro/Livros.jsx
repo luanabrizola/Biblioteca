@@ -41,6 +41,9 @@ function CardLivro({
     try {
       const formData = new FormData();
       formData.append("id_livro", id_livro);
+      formData.append("titulo", form.titulo);
+      formData.append("qtde_disponivel", form.qtde_disponivel);
+      formData.append("isbn", form.isbn);
       formData.append("edicao", form.edicao);
       formData.append("is_ativo", true);
       if (fotoCapa) {
