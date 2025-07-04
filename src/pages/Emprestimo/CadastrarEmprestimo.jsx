@@ -31,14 +31,13 @@ function CadastrarEmprestimo() {
     carregarUsuariosELivros();
   }, []);
 
-  // Atualiza o tipo do usuário ao selecionar um usuário
   const handleUsuarioChange = (e) => {
     const registro = e.target.value;
     setUsuarioSelecionado(registro);
-  
+
     const usuario = usuarios.find((u) => u.registro_academico === registro);
     if (usuario) {
-      setTipoUsuario(usuario.tipo); // já é minúsculo, segundo você
+      setTipoUsuario(usuario.tipo);
     } else {
       setTipoUsuario("");
     }
@@ -149,7 +148,7 @@ function CadastrarEmprestimo() {
                 >
                   <option value="">Selecione um livro</option>
                   {livros.map((livro) => (
-                    <option key={livro.id_livro} value={livro.isbn}>
+                    <option key={livro.id_livro} value={livro.id_livro}>
                       {livro.isbn} - {livro.titulo}
                     </option>
                   ))}
