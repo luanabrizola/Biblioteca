@@ -71,8 +71,8 @@ function CardLivro({
     <div className="flex flex-col bg-white w-[45%] h-auto mb-5 rounded-md p-4">
       <div className="flex">
         <img src={`http://localhost:3333/imagens/${id_livro}.${caminho_foto_capa}`} alt="Capa do Livro" className="w-[200px] h-[300px]" />
-        <div className="ml-5 h-[90%] mt-4 flex flex-col">
-          <h1 className="text-xl font-bold mb-2 text-center break-words">{titulo}</h1>
+        <div className="ml-5 h-[300px] flex flex-col">
+          <h1 className="text-xl font-bold mb-4 text-center break-words">{titulo}</h1>
           <p className="mb-2"><span className="font-bold">ISBN:</span> {isbn}</p>
           <p className="mb-2"><span className="font-bold">Edição:</span> {edicao}</p>
           <p><span className="font-bold">Quantidade Disponível:</span> {qtde_disponivel}</p> <br />
@@ -85,7 +85,7 @@ function CardLivro({
               {verMais ? "Ver menos" : "Ver mais"}
             </button>
 
-            <div className="flex justify-end space-x-3">
+            <div className="flex justify-end space-x-3 mt-2">
               <span
                 className="material-icons cursor-pointer hover:text-gray-500"
                 onClick={() => {
