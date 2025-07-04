@@ -479,7 +479,7 @@ function Inicio() {
                         </Link>
                         <div className="flex justify-center gap-5 flex-wrap">
                             {tituloSessao === "Livros" && (
-                                <div className="flex flex-col w-[90%] rounded-md mt-10 mb-5">
+                                <div className="flex flex-col w-[90%] rounded-md">
                                     <div className="flex justify-center gap-5 flex-wrap">
                                         {livrosFiltrados.length > 0 ? (
                                             livrosFiltrados.slice(0, 2)
