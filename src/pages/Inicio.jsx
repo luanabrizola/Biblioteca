@@ -316,15 +316,28 @@ function Inicio() {
 
     const [cadastrar, setCadastrar] = useState(false)
 
+    const [carregandoUsuarios, setCarregandoUsuarios] = useState(true);
+    const [carregandoLivros, setCarregandoLivros] = useState(true);
+
     const handleClose = () => {
         setCadastrar(false)
     }
 
     useEffect(() => {
-        fetch("http://localhost:3333/listarUsuarios")
-            .then(response => response.json())
-            .then(data => setUsuarios(data))
-            .catch(error => console.error("Erro ao buscar usuários:", error))
+        async function carregarUsuarios() {
+            try {
+                const resposta = await fetch("http://localhost:3333/listarUsuarios");
+                if (!resposta.ok) throw new Error("Erro ao buscar usuários");
+                const dados = await resposta.json();
+
+                setUsuarios(dados);
+            } catch (erro) {
+                console.error("Erro ao carregar usuários:", erro);
+            } finally {
+                setCarregandoUsuarios(false)
+            }
+        }
+        carregarUsuarios();
     }, [])
 
     const [livros, setLivros] = useState([]);
@@ -350,6 +363,8 @@ function Inicio() {
                 setLivros(dados);
             } catch (erro) {
                 console.error("Erro ao carregar livros:", erro);
+            } finally {
+                setCarregandoLivros(false)
             }
         }
 
@@ -419,114 +434,142 @@ function Inicio() {
     });
 
     return (
-        <div className="flex w-full flex-1 font-poppins bg-[#f0e7c2]">
-            <div className="w-full px-10 flex flex-col items-center justify-center">
-                <form className="flex w-full justify-center gap-4 mt-12 flex-wrap mb-10">
-                    <input
-                        className="bg-[#5b3011]/48 rounded-full w-[74%] h-12 text-white placeholder:text-[#5b3011]/44 px-3"
-                        type="text"
-                        placeholder="O que você procura?"
-                    />
-                    <button className="bg-[#5b3011]/48 text-white rounded-full h-12 w-12 flex items-center justify-center cursor-pointer">
-                        <span className="material-icons">search</span>
-                    </button>
-                    <button
-                        className="bg-[#5b3011]/48 text-white rounded-full h-12 w-40 font-poppins px-3 cursor-pointer flex items-center"
-                        onClick={() => setCadastrar(true)}
-                        type="button"
-                    >
-                        <span className="material-icons mr-3">add</span>
-                        Cadastrar
-                    </button>
-                </form>
+        <div className='flex w-full min-h-screen font-poppins'>
+            <div className="flex w-full flex-1 font-poppins bg-[#f0e7c2] items-center justify-center">
+                <div className="w-full px-10 flex flex-col items-center">
+                    <form className="flex w-full justify-center gap-4 mt-12 flex-wrap mb-10">
+                        <input
+                            className="bg-[#5b3011]/48 rounded-full w-[74%] h-12 text-white placeholder:text-[#5b3011]/44 px-3"
+                            type="text"
+                            placeholder="O que você procura?"
+                        />
+                        <button className="bg-[#5b3011]/48 text-white rounded-full h-12 w-12 flex items-center justify-center cursor-pointer">
+                            <span className="material-icons">search</span>
+                        </button>
+                        <button
+                            className="bg-[#5b3011]/48 text-white rounded-full h-12 w-40 font-poppins px-3 cursor-pointer flex items-center"
+                            onClick={() => setCadastrar(true)}
+                            type="button"
+                        >
+                            <span className="material-icons mr-3">add</span>
+                            Cadastrar
+                        </button>
+                    </form>
 
-                {cadastrar && (
-                    <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center z-50">
-                        <div className="bg-white p-8 rounded-xl sm:w-[60%] md:w-[40%]">
-                            <h2 className="text-4xl font-bold text-center mb-10 text-[#331a08]">Cadastrar</h2>
-                            <div className=" flex w-full h-full justify-center">
-                                <div className="flex flex-col items-center space-y-4 justify-center">
-                                    <Link className="bg-[#5b3011] w-80 h-20 rounded-full text-white text-lg flex items-center justify-center relative transition-all duration-200 transform hover:scale-110" to='/cadastraaluno'>
-                                        <i className="ph ph-student text-4xl absolute left-8"></i>
-                                        <span className="text-center">Aluno</span>
-                                    </Link>
-                                    <Link className="bg-[#5b3011] w-80 h-20 rounded-full text-white text-lg flex items-center justify-center relative transition-all duration-200 transform hover:scale-110" to='/cadastraprof'>
-                                        <i className="ph ph-chalkboard-teacher text-4xl absolute left-8"></i>
-                                        <span className="text-center">Professor</span>
-                                    </Link>
-                                    <Link className="bg-[#5b3011] w-80 h-20 rounded-full text-white text-lg flex items-center justify-center p-6 relative transition-all duration-200 transform hover:scale-110" to='/cadastralivro'>
-                                        <i className="ph ph-book-open text-4xl absolute left-8"></i>
-                                        <span className="text-center">Livro</span>
-                                    </Link>
-                                </div>
-                            </div>
-                            <div className="flex justify-end">
-                                <button
-                                    onClick={handleClose}
-                                    className="bg-[#5b3011]/48 text-white rounded-full px-4 py-2 mt-5 cursor-pointer hover:bg-[#5b3011]/80 transition-colors duration-300"
-                                >
-                                    Fechar
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {["Livros", "Alunos", "Professores"].map((tituloSessao, index) => (
-                    <div key={index} className="flex flex-col bg-[#5b3011]/48 w-[90%] rounded-md mt-10 mb-5 p-5">
-                        <Link to={`/${tituloSessao.toLowerCase()}`} className="text-white font-bold text-2xl mb-4 transition-all duration-200 hover:text-4xl cursor-pointer">
-                            {tituloSessao}
-                        </Link>
-                        <div className="flex justify-center gap-5 flex-wrap">
-                            {tituloSessao === "Livros" && (
-                                <div className="flex flex-col w-[95%] rounded-md">
-                                    <div className="flex justify-center gap-5 flex-wrap">
-                                        {livrosFiltrados.length > 0 ? (
-                                            livrosFiltrados.slice(0, 2)
-                                                .map((livro) => (
-                                                    <CardLivro
-                                                        key={livro.id_livro}
-                                                        {...livro}
-                                                        onExcluir={handleExcluirLivro}
-                                                        onAtualizar={handleAtualizarLivro}
-                                                        categorias={livro.categorias || []}
-                                                    />
-                                                ))
-                                        ) : (
-                                            <p className="text-center w-full text-gray-600 mt-8">Nenhum livro encontrado.</p>
-                                        )}
+                    {cadastrar && (
+                        <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center z-50">
+                            <div className="bg-white p-8 rounded-xl sm:w-[60%] md:w-[40%]">
+                                <h2 className="text-4xl font-bold text-center mb-10 text-[#331a08]">Cadastrar</h2>
+                                <div className=" flex w-full h-full justify-center">
+                                    <div className="flex flex-col items-center space-y-4 justify-center">
+                                        <Link className="bg-[#5b3011] w-80 h-20 rounded-full text-white text-lg flex items-center justify-center relative transition-all duration-200 transform hover:scale-110" to='/cadastraaluno'>
+                                            <i className="ph ph-student text-4xl absolute left-8"></i>
+                                            <span className="text-center">Aluno</span>
+                                        </Link>
+                                        <Link className="bg-[#5b3011] w-80 h-20 rounded-full text-white text-lg flex items-center justify-center relative transition-all duration-200 transform hover:scale-110" to='/cadastraprof'>
+                                            <i className="ph ph-chalkboard-teacher text-4xl absolute left-8"></i>
+                                            <span className="text-center">Professor</span>
+                                        </Link>
+                                        <Link className="bg-[#5b3011] w-80 h-20 rounded-full text-white text-lg flex items-center justify-center p-6 relative transition-all duration-200 transform hover:scale-110" to='/cadastralivro'>
+                                            <i className="ph ph-book-open text-4xl absolute left-8"></i>
+                                            <span className="text-center">Livro</span>
+                                        </Link>
                                     </div>
                                 </div>
-                            )}
-                            {tituloSessao === "Alunos" && usuarios.filter(user => user.tipo === "aluno")
-                                .slice(0, 3)
-                                .map(user => (
-                                    <CardUsuario
-                                        key={user.id_usuario}
-                                        registro_academico={user.registro_academico}
-                                        nome={user.nome}
-                                        data_nascimento={user.data_nascimento}
-                                        email={user.email}
-                                        telefone={user.telefone}
-                                        tipo="aluno"
-                                    />
-                                ))}
-                            {tituloSessao === "Professores" && usuarios.filter(user => user.tipo === "professor")
-                                .slice(0, 3)
-                                .map(user => (
-                                    <CardUsuario
-                                        key={user.registro_academico}
-                                        registro_academico={user.registro_academico}
-                                        nome={user.nome}
-                                        data_nascimento={user.data_nascimento}
-                                        email={user.email}
-                                        telefone={user.telefone}
-                                        id_tipo="Professor"
-                                    />
-                                ))}
+                                <div className="flex justify-end">
+                                    <button
+                                        onClick={handleClose}
+                                        className="bg-[#5b3011]/48 text-white rounded-full px-4 py-2 mt-5 cursor-pointer hover:bg-[#5b3011]/80 transition-colors duration-300"
+                                    >
+                                        Fechar
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    )}
+
+                    {["Livros", "Alunos", "Professores"].map((tituloSessao, index) => (
+                        <div key={index} className="flex flex-col bg-[#5b3011]/48 w-[90%] rounded-md mt-10 mb-5 p-5">
+                            <Link to={`/${tituloSessao.toLowerCase()}`} className="text-white font-bold text-2xl mb-4 transition-all duration-200 hover:text-4xl cursor-pointer">
+                                {tituloSessao}
+                            </Link>
+                            <div className="flex justify-center gap-5 flex-wrap">
+                                {tituloSessao === "Livros" && (
+                                    <div className="flex flex-col w-[95%] rounded-md">
+                                        <div className="flex justify-center gap-5 flex-wrap ">
+                                            {
+                                                carregandoLivros ? (
+                                                    <p className="text-center w-full text-gray-600 mt-8" > Carregando livros...</p>
+                                                ) : livrosFiltrados.length > 0 ? (
+                                                    livrosFiltrados.slice(0, 2)
+                                                        .map((livro) => (
+                                                            <CardLivro
+                                                                key={livro.id_livro}
+                                                                {...livro}
+                                                                onExcluir={handleExcluirLivro}
+                                                                onAtualizar={handleAtualizarLivro}
+                                                                categorias={livro.categorias || []}
+                                                            />
+                                                        ))
+                                                ) : (
+                                                    <p className="text-center w-full text-gray-600 mt-8">Nenhum livro encontrado.</p>
+                                                )
+                                            }
+                                        </div>
+                                    </div>
+                                )}
+                                {tituloSessao === "Alunos" && (
+                                    <div className="flex flex-col w-[95%] rounded-md">
+                                        <div className="flex justify-center gap-5 flex-wrap">
+                                            {carregandoUsuarios ? (
+                                                <p className="text-center w-full text-gray-600 mt-8">Carregando alunos...</p>
+                                            ) : (
+                                                usuarios
+                                                    .filter(user => user.tipo === "aluno")
+                                                    .slice(0, 3)
+                                                    .map(user => (
+                                                        <CardUsuario
+                                                            key={user.id_usuario}
+                                                            registro_academico={user.registro_academico}
+                                                            nome={user.nome}
+                                                            data_nascimento={user.data_nascimento}
+                                                            email={user.email}
+                                                            telefone={user.telefone}
+                                                            tipo="aluno"
+                                                        />
+                                                    ))
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                                {tituloSessao === "Professores" && (
+                                    <div className="flex flex-col w-[95%] rounded-md">
+                                        <div className="flex justify-center gap-5 flex-wrap">
+                                            {carregandoUsuarios ? (
+                                                <p className="text-center w-full text-gray-600 mt-8">Carregando professores...</p>
+                                            ) : (
+                                                usuarios
+                                                    .filter(user => user.tipo === "professor")
+                                                    .slice(0, 3)
+                                                    .map(user => (
+                                                        <CardUsuario
+                                                            key={user.id_usuario}
+                                                            registro_academico={user.registro_academico}
+                                                            nome={user.nome}
+                                                            data_nascimento={user.data_nascimento}
+                                                            email={user.email}
+                                                            telefone={user.telefone}
+                                                            tipo="professor"
+                                                        />
+                                                    ))
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     )

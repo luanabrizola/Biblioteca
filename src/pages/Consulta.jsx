@@ -36,10 +36,10 @@ function CardLivro({
 
     return (
         <div className="flex bg-white w-[45%] h-[380px] mb-5 rounded-md p-4">
-            <img src={`http://localhost:3333/imagens/${id_livro}.${caminho_foto_capa}`} alt="Capa do Livro" className="max-h-[350px] h-auto w-auto max-w-[300px]"/>
-            <div className="ml-5 h-[90%] mt-4 flex flex-col ml-8">
+            <img src={`http://localhost:3333/imagens/${id_livro}.${caminho_foto_capa}`} alt="Capa do Livro" className="max-h-[350px] h-auto w-auto max-w-[300px]" />
+            <div className="ml-5 h-[90%] mt-4 flex flex-col">
                 <h1 className="text-xl font-bold mb-2 text-center break-words">{titulo}</h1>
-                <p><span className="font-bold">ISBN:</span> {isbn}</p>
+                <p className="mb-2"><span className="font-bold">ISBN:</span> {isbn}</p>
                 <p className="mb-2"><span className="font-bold">Edição:</span> {edicao}</p>
                 <p><span className="font-bold">Quantidade Disponível:</span> {qtde_disponivel}</p> <br />
             </div>
@@ -48,12 +48,12 @@ function CardLivro({
                 <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center flex-col z-50">
                     <div className="bg-white p-6 rounded-md sm:w-[50%] md:w-[55%] flex  overflow-auto max-h-[80vh]">
                         <img src={`http://localhost:3333/imagens/${id_livro}.${caminho_foto_capa}`} alt="Capa do Livro" />
-                        <div className="ml-5 h-[90%] mt-4 flex flex-col ml-8">
+                        <div className="ml-5 h-[90%] mt-4 flex flex-col">
                             <h1 className="text-2xl font-bold mb-4 text-center">{titulo}</h1> <br />
 
-                            <p><span className="font-bold">Quantidade Disponível:</span> {qtde_disponivel}</p> <br />
+                            <p className="mb-2"><span className="font-bold">Quantidade Disponível:</span> {qtde_disponivel}</p>
 
-                            <p><span className="font-bold">ISBN:</span> {isbn}</p> <br />
+                            <p className="mb-2"><span className="font-bold">ISBN:</span> {isbn}</p>
 
                             <p><span className="font-bold">Edição:</span> {edicao}</p>
 
@@ -111,7 +111,8 @@ function CardLivro({
 function Consulta() {
 
     const [livros, setLivros] = useState([]);
-    const [busca, setBusca] = useState("");  
+    const [busca, setBusca] = useState("");
+    const [carregando, setCarregando] = useState(true);
 
     useEffect(() => {
         async function carregarLivros() {
@@ -123,6 +124,8 @@ function Consulta() {
                 setLivros(dados);
             } catch (erro) {
                 console.error("Erro ao carregar livros:", erro);
+            } finally {
+                setCarregando(false)
             }
         }
 
@@ -131,15 +134,16 @@ function Consulta() {
 
     const livrosFiltrados = livros.filter((livro) =>
         livro.titulo.toLowerCase().includes(busca.toLowerCase())
-      );
+    );
 
     return (
-        <div className='flex w-full flex-1 min-h-screen font-poppins'>
 
-            <div className='bg-[#f0e7c2] w-full h-full font-poppins'>
-                <div className="mb-20 w-full px-10 flex flex-col items-center justify-center">
-                    <form action="get" 
-                        className="flex w-full justify-center gap-4 mt-12 flex-wrap" 
+        <div className='flex w-full min-h-screen font-poppins'>
+
+            <div className='bg-[#f0e7c2] flex flex-1 flex-col w-full font-poppins items-center'>
+                <div className="mb-20 w-full px-10 flex flex-col">
+                    <form action="get"
+                        className="flex w-full justify-center gap-4 mt-12 flex-wrap"
                         onSubmit={(e) => {
                             e.preventDefault();
                         }}
@@ -163,20 +167,21 @@ function Consulta() {
                         </button>
                     </form>
                 </div>
-                <div className="flex flex-col max-w-screen rounded-md mt-10 mb-5">
-                    <div className="flex justify-center gap-5 flex-wrap">
-                        {livrosFiltrados.length > 0 ? (
-                        livrosFiltrados.map((livro) => (
-                            <CardLivro
-                                key={livro.id_livro}
-                                {...livro}
-                            />
-                        ))
-                        ) : (
-                        <p className="text-center w-full text-gray-600 mt-8">Nenhum livro encontrado.</p>
-                        )}
+                <div className="flex flex-col w-[90%] rounded-md mt-10 mb-5">
+                    <div className="flex justify-center gap-5 flex-wrap ">
+                        {
+                            carregando ? (
+                                <p className="text-center w-full text-gray-600 mt-8" > Carregando livros...</p>
+                            ) : livros.length > 0 ? (
+                                livros.map((livro) => (
+                                    <CardLivro key={livro.id_livro} {...livro} />
+                                ))
+                            ) : (
+                                <p className="text-center w-full text-gray-600 mt-8">Nenhum livro encontrado.</p>
+                            )
+                        }
                     </div>
-                    </div>
+                </div>
             </div>
 
         </div>
