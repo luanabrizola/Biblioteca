@@ -10,6 +10,8 @@ function CadastrarAluno() {
     const [telefone, setTelefone] = useState("");
     const [cursos, setCursos] = useState([]);
     const [cursoSelecionado, setCursoSelecionado] = useState("");
+    const [mostrarNovoCurso, setMostrarNovoCurso] = useState(false);
+    const [novoCurso, setNovoCurso] = useState({ nome: "", codigo: "" });
 
 
     const handleSubmit = async (e) => {
@@ -58,8 +60,51 @@ function CadastrarAluno() {
         }
     };
 
-    useEffect(() => {
-        async function buscarCursos() {
+    const cadastrarCurso = async () => {
+        console.log("Cadastrando curso", novoCurso);
+        if (!novoCurso.nome.trim() || !novoCurso.codigo.trim()) {
+            return alert("Preencha o nome e o código do curso");
+        }
+
+        const codigosExistentes = cursos.map(curso => (curso.codigo ?? "").trim());
+        const nomesExistentes = cursos.map(curso => (curso.nome ?? "").trim().toLowerCase());
+
+        if (codigosExistentes.includes(novoCurso.codigo.trim())) {
+            return alert("Já existe um curso com esse código.");
+        }
+
+        if (nomesExistentes.includes(novoCurso.nome.trim().toLowerCase())) {
+            return alert("Já existe um curso com esse nome.");
+        }
+
+        try {
+            const resposta = await fetch("http://localhost:3333/cadastrarCurso", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    nome: novoCurso.nome,
+                    codigo: novoCurso.codigo
+                })
+            });
+
+            if (!resposta.ok) throw new Error("Erro ao cadastrar curso");
+
+            const novo = await resposta.json()
+
+            await buscarCursos();
+
+            setCursoSelecionado(novo.id_curso);
+            setNovoCurso({ nome: "", codigo: "" });
+            setMostrarNovoCurso(false);
+        } catch (erro) {
+            console.error("Erro ao cadastrar curso:", erro);
+            alert("Erro ao cadastrar curso.");
+        }
+    };
+
+    async function buscarCursos() {
             try {
                 const resposta = await fetch("http://localhost:3333/listarCursos");
                 const dados = await resposta.json();
@@ -69,6 +114,7 @@ function CadastrarAluno() {
             }
         }
 
+    useEffect(() => {
         buscarCursos();
     }, []);
 
@@ -114,22 +160,81 @@ function CadastrarAluno() {
                                     onChange={(e) => setNome(e.target.value)}
                                 />
                             </div>
-                            <div className="bg-[#9f6d3d]/19 rounded-full h-10 w-full mt-5 flex items-center px-5">
-                                <label className="mr-2">Curso:</label>
-                                <select
-                                    className="h-full w-full bg-transparent outline-none"
-                                    value={cursoSelecionado}
-                                    onChange={(e) => setCursoSelecionado(e.target.value)}
-                                    required
+                            <div className="w-full mt-5 flex items-center space-x-2">
+                                <div className="bg-[#9f6d3d]/19 rounded-full h-10 w-full flex items-center px-5">
+                                    <label className="mr-2">Curso:</label>
+                                    <select
+                                        className="h-full w-full bg-transparent outline-none"
+                                        value={cursoSelecionado}
+                                        onChange={(e) => setCursoSelecionado(e.target.value)}
+                                        required
+                                    >
+                                        <option value="">Selecione um curso</option>
+                                        {cursos
+                                            .filter(curso => curso.is_ativo)
+                                            .map(curso => (
+                                                <option key={curso.id_curso} value={curso.id_curso}>
+                                                    {curso.nome}
+                                                </option>
+                                            ))}
+                                    </select>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    className="bg-[#9f6d3d]/80 text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-[#9f6d3d]/48 cursor-pointer"
+                                    title="Adicionar novo curso"
+                                    onClick={() => {
+                                        setMostrarNovoCurso(!mostrarNovoCurso)
+                                        console.log("Tôa qui");
+                                    }
+
+                                    }
                                 >
-                                    <option value="">Selecione um curso</option>
-                                    {cursos.map((curso) => (
-                                        <option key={curso.id_curso} value={curso.id_curso}>
-                                            {curso.nome}
-                                        </option>
-                                    ))}
-                                </select>
+                                    +
+                                </button>
                             </div>
+
+                            {mostrarNovoCurso && (
+                                <div className="flex items-center mt-2 space-x-2">
+                                    <div className="flex w-[80%] space-x-2">
+                                        <input
+                                            type="text"
+                                            placeholder="Nome do novo curso"
+                                            value={novoCurso.nome}
+                                            onChange={(e) => setNovoCurso({ ...novoCurso, nome: e.target.value })}
+                                            className="border border-gray-300 rounded-full w-[75%] py-1 px-2 outline-none"
+                                        />
+
+                                        <input
+                                            type="text"
+                                            placeholder="Código do novo curso"
+                                            value={novoCurso.codigo}
+                                            onChange={(e) => setNovoCurso({ ...novoCurso, codigo: e.target.value })}
+                                            className="border border-gray-300 rounded-full w-[35%] py-1 px-2 outline-none"
+                                        />
+                                    </div>
+
+                                    <button
+                                        type="button"
+                                        className="bg-[#9f6d3d]/80 text-white w-[90px] py-1 rounded-full hover:bg-[#9f6d3d]/48 cursor-pointer"
+                                        onClick={cadastrarCurso}
+                                    >
+                                        Salvar
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="bg-[#848484] text-white w-[90px] py-1 rounded-full hover:bg-gray-300 cursor-pointer"
+                                        onClick={() => {
+                                            setNovoCurso({ nome: "", codigo: "" });
+                                            setMostrarNovoCurso(false);
+                                        }}
+                                    >
+                                        Cancelar
+                                    </button>
+                                </div>
+                            )}
+
 
                             <div className="bg-[#9f6d3d]/19 rounded-full h-10 w-full mt-5 flex items-center px-5">
                                 <label className="mr-2">Telefone:</label>

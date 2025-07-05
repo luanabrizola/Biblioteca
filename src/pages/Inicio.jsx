@@ -244,7 +244,7 @@ function CardLivro({
     )
 }
 
-function CardUsuario({ registro_academico, nome, data_nascimento, email, telefone, id_tipo }) {
+function CardUsuario({ registro_academico, nome, data_nascimento, email, telefone, id_tipo, cursos = [] }) {
     const [verMais, setVerMais] = useState(false)
 
     const handleClose = () => {
@@ -258,12 +258,13 @@ function CardUsuario({ registro_academico, nome, data_nascimento, email, telefon
                 <span className="font-bold">Registro Acadêmico</span> {registro_academico}
             </p>
             <p className="mb-2">
-                <span className="font-bold">Curso:</span>
+                <span className="font-bold">Curso(s):</span>{" "}
+                {cursos.length > 0 ? cursos.map(c => c.nome).join(", ") : "Nenhum curso cadastrado"}
             </p>
 
             {verMais && (
-                <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-md sm:w-[50%] md:w-[35%] flex">
+                <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex flex-col items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-md sm:w-[50%] md:w-[35%] flex flex-col">
                         <div className="flex flex-col items-center w-full">
                             <h1 className="text-2xl font-bold mb-8 text-center"> {nome} </h1>
                             <div className="flex flex-col">
@@ -280,21 +281,23 @@ function CardUsuario({ registro_academico, nome, data_nascimento, email, telefon
                                     <span className="font-bold">Telefone:</span> {telefone}
                                 </p>
                                 <p className="mb-2">
-                                    <span className="font-bold">Curso:</span>
+                                    <span className="font-bold">Curso(s):</span>{" "}
+                                    {cursos.length > 0 ? cursos.map(c => c.nome).join(", ") : "Nenhum curso cadastrado"}
                                 </p>
                             </div>
-                            <div className="flex mt-5 w-full justify-end">
-                                <button
-                                    onClick={handleClose}
-                                    className="bg-[#5b3011]/48 text-white rounded-full px-4 py-2 cursor-pointer hover:bg-[#5b3011]/80 transition-colors duration-300"
-                                >
-                                    Fechar
-                                </button>
-                            </div>
+                        </div>
+                        <div className="flex mt-5 w-full justify-end">
+                            <button
+                                onClick={handleClose}
+                                className="bg-[#5b3011]/48 text-white rounded-full px-4 py-2 cursor-pointer hover:bg-[#5b3011]/80 transition-colors duration-300"
+                            >
+                                Fechar
+                            </button>
                         </div>
                     </div>
                 </div>
-            )}
+    )
+}
 
             <button
                 onClick={() => setVerMais(!verMais)}
@@ -307,7 +310,7 @@ function CardUsuario({ registro_academico, nome, data_nascimento, email, telefon
                 <span className="material-icons cursor-pointer hover:text-gray-500 transition-colors duration-300">edit</span>
                 <span className="material-icons cursor-pointer hover:text-red-500 transition-colors duration-300">delete</span>
             </div>
-        </div>
+        </div >
     )
 }
 
@@ -479,7 +482,7 @@ function Inicio() {
                                 <div className="flex justify-end">
                                     <button
                                         onClick={handleClose}
-                                        className="bg-[#5b3011]/48 text-white rounded-full px-4 py-2 mt-5 cursor-pointer hover:bg-[#5b3011]/80 transition-colors duration-300"
+                                        className="bg-[#5b3011]/80 text-white rounded-full px-4 py-2 mt-5 cursor-pointer hover:bg-[#5b3011]/48 transition-colors duration-300"
                                     >
                                         Fechar
                                     </button>
@@ -535,6 +538,7 @@ function Inicio() {
                                                             data_nascimento={user.data_nascimento}
                                                             email={user.email}
                                                             telefone={user.telefone}
+                                                            cursos={user.cursos || []}
                                                             tipo="aluno"
                                                         />
                                                     ))
@@ -559,6 +563,7 @@ function Inicio() {
                                                             data_nascimento={user.data_nascimento}
                                                             email={user.email}
                                                             telefone={user.telefone}
+                                                            cursos={user.cursos || []}
                                                             tipo="professor"
                                                         />
                                                     ))
