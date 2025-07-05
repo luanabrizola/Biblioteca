@@ -82,7 +82,7 @@ function CardUsuario({
                   <span className="font-bold">Registro Acadêmico:</span> {registro_academico}
                 </p>
                 <p className="mb-2">
-                  <span className="font-bold">Data de Nascimento:</span> {data_nascimento}
+                  <span className="font-bold">Data de Nascimento:</span> {new Date(data_nascimento).toLocaleDateString("pt-BR")}
                 </p>
                 <p className="mb-2">
                   <span className="font-bold">Email:</span> {email}
@@ -218,6 +218,7 @@ function CardUsuario({
 function Professores() {
   const [usuarios, setUsuarios] = useState([]);
   const [busca, setBusca] = useState("");
+  const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
     async function carregarProfessores() {
@@ -228,6 +229,8 @@ function Professores() {
         setUsuarios(dados);
       } catch (erro) {
         console.error("Erro ao carregar professores:", erro);
+      } finally {
+        setCarregando(false);
       }
     }
 
@@ -317,7 +320,10 @@ function Professores() {
 
         <div className="flex flex-col w-full rounded-md mt-10 mb-5">
           <div className="flex justify-center gap-5 flex-wrap w-full">
-            {usuariosFiltrados.length > 0 ? (
+            {
+              carregando ? (
+                <p className="text-center w-full text-gray-600 mt-8" > Carregando professores...</p>
+              ) : usuariosFiltrados.length > 0 ? (
               usuariosFiltrados.map((user) => (
                 <CardUsuario
                   key={user.id_usuario}

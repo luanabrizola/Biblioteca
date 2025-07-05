@@ -271,7 +271,7 @@ function CardUsuario({ registro_academico, nome, data_nascimento, email, telefon
                                     <span className="font-bold">Registro Acadêmico:</span> {registro_academico}
                                 </p>
                                 <p className="mb-2">
-                                    <span className="font-bold">Data de Nascimento:</span> {data_nascimento}
+                                    <span className="font-bold">Data de Nascimento:</span> {new Date(data_nascimento).toLocaleDateString("pt-BR")}
                                 </p>
                                 <p className="mb-2">
                                     <span className="font-bold">Email:</span> {email}
@@ -303,7 +303,7 @@ function CardUsuario({ registro_academico, nome, data_nascimento, email, telefon
                 {verMais ? "Ver menos" : "Ver mais"}
             </button>
 
-            <div className="flex space-x-3 mt-2">
+            <div className="flex space-x-3 mt-2 self-end">
                 <span className="material-icons cursor-pointer hover:text-gray-500 transition-colors duration-300">edit</span>
                 <span className="material-icons cursor-pointer hover:text-red-500 transition-colors duration-300">delete</span>
             </div>

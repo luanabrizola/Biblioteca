@@ -82,7 +82,7 @@ function CardUsuario({
                   <span className="font-bold">Registro Acadêmico:</span> {registro_academico}
                 </p>
                 <p className="mb-2">
-                  <span className="font-bold">Data de Nascimento:</span> {data_nascimento}
+                  <span className="font-bold">Data de Nascimento:</span> {new Date(data_nascimento).toLocaleDateString("pt-BR")}
                 </p>
                 <p className="mb-2">
                   <span className="font-bold">Email:</span> {email}
@@ -218,6 +218,7 @@ function CardUsuario({
 function Alunos() {
   const [usuarios, setUsuarios] = useState([]);
   const [busca, setBusca] = useState("");
+  const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
     async function carregarAlunos() {
@@ -228,9 +229,10 @@ function Alunos() {
         setUsuarios(dados);
       } catch (erro) {
         console.error("Erro ao carregar alunos:", erro);
+      } finally {
+        setCarregando(false);
       }
     }
-
     carregarAlunos();
   }, []);
 
@@ -317,26 +319,29 @@ function Alunos() {
 
         <div className="flex flex-col w-full rounded-md mt-10 mb-5">
           <div className="flex justify-center gap-5 flex-wrap w-full">
-            {usuariosFiltrados.length > 0 ? (
-              usuariosFiltrados.map((user) => (
-                <CardUsuario
-                  key={user.id_usuario}
-                  id_usuario={user.id_usuario}
-                  registro_academico={user.registro_academico}
-                  nome={user.nome}
-                  data_nascimento={user.data_nascimento}
-                  email={user.email}
-                  telefone={user.telefone}
-                  is_ativo={user.is_ativo}
-                  tipo={user.tipo}
-                  cursos={user.cursos || []}
-                  onExcluir={handleExcluirUsuario}
-                  onAtualizar={handleAtualizarUsuario}
-                />
-              ))
-            ) : (
-              <p className="text-center w-full text-gray-600 mt-8">Nenhum aluno encontrado.</p>
-            )}
+            {
+              carregando ? (
+                <p className="text-center w-full text-gray-600 mt-8" > Carregando alunos...</p>
+              ) : usuariosFiltrados.length > 0 ? (
+                usuariosFiltrados.map((user) => (
+                  <CardUsuario
+                    key={user.id_usuario}
+                    id_usuario={user.id_usuario}
+                    registro_academico={user.registro_academico}
+                    nome={user.nome}
+                    data_nascimento={user.data_nascimento}
+                    email={user.email}
+                    telefone={user.telefone}
+                    is_ativo={user.is_ativo}
+                    tipo={user.tipo}
+                    cursos={user.cursos || []}
+                    onExcluir={handleExcluirUsuario}
+                    onAtualizar={handleAtualizarUsuario}
+                  />
+                ))
+              ) : (
+                <p className="text-center w-full text-gray-600 mt-8">Nenhum aluno encontrado.</p>
+              )}
           </div>
         </div>
       </div>

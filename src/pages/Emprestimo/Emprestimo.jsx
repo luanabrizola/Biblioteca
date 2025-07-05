@@ -107,6 +107,7 @@ function Emprestimo() {
   const [emprestimos, setEmprestimos] = useState([]);
   const [busca, setBusca] = useState("");
   const [tipoBusca, setTipoBusca] = useState("isbn");
+  const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
     async function carregarEmprestimos() {
@@ -117,6 +118,8 @@ function Emprestimo() {
         setEmprestimos(dados);
       } catch (erro) {
         console.error("Erro ao carregar empréstimos:", erro);
+      } finally {
+        setCarregando(false);
       }
     }
 
@@ -152,21 +155,21 @@ function Emprestimo() {
 
   const handleDevolverEmprestimo = async (id_emprestimo) => {
     if (!window.confirm("Confirma devolução do empréstimo?")) return;
-  
+
     try {
       const resposta = await fetch("http://localhost:3333/devolverEmprestimo", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id_emprestimo }),
       });
-  
+
       const dados = await resposta.json();
       console.log("Resposta da API devolverEmprestimo:", dados);
-  
+
       if (!resposta.ok) {
         throw new Error(dados.erro || "Erro ao devolver empréstimo");
       }
-  
+
       setEmprestimos((prev) =>
         prev.map((emp) =>
           emp.id_emprestimo === id_emprestimo ? { ...emp, foi_devolvido: true } : emp
@@ -234,29 +237,32 @@ function Emprestimo() {
 
         <div className="flex flex-col w-full rounded-md mt-10 mb-5">
           <div className="flex justify-center gap-5 flex-wrap w-full">
-            {emprestimosFiltrados.length > 0 ? (
-              emprestimosFiltrados.map((emp) => (
-                <CardEmprestimo
-                  key={emp.id_emprestimo}
-                  id_emprestimo={emp.id_emprestimo}
-                  titulo={emp.titulo}
-                  registro_academico={emp.registro_academico}
-                  data_emprestimo={emp.data_emprestimo}
-                  data_devolucao={emp.data_devolucao}
-                  foi_devolvido={emp.foi_devolvido}
-                  onExcluir={handleExcluirEmprestimo}
-                  onDevolver={handleDevolverEmprestimo}
-                />
-              ))
-            ) : (
-              <p className="text-center w-full text-gray-600 mt-8">
-                Nenhum empréstimo encontrado.
-              </p>
-            )}
+            {
+              carregando ? (
+                <p className="text-center w-full text-gray-600 mt-8" > Carregando empréstimos...</p>
+              ) : emprestimosFiltrados.length > 0 ? (
+                emprestimosFiltrados.map((emp) => (
+                  <CardEmprestimo
+                    key={emp.id_emprestimo}
+                    id_emprestimo={emp.id_emprestimo}
+                    titulo={emp.titulo}
+                    registro_academico={emp.registro_academico}
+                    data_emprestimo={emp.data_emprestimo}
+                    data_devolucao={emp.data_devolucao}
+                    foi_devolvido={emp.foi_devolvido}
+                    onExcluir={handleExcluirEmprestimo}
+                    onDevolver={handleDevolverEmprestimo}
+                  />
+                ))
+              ) : (
+                <p className="text-center w-full text-gray-600 mt-8">
+                  Nenhum empréstimo encontrado.
+                </p>
+              )}
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 
