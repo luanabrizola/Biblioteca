@@ -13,6 +13,7 @@ function CardUsuario({
   is_ativo,
   onExcluir,
   onAtualizar,
+  onVerHistorico = { buscarHistoricoUsuario }
 }) {
   const [verMais, setVerMais] = useState(false);
   const [editar, setEditar] = useState(false);
@@ -71,6 +72,12 @@ function CardUsuario({
         <span className="font-bold">Curso(s):</span>{" "}
         {cursos.length > 0 ? cursos.map(c => c.nome).join(", ") : "Nenhum curso cadastrado"}
       </p>
+      <button
+        onClick={() => onVerHistorico(id_usuario)}
+        className="mt-2 bg-[#5b3011]/48 text-white rounded-full px-3 py-1 hover:bg-[#5b3011]/80 transition"
+      >
+        Ver histórico
+      </button>
 
       {verMais && !editar && (
         <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center z-50">
@@ -219,6 +226,9 @@ function Alunos() {
   const [usuarios, setUsuarios] = useState([]);
   const [busca, setBusca] = useState("");
   const [carregando, setCarregando] = useState(true);
+  const [usuarioSelecionado, setUsuarioSelecionado] = useState(null);
+  const [historico, setHistorico] = useState([]);
+  const [carregandoHistorico, setCarregandoHistorico] = useState(false);
 
   useEffect(() => {
     async function carregarAlunos() {
@@ -280,6 +290,21 @@ function Alunos() {
     );
   });
 
+  async function buscarHistoricoUsuario(id_usuario) {
+    setCarregandoHistorico(true);
+    try {
+      const res = await fetch(`http://localhost:3333/historicoEmprestimos/${id_usuario}`);
+      if (!res.ok) throw new Error("Erro ao buscar histórico");
+      const dados = await res.json();
+      setHistorico(dados);
+      setUsuarioSelecionado(usuarios.find(u => u.id_usuario === id_usuario));
+    } catch (e) {
+      alert("Erro ao carregar histórico");
+    } finally {
+      setCarregandoHistorico(false);
+    }
+  }
+
   return (
     <div className="flex flex-1 w-[100%] min-h-screen font-poppins bg-[#f0e7c2]">
       <div className="w-full px-10 flex flex-col items-center">
@@ -337,6 +362,7 @@ function Alunos() {
                     cursos={user.cursos || []}
                     onExcluir={handleExcluirUsuario}
                     onAtualizar={handleAtualizarUsuario}
+                    onVerHistorico={buscarHistoricoUsuario}
                   />
                 ))
               ) : (
@@ -344,6 +370,50 @@ function Alunos() {
               )}
           </div>
         </div>
+
+        {usuarioSelecionado && (
+          <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center">
+            <div className="bg-white p-6 rounded-md max-w-[60vw] max-h-[80vh] overflow-auto">
+              <button
+                onClick={() => setUsuarioSelecionado(null)}
+                className="mb-4 text-[#5b3011] font-bold hover:underline"
+              >
+                ← Fechar histórico
+              </button>
+              <h2 className="text-xl font-bold mb-8 text-center">Histórico de {usuarioSelecionado.nome}</h2>
+
+              {carregandoHistorico ? (
+                <p>Carregando...</p>
+              ) : historico.length === 0 ? (
+                <p>Não há empréstimos para este usuário.</p>
+              ) : (
+                <div className="overflow-x-auto w-screen max-w-full">
+                  <table className="min-w-[800px] w-full text-left border-collapse">
+                    <thead>
+                      <tr>
+                        <th className="border-b p-2 min-w-[200px]">Livro</th>
+                        <th className="border-b p-2 min-w-[150px]">Data Empréstimo</th>
+                        <th className="border-b p-2 min-w-[150px]">Data Devolução</th>
+                        <th className="border-b p-2 min-w-[100px]">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {historico.map(e => (
+                        <tr key={e.id_emprestimo} className="odd:bg-gray-100">
+                          <td className="p-2">{e.titulo}</td>
+                          <td className="p-2">{new Date(e.data_emprestimo).toLocaleDateString("pt-BR")}</td>
+                          <td className="p-2">{new Date(e.data_devolucao).toLocaleDateString("pt-BR")}</td>
+                          <td className="p-2">{e.is_ativo ? "Ativo" : "Finalizado"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );
