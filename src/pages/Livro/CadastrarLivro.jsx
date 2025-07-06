@@ -10,6 +10,8 @@ function CadastrarLivro() {
     const [fotoCapa, setFotoCapa] = useState(null);
     const [categorias, setCategorias] = useState([]);
     const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
+    const [editoras, setEditora] = useState([]);
+    const [editoraSelecionada, setEditoraSelecionada] = useState("");
 
 
     const handleSubmit = async (e) => {
@@ -73,6 +75,20 @@ function CadastrarLivro() {
         }
 
         buscarCategorias();
+    }, []);
+
+    useEffect(() => {
+        async function buscarEditoras() {
+            try {
+                const resposta = await fetch("http://localhost:3333/listarEditoras");
+                const dados = await resposta.json();
+                setEditora(dados);
+            } catch (erro) {
+                console.error("Erro ao buscar editoras:", erro);
+            }
+        }
+
+        buscarEditoras();
     }, []);
 
 
@@ -140,6 +156,23 @@ function CadastrarLivro() {
                                     {categorias.map((categorias) => (
                                         <option key={categorias.id_categoria} value={categorias.id_categoria}>
                                             {categorias.nome_categoria}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="bg-[#9f6d3d]/19 rounded-full h-10 w-[100%] mt-5 flex items-center px-5">
+                                <label className="mr-2">Editora:</label>
+                                <select
+                                    className="h-full w-full bg-transparent outline-none"
+                                    value={editoraSelecionada}
+                                    onChange={(e) => setEditoraSelecionada(e.target.value)}
+                                    required
+                                >
+                                    <option value="">Selecione uma Editora</option>
+                                    {editoras.map((editora) => (
+                                        <option key={editora.id_editora} value={editora.id_editora}>
+                                            {editora.nome}
                                         </option>
                                     ))}
                                 </select>
