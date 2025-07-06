@@ -112,20 +112,21 @@ function CardLivro({
       {verMais && !editar && (
         <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center flex-col z-50">
           <div className="bg-white p-6 rounded-md sm:w-[50%] md:w-[55%] flex overflow-auto max-h-[80vh]">
-            <img src={`http://localhost:3333/imagens/${id_livro}.${caminho_foto_capa}`} alt="Capa do Livro" />
+            <img
+              src={`http://localhost:3333/imagens/${id_livro}.${caminho_foto_capa}`}
+              alt="Capa do Livro"
+              className="w-[200px] h-[300px]"
+            />
             <div className="ml-5 h-[90%] mt-4 flex flex-col">
-              <h1 className="text-2xl font-bold mb-4 text-center">{titulo}</h1> <br />
-
-              <p><span className="font-bold">Quantidade Disponível:</span> {qtde_disponivel}</p> <br />
-
-              <p><span className="font-bold">ISBN:</span> {isbn}</p> <br />
-
+              <h1 className="text-2xl font-bold mb-4 text-center">{titulo}</h1>
+              <p><span className="font-bold">Quantidade Disponível:</span> {qtde_disponivel}</p>
+              <p><span className="font-bold">ISBN:</span> {isbn}</p>
               <p><span className="font-bold">Edição:</span> {edicao}</p>
 
-
+              {/* Autores */}
               <div className="mt-4">
                 <h3 className="font-semibold">Autores:</h3>
-                {autores.length > 0 ? (
+                {autores?.length > 0 ? (
                   autores.map((autor) => (
                     <p key={autor.id_autor}>{autor.nome_autor}</p>
                   ))
@@ -134,9 +135,10 @@ function CardLivro({
                 )}
               </div>
 
+              {/* Categorias */}
               <div className="mt-4">
                 <h3 className="font-semibold">Categorias:</h3>
-                {categorias.length > 0 ? (
+                {categorias?.length > 0 ? (
                   categorias.map((categoria) => (
                     <p key={categoria.id_categoria}>{categoria.nome_categoria}</p>
                   ))
@@ -145,9 +147,10 @@ function CardLivro({
                 )}
               </div>
 
+              {/* Editora */}
               <div className="mt-4">
                 <h3 className="font-semibold">Editora:</h3>
-                {editora ? (
+                {editora?.nome ? (
                   <p>{editora.nome}</p>
                 ) : (
                   <p>Sem editora cadastrada</p>
@@ -166,6 +169,7 @@ function CardLivro({
           </div>
         </div>
       )}
+
 
       {editar && (
         <div className="fixed top-0 left-0 w-full h-full bg-white/10 backdrop-blur-sm flex items-center justify-center z-50">
