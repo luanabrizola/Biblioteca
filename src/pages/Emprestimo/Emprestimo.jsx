@@ -68,7 +68,7 @@ function CardEmprestimo({
         </div>
       )}
 
-      {verMais && diasAtraso === 0 && !foi_devolvido && (
+      {verMais && diasAtraso === 0 && foi_devolvido && (
         <p className="mt-2 text-black">Devolução em dia.</p>
       )}
 
