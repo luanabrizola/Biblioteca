@@ -255,6 +255,7 @@ function Livros() {
   const [busca, setBusca] = useState("");
   const [tipoBusca, setTipoBusca] = useState("titulo");
   const [buscaFinal, setBuscaFinal] = useState("");
+  const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
     if (busca.trim() === "") {
@@ -272,7 +273,9 @@ function Livros() {
         setLivros(dados);
       } catch (erro) {
         console.error("Erro ao carregar livros:", erro);
-      }
+      } finally {
+      setCarregando(false);
+    }
     }
 
     carregarLivros();
@@ -399,19 +402,22 @@ function Livros() {
 
         <div className="flex flex-col w-[100%] rounded-md mt-10 mb-5">
           <div className="flex justify-center gap-5 flex-wrap">
-            {livrosFiltrados.length > 0 ? (
-              livrosFiltrados.map((livro) => (
-                <CardLivro
-                  key={livro.id_livro}
-                  {...livro}
-                  onExcluir={handleExcluirLivro}
-                  onAtualizar={handleAtualizarLivro}
-                  categorias={livro.categorias || []}
-                />
-              ))
-            ) : (
-              <p className="text-center w-full text-gray-600 mt-8">Nenhum livro encontrado.</p>
-            )}
+            {
+              carregando ? (
+                <p className="text-center w-full text-gray-600 mt-8" > Carregando livros...</p>
+              ) : livrosFiltrados.length > 0 ? (
+                livrosFiltrados.map((livro) => (
+                  <CardLivro
+                    key={livro.id_livro}
+                    {...livro}
+                    onExcluir={handleExcluirLivro}
+                    onAtualizar={handleAtualizarLivro}
+                    categorias={livro.categorias || []}
+                  />
+                ))
+              ) : (
+                <p className="text-center w-full text-gray-600 mt-8">Nenhum aluno encontrado.</p>
+              )}
           </div>
         </div>
       </div>
