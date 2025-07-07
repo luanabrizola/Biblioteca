@@ -92,12 +92,10 @@ function CardUsuario({
           id_cursos: cursosSelecionados,
         }),
       });
-  
-      if (!resposta.ok) {
-        const erroTexto = await resposta.text();
-        throw new Error(`Erro do servidor: ${erroTexto}`);
-      }
-  
+
+      if (!resposta.ok) throw new Error("Erro ao atualizar usuário");
+
+
       const dados = await resposta.json();
       const cursosAtualizados = await carregarCursosDoUsuario(dados.usuario.id_usuario);
       const usuarioAtualizadoComCursos = {
@@ -185,18 +183,17 @@ function CardUsuario({
                   className="h-full w-full bg-transparent outline-none"
                 />
               </div>
-              <div className="bg-[#9f6d3d]/19 rounded-full w-full px-5 mb-2 flex flex-col">
-                <label className="mb-1">Cursos:</label>
+              <div className="bg-[#9f6d3d]/19 rounded-full h-10 w-full flex items-center mb-2 px-5">
+                <label className="mr-2">Cursos:</label>
                 <select
-                  multiple
+                  className="h-full w-full bg-transparent outline-none"
                   value={cursosSelecionados}
                   onChange={(e) => {
                     const options = Array.from(e.target.selectedOptions);
                     const valores = options.map(o => parseInt(o.value));
                     setCursosSelecionados(valores);
                   }}
-                  className="bg-transparent h-32 w-full outline-none"
-                >
+                  >
                   {todosCursos.map(curso => (
                     <option key={curso.id_curso} value={curso.id_curso}>
                       {curso.nome}

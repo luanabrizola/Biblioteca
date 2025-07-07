@@ -16,6 +16,9 @@ function CardUsuario({
 }) {
   const [verMais, setVerMais] = useState(false);
   const [editar, setEditar] = useState(false);
+  const [todosCursos, setTodosCursos] = useState([]);
+  const [cursosSelecionados, setCursosSelecionados] = useState(cursos.map(c => c.id_curso));
+
 
   const [form, setForm] = useState({
     nome,
@@ -27,6 +30,20 @@ function CardUsuario({
     tipo,
   });
 
+  useEffect(() => {
+    setCursosSelecionados(cursos.map(c => c.id_curso));
+    setForm((prev) => ({
+      ...prev,
+      nome,
+      registro_academico,
+      data_nascimento,
+      email,
+      telefone,
+      is_ativo,
+      tipo,
+    }));
+  }, [cursos, nome, registro_academico, data_nascimento, email, telefone, is_ativo, tipo]);
+
   const handleClose = () => {
     setVerMais(false);
   };
@@ -34,6 +51,32 @@ function CardUsuario({
   function handleChange(e) {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+  }
+
+  useEffect(() => {
+    async function carregarCursos() {
+      try {
+        const res = await fetch("http://localhost:3333/listarCursos");
+        if (!res.ok) throw new Error("Erro ao buscar cursos");
+        const dados = await res.json();
+        setTodosCursos(dados);
+      } catch (err) {
+        console.error("Erro ao carregar cursos:", err);
+      }
+    }
+
+    carregarCursos();
+  }, []);
+
+  async function carregarCursosDoUsuario(id_usuario) {
+    try {
+      const res = await fetch(`http://localhost:3333/listarCursosDoUsuario/${id_usuario}`);
+      if (!res.ok) throw new Error("Erro ao buscar cursos do usuário");
+      const cursos = await res.json();
+      return cursos;
+    } catch {
+      return [];
+    }
   }
 
   async function handleSalvar() {
@@ -46,18 +89,24 @@ function CardUsuario({
         body: JSON.stringify({
           id_usuario,
           ...form,
+          id_cursos: cursosSelecionados
         }),
       });
 
       if (!resposta.ok) throw new Error("Erro ao atualizar usuário");
 
       const dados = await resposta.json();
-      onAtualizar(dados.usuario);
+      const cursosAtualizados = await carregarCursosDoUsuario(dados.usuario.id_usuario);
+      const usuarioAtualizadoComCursos = {
+        ...dados.usuario,
+        cursos: cursosAtualizados,
+      };
+      onAtualizar(usuarioAtualizadoComCursos);
       setEditar(false);
       setVerMais(false);
     } catch (erro) {
-      alert("Erro ao atualizar usuário");
-      console.error(erro);
+      alert("Erro ao atualizar usuário: " + erro.message);
+      console.error("handleSalvar", erro);
     }
   }
 
@@ -125,6 +174,24 @@ function CardUsuario({
                   onChange={handleChange}
                   className="h-full w-full bg-transparent outline-none"
                 />
+              </div>
+              <div className="bg-[#9f6d3d]/19 rounded-full h-10 w-full flex items-center mb-2 px-5">
+                <label className="mr-2">Cursos:</label>
+                <select
+                  className="h-full w-full bg-transparent outline-none"
+                  value={cursosSelecionados}
+                  onChange={(e) => {
+                    const options = Array.from(e.target.selectedOptions);
+                    const valores = options.map(o => parseInt(o.value));
+                    setCursosSelecionados(valores);
+                  }}
+                  >
+                  {todosCursos.map(curso => (
+                    <option key={curso.id_curso} value={curso.id_curso}>
+                      {curso.nome}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div className="bg-[#9f6d3d]/19 rounded-full h-10 w-full flex items-center px-5 mb-2">
                 <label className="mr-2">Registro:</label>
@@ -324,25 +391,25 @@ function Professores() {
               carregando ? (
                 <p className="text-center w-full text-gray-600 mt-8" > Carregando professores...</p>
               ) : usuariosFiltrados.length > 0 ? (
-              usuariosFiltrados.map((user) => (
-                <CardUsuario
-                  key={user.id_usuario}
-                  id_usuario={user.id_usuario}
-                  registro_academico={user.registro_academico}
-                  nome={user.nome}
-                  data_nascimento={user.data_nascimento}
-                  email={user.email}
-                  telefone={user.telefone}
-                  is_ativo={user.is_ativo}
-                  tipo={user.tipo}
-                  cursos={user.cursos || []}
-                  onExcluir={handleExcluirUsuario}
-                  onAtualizar={handleAtualizarUsuario}
-                />
-              ))
-            ) : (
-              <p className="text-center w-full text-gray-600 mt-8">Nenhum professor encontrado.</p>
-            )}
+                usuariosFiltrados.map((user) => (
+                  <CardUsuario
+                    key={user.id_usuario}
+                    id_usuario={user.id_usuario}
+                    registro_academico={user.registro_academico}
+                    nome={user.nome}
+                    data_nascimento={user.data_nascimento}
+                    email={user.email}
+                    telefone={user.telefone}
+                    is_ativo={user.is_ativo}
+                    tipo={user.tipo}
+                    cursos={user.cursos || []}
+                    onExcluir={handleExcluirUsuario}
+                    onAtualizar={handleAtualizarUsuario}
+                  />
+                ))
+              ) : (
+                <p className="text-center w-full text-gray-600 mt-8">Nenhum professor encontrado.</p>
+              )}
           </div>
         </div>
       </div>
