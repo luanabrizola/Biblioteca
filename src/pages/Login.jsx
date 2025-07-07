@@ -7,6 +7,7 @@ function Login() {
     const [login, setLogin] = useState("");
     const [senha, setSenha] = useState("");
     const [erro, setErro] = useState("");
+    const [usuarioLogado, setUsuarioLogado] = useState("");
 
     const validarLogin = async (e) => {
         e.preventDefault();
@@ -21,13 +22,16 @@ function Login() {
                 body: JSON.stringify({ login, senha }),
             });
 
-            const data = await response.text();
+            const data = await response.json();
             console.log("Resposta do servidor:", data);
 
             if (response.ok) {
+                localStorage.setItem("usuarioLogado", login);
                 navigate("/inicio");
             } else {
+                window.alert(data.message || "Login ou senha inválidos.");
                 setErro(data.message || "Login ou senha inválidos.");
+                return;
             }
         } catch (error) {
             setErro("Erro ao conectar com o servidor.");
@@ -37,11 +41,11 @@ function Login() {
 
     return (
         <div className="flex w-full h-full justify-center items-center bg-[url(/img/width_800.jpeg)] bg-cover">
-            <div className="flex flex-col items-center w-1/3 h-[80%] bg-white/40 rounded-md m-0 p-0">
+            <div className="flex flex-col items-center justify-center w-[80%] h-[60%] md:w-[60%] md:h-[90%] lg:w-[50%] lg:h-[60%] bg-white/40 rounded-md m-0 p-0">
                 <div className="flex flex-row">
                     <div className="flex flex-col">
-                        <div className="flex justify-center mt-16 mb-5">
-                            <img src="/img/ajl_cortada.png" alt="" className="w-32 h-32" />
+                        <div className="flex justify-center mt-2 mb-5">
+                            <img src="/img/ajl_cortada.png" alt="" className="w-[110px] lg:w-32 lg:h-32" />
                         </div>
                         <form className="flex flex-col" onSubmit={validarLogin}>
                             <div>
@@ -55,7 +59,7 @@ function Login() {
                                         type="text"
                                         value={login}
                                         onChange={(e) => setLogin(e.target.value)}
-                                        className="text-[#5b3011]/33 h-full w-full"
+                                        className="text-[#5b3011]/33 h-full w-full p-1"
                                     />
                                 </div>
                             </div>
@@ -71,11 +75,10 @@ function Login() {
                                         value={senha}
                                         onChange={(e) => setSenha(e.target.value)}
                                         placeholder="Digite sua senha"
-                                        className="text-[#5b3011]/33 h-full w-full"
+                                        className="text-[#5b3011]/33 h-full w-full p-1"
                                     />
                                 </div>
                             </div>
-                            <a href="" className="text-[#5b3011]">Esqueceu a senha?</a>
                             <div className="flex items-center justify-center">
                                 <button
                                     className="bg-[#ad795b] text-white font-bold rounded-full h-12 w-42 mt-4 mb-4 cursor-pointer"
@@ -94,7 +97,3 @@ function Login() {
     )
 }
 export default Login
-
-// SyntaxError: JSON.parse: unexpected character at line 1 column 1 of the JSON data Login.jsx:33:20
-//     validarLogin Login.jsx:33
-//     React 8

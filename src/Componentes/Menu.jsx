@@ -3,11 +3,7 @@ import { useState } from "react";
 
 function Menu() {
     const location = useLocation();
-
-    const estaNaConsulta = location.pathname === "/";
-    const estaNoInicio = location.pathname === "/inicio";
-    const estaNoEmprestimo = location.pathname === "/emprestimos"
-
+    const usuarioLogado = localStorage.getItem("usuarioLogado");
     const [isOpen, setIsOpen] = useState(false);
     const menuSelecionado = () => setIsOpen(!isOpen);
 
@@ -23,7 +19,7 @@ function Menu() {
             </button>
             <div className={`
                 bg-[#5b3011] overflow-y-auto text-white flex flex-col
-                fixed top-0 left-0 h-full w-full z-40 w-64 lg:w-[300px]
+                fixed top-0 left-0 h-full w-full z-40 lg:w-[300px]
                 transition-transform duration-300
                 ${isOpen ? "translate-x-0" : "-translate-x-full"}
                 lg:translate-x-0 lg:static lg:flex`
@@ -39,29 +35,48 @@ function Menu() {
                     >
                         Consulta
                     </NavLink>
+                    {! usuarioLogado && (
+                        <NavLink
+                            to="/login"
+                            className="bg-[#9f6d3d] w-full h-12 font-bold text-white mt-auto flex items-center justify-center"
+                        >
+                            Entrar
+                        </NavLink>
+                    )}
 
-                    <NavLink
-                        to="/inicio"
-                        className={`w-full h-12 rounded-e-full font-bold mt-2 flex items-center justify-center ${location.pathname === "/inicio2" ? "bg-[#dbd0b3] text-[#5b3011]" : "text-white"
-                            }`}
-                    >
-                        Início
-                    </NavLink>
+                    {usuarioLogado && (
+                        <>
+                            <NavLink
+                                to="/inicio"
+                                className={({ isActive }) =>
+                                    `w-full h-12 rounded-e-full font-bold flex items-center justify-center ${isActive ? "bg-[#dbd0b3] text-[#5b3011]" : "text-white"
+                                    }`
+                                }
+                            >
+                                Início
+                            </NavLink>
 
-                    <NavLink
-                        to="/emprestimos"
-                        className={`w-full h-12 rounded-e-full font-bold mt-2 flex items-center justify-center ${location.pathname === "/emprestimos" ? "bg-[#dbd0b3] text-[#5b3011]" : "text-white"
-                            }`}
-                    >
-                        Empréstimo
-                    </NavLink>
+                            <NavLink
+                                to="/emprestimos"
+                                className={({ isActive }) =>
+                                    `w-full h-12 rounded-e-full font-bold mt-2 flex items-center justify-center ${isActive ? "bg-[#dbd0b3] text-[#5b3011]" : "text-white"
+                                    }`
+                                }
+                            >
+                                Empréstimo
+                            </NavLink>
+                        </>
+                    )}
 
-                    <NavLink
-                        to={estaNaConsulta ? "/login" : "/"}
-                        className="bg-[#9f6d3d] w-full h-12 font-bold text-white mt-auto flex items-center justify-center"
-                    >
-                        {estaNaConsulta ? "Entrar" : "Sair"}
-                    </NavLink>
+                    {usuarioLogado && (
+                        <NavLink
+                            to="/"
+                            className="bg-[#9f6d3d] w-full h-12 font-bold text-white mt-auto flex items-center justify-center"
+                            onClick={() => localStorage.removeItem("usuarioLogado")}
+                        >
+                            Sair
+                        </NavLink>
+                    )}
                 </div>
             </div>
         </>
