@@ -148,7 +148,7 @@ function Consulta() {
 
     return (
 
-        <div className='flex flex-1 min-h-screen font-poppins'>
+        <div className='flex flex-1 w-full min-h-screen font-poppins'>
 
             <div className='bg-[#f0e7c2] flex flex-1 flex-col w-full font-poppins items-center'>
                 <div className="mb-20 w-full px-2 md:px-10 flex flex-col">

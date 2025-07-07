@@ -66,10 +66,12 @@ function CardLivro({
         }
     }
     return (
-        <div className="flex flex-col bg-white w-[48%] h-auto mb-5 rounded-md p-4">
+        <div className="flex flex-col bg-white w-full sm:w-full md:w-full lg:w-[48%] h-auto mb-5 rounded-md p-4">
             <div className="flex">
-                <img src={`http://localhost:3333/imagens/${id_livro}.${caminho_foto_capa}`} alt="Capa do Livro" className="h-[220px] w-auto max-w-[250px]" />
-                <div className="ml-5 h-[100%] flex flex-col">
+                <div className="flex justify-center items-center md:w-[30%] max-w-screen">
+                    <img src={`http://localhost:3333/imagens/${id_livro}.${caminho_foto_capa}`} alt="Capa do Livro" className="h-[220px] w-auto md:h-[250px] max-w-[250px]" />
+                </div>
+                <div className="ml-5 h-[100%] md:w-[70%] flex flex-col">
                     <h1 className="text-xl font-bold mb-2 text-center break-words">{titulo}</h1>
                     <p className="mb-1"><span className="font-bold">ISBN:</span> {isbn}</p>
                     <p className="mb-1"><span className="font-bold">Edição:</span> {edicao}</p>
@@ -252,7 +254,7 @@ function CardUsuario({ registro_academico, nome, data_nascimento, email, telefon
     }
 
     return (
-        <div className="flex flex-col bg-white w-[30%] h-auto mb-5 rounded-md p-4">
+        <div className="flex flex-col bg-white w-[90%] md:w-[30%] h-auto mb-5 rounded-md p-4">
             <h1 className="text-xl font-bold mb-2 text-center break-words">{nome}</h1>
             <p>
                 <span className="font-bold">Registro Acadêmico</span> {registro_academico}
@@ -296,8 +298,8 @@ function CardUsuario({ registro_academico, nome, data_nascimento, email, telefon
                         </div>
                     </div>
                 </div>
-    )
-}
+            )
+            }
 
             <button
                 onClick={() => setVerMais(!verMais)}
@@ -439,10 +441,10 @@ function Inicio() {
     return (
         <div className='flex w-full min-h-screen font-poppins'>
             <div className="flex w-full flex-1 font-poppins bg-[#f0e7c2] items-center justify-center">
-                <div className="w-full px-10 flex flex-col items-center">
-                    <form className="flex w-full justify-center gap-4 mt-12 flex-wrap mb-10">
+                <div className="w-full px-2 md:px-10 flex flex-col items-center">
+                    <form className="flex w-full justify-center gap-2 md:gap-4 mt-24 md:mt-12 flex-wrap lg:mb-20">
                         <input
-                            className="bg-[#5b3011]/48 rounded-full w-[74%] h-12 text-white placeholder:text-[#5b3011]/44 px-3"
+                            className="bg-[#5b3011]/48 rounded-full w-[80%] md:w-[74%] h-12 text-white placeholder:text-[#5b3011]/44 px-3"
                             type="text"
                             placeholder="O que você procura?"
                         />
@@ -450,7 +452,7 @@ function Inicio() {
                             <span className="material-icons">search</span>
                         </button>
                         <button
-                            className="bg-[#5b3011]/48 text-white rounded-full h-12 w-40 font-poppins px-3 cursor-pointer flex items-center"
+                            className="bg-[#5b3011]/48 text-white rounded-full h-12 w-40 mt-2 md:mt-0 font-poppins px-3 cursor-pointer flex items-center"
                             onClick={() => setCadastrar(true)}
                             type="button"
                         >
@@ -522,7 +524,7 @@ function Inicio() {
                                     </div>
                                 )}
                                 {tituloSessao === "Alunos" && (
-                                    <div className="flex flex-col w-[95%] rounded-md">
+                                    <div className="flex flex-col w-[100%] rounded-md">
                                         <div className="flex justify-center gap-5 flex-wrap">
                                             {carregandoUsuarios ? (
                                                 <p className="text-center w-full text-gray-600 mt-8">Carregando alunos...</p>
@@ -547,7 +549,7 @@ function Inicio() {
                                     </div>
                                 )}
                                 {tituloSessao === "Professores" && (
-                                    <div className="flex flex-col w-[95%] rounded-md">
+                                    <div className="flex flex-col w-[100%] rounded-md">
                                         <div className="flex justify-center gap-5 flex-wrap">
                                             {carregandoUsuarios ? (
                                                 <p className="text-center w-full text-gray-600 mt-8">Carregando professores...</p>
