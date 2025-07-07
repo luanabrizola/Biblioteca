@@ -318,25 +318,25 @@ function CadastrarLivro() {
                         </div>
 
                         {mostrarNovaCategoria && (
-                            <div className="flex gap-2 items-center mt-2 px-5">
+                            <div className="flex items-center mt-2 space-x-2">
                                 <input
                                     type="text"
                                     placeholder="Nova categoria"
                                     value={novaCategoria.nome}
                                     onChange={(e) => setNovaCategoria({ nome: e.target.value })}
-                                    className="border rounded px-2 py-1 flex-1"
+                                    className="border border-gray-300 rounded-full py-1 px-2 w-[70%] outline-none"
                                 />
                                 <button
                                     type="button"
                                     onClick={cadastrarCategoria}
-                                    className="bg-green-600 text-white px-4 py-1 rounded"
+                                    className="bg-[#9f6d3d]/80 text-white w-[90px] py-1 rounded-full hover:bg-[#9f6d3d]/48 cursor-pointer"
                                 >
                                     Salvar
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => setMostrarNovaCategoria(false)}
-                                    className="bg-gray-400 text-white px-4 py-1 rounded"
+                                    className="bg-[#848484] text-white w-[90px] py-1 rounded-full hover:bg-gray-300 cursor-pointer"
                                 >
                                     Cancelar
                                 </button>
@@ -370,34 +370,30 @@ function CadastrarLivro() {
                         </div>
 
                         {mostrarNovaEditora && (
-                            <div className="flex gap-2 items-center mt-2 px-5">
+                            <div className="flex items-center mt-2 space-x-2">
                                 <input
                                     type="text"
                                     placeholder="Nova editora"
                                     value={novaEditora.nome}
                                     onChange={(e) => setNovaEditora({ nome: e.target.value })}
-                                    className="border rounded px-2 py-1 flex-1"
+                                    className="border border-gray-300 rounded-full py-1 px-2 w-[70%] outline-none"
                                 />
                                 <button
                                     type="button"
                                     onClick={cadastrarEditora}
-                                    className="bg-green-600 text-white px-4 py-1 rounded"
+                                    className="bg-[#9f6d3d]/80 text-white w-[90px] py-1 rounded-full hover:bg-[#9f6d3d]/48 cursor-pointer"
                                 >
                                     Salvar
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => setMostrarNovaEditora(false)}
-                                    className="bg-gray-400 text-white px-4 py-1 rounded"
+                                    className="bg-[#848484] text-white w-[90px] py-1 rounded-full hover:bg-gray-300 cursor-pointer"
                                 >
                                     Cancelar
                                 </button>
                             </div>
                         )}
-
-
-
-
 
                         <div className="w-full mt-5 flex items-center">
 
@@ -427,25 +423,25 @@ function CadastrarLivro() {
                         </div>
 
                         {mostrarNovoAutor && (
-                            <div className="flex gap-2 items-center mt-2 px-5">
+                            <div className="flex items-center mt-2 space-x-2">
                                 <input
                                     type="text"
                                     placeholder="Novo autor"
                                     value={novoAutor.nome}
                                     onChange={(e) => setNovoAutor({ nome: e.target.value })}
-                                    className="border rounded px-2 py-1 flex-1"
+                                    className="border border-gray-300 rounded-full py-1 px-2 w-[70%] outline-none"
                                 />
                                 <button
                                     type="button"
                                     onClick={cadastrarAutor}
-                                    className="bg-green-600 text-white px-4 py-1 rounded"
+                                    className="bg-[#9f6d3d]/80 text-white w-[90px] py-1 rounded-full hover:bg-[#9f6d3d]/48 cursor-pointer"
                                 >
                                     Salvar
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => setMostrarNovoAutor(false)}
-                                    className="bg-gray-400 text-white px-4 py-1 rounded"
+                                    className="bg-[#848484] text-white w-[90px] py-1 rounded-full hover:bg-gray-300 cursor-pointer"
                                 >
                                     Cancelar
                                 </button>

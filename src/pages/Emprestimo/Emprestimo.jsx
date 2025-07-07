@@ -106,7 +106,6 @@ function CardEmprestimo({
 function Emprestimo() {
   const [emprestimos, setEmprestimos] = useState([]);
   const [busca, setBusca] = useState("");
-  const [tipoBusca, setTipoBusca] = useState("isbn");
   const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
@@ -209,31 +208,6 @@ function Emprestimo() {
             <span className="text-center">Cadastrar</span>
           </Link>
         </form>
-
-        <div className="flex gap-4 mb-4 font-semibold">
-          <button
-            onClick={() => setTipoBusca("isbn")}
-            className={`w-30 py-2 rounded-full border-none ${tipoBusca === "isbn" ? "bg-[#5b3011]/60 text-white" : "bg-white text-black"
-              }`}
-          >
-            ISBN
-          </button>
-          <button
-            onClick={() => setTipoBusca("registro")}
-            className={`w-50 py-2 rounded-full border-none ${tipoBusca === "registro" ? "bg-[#5b3011]/60 text-white" : "bg-white text-black"
-              }`}
-          >
-            Registro Acadêmico
-          </button>
-          <button
-            onClick={() => setTipoBusca("data")}
-            className={`w-30 py-2 rounded-full border-none ${tipoBusca === "data" ? "bg-[#5b3011]/60 text-white" : "bg-white text-black"
-              }`}
-          >
-            Data
-          </button>
-        </div>
-
 
         <div className="flex flex-col w-full rounded-md mt-10 mb-5">
           <div className="flex justify-center gap-5 flex-wrap w-full">

@@ -186,7 +186,6 @@ function CadastrarAluno() {
                                     title="Adicionar novo curso"
                                     onClick={() => {
                                         setMostrarNovoCurso(!mostrarNovoCurso)
-                                        console.log("Tôa qui");
                                     }
 
                                     }

@@ -42,6 +42,14 @@ function CardLivro({
                 <p className="mb-2"><span className="font-bold">ISBN:</span> {isbn}</p>
                 <p className="mb-2"><span className="font-bold">Edição:</span> {edicao}</p>
                 <p><span className="font-bold">Quantidade Disponível:</span> {qtde_disponivel}</p> <br />
+                <div className="flex flex-col justify-end h-full">
+            <button
+              onClick={() => setVerMais(!verMais)}
+              className="text-black underline font-bold flex justify-center mt-2 hover:text-[#5b3011]"
+            >
+              {verMais ? "Ver menos" : "Ver mais"}
+            </button>
+          </div>
             </div>
 
             {verMais && (
