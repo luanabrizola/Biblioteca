@@ -35,21 +35,23 @@ function CardLivro({
     };
 
     return (
-        <div className="flex bg-white w-[45%] h-[380px] mb-5 rounded-md p-4">
-            <img src={`http://localhost:3333/imagens/${id_livro}.${caminho_foto_capa}`} alt="Capa do Livro" className="max-h-[350px] h-auto w-auto max-w-[300px]" />
+        <div className="flex flex-col md:flex-row bg-white w-full md:w-[45%] h-auto md:h-[380px] mb-5 rounded-md p-4">
+            <div className="flex justify-center">
+                <img src={`http://localhost:3333/imagens/${id_livro}.${caminho_foto_capa}`} alt="Capa do Livro" className="max-h-[200px] max-w-[150px] w-auto h-auto md:max-h-[350px] md:max-w-[300px]" />
+            </div>
             <div className="ml-5 h-[90%] mt-4 flex flex-col">
                 <h1 className="text-xl font-bold mb-2 text-center break-words">{titulo}</h1>
                 <p className="mb-2"><span className="font-bold">ISBN:</span> {isbn}</p>
                 <p className="mb-2"><span className="font-bold">Edição:</span> {edicao}</p>
                 <p><span className="font-bold">Quantidade Disponível:</span> {qtde_disponivel}</p> <br />
-                <div className="flex flex-col justify-end h-full">
-            <button
-              onClick={() => setVerMais(!verMais)}
-              className="text-black underline font-bold flex justify-center mt-2 hover:text-[#5b3011]"
-            >
-              {verMais ? "Ver menos" : "Ver mais"}
-            </button>
-          </div>
+                <div className="flex flex-col justify-center md:justify-end h-full">
+                    <button
+                        onClick={() => setVerMais(!verMais)}
+                        className="text-black underline font-bold flex justify-center mt-2 hover:text-[#5b3011]"
+                    >
+                        {verMais ? "Ver menos" : "Ver mais"}
+                    </button>
+                </div>
             </div>
 
             {verMais && (

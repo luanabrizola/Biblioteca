@@ -11,7 +11,7 @@ function CadastrarLivro() {
     const [fotoCapa, setFotoCapa] = useState(null);
 
     const [categorias, setCategorias] = useState([]);
-    const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
+    const [categoriasSelecionadas, setCategoriasSelecionadas] = useState([""]);
     const [novaCategoria, setNovaCategoria] = useState({ nome: "" });
     const [mostrarNovaCategoria, setMostrarNovaCategoria] = useState(false);
 
@@ -21,7 +21,7 @@ function CadastrarLivro() {
     const [mostrarNovaEditora, setMostrarNovaEditora] = useState(false);
 
     const [autores, setAutores] = useState([]);
-    const [autorSelecionado, setAutorSelecionado] = useState("");
+    const [autoresSelecionados, setAutoresSelecionados] = useState([""]);
     const [novoAutor, setNovoAutor] = useState({ nome: "" });
     const [mostrarNovoAutor, setMostrarNovoAutor] = useState(false);
 
@@ -142,18 +142,30 @@ function CadastrarLivro() {
         }
     };
 
+    const adicionarCampoCategoria = () => {
+        setCategoriasSelecionadas([...categoriasSelecionadas, ""]);
+    };
+
+    const atualizarCategoria = (index, value) => {
+        const novas = [...categoriasSelecionadas];
+        novas[index] = value;
+        setCategoriasSelecionadas(novas);
+    };
+
+    const adicionarCampoAutor = () => {
+        setAutoresSelecionados([...autoresSelecionados, ""]);
+    };
+
+    const atualizarAutor = (index, value) => {
+        const novos = [...autoresSelecionados];
+        novos[index] = value;
+        setAutoresSelecionados(novos);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (
-            !titulo.trim() ||
-            !qtdeDisponivel.trim() ||
-            !isbn.trim() ||
-            !edicao.trim() ||
-            !categoriaSelecionada ||
-            !editoraSelecionada ||
-            !autorSelecionado
-        ) {
+        if (!titulo.trim() || !qtdeDisponivel.trim() || !isbn.trim() || !edicao.trim() || categoriasSelecionadas.some(c => !c) || !editoraSelecionada || autoresSelecionados.some(a => !a)) {
             return alert("Preencha todos os campos obrigatórios.");
         }
 
@@ -171,55 +183,37 @@ function CadastrarLivro() {
                 body: formData,
             });
 
-            if (!resposta.ok) {
-                const errorMsg = await resposta.text();
-                throw new Error(errorMsg || "Erro ao cadastrar livro");
-            }
+            if (!resposta.ok) throw new Error("Erro ao cadastrar livro");
 
             const dados = await resposta.json();
             const id_livro = dados.id_livro.id_livro;
-            const associarCategoria = await fetch("http://localhost:3333/associarCategoriaAoLivro", {
+
+            for (const id_categoria of categoriasSelecionadas) {
+                await fetch("http://localhost:3333/associarCategoriaAoLivro", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ id_livro, id_categoria: parseInt(id_categoria) }),
+                });
+            }
+
+            await fetch("http://localhost:3333/associarEditoraAoLivro", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    id_livro,
-                    id_categoria: parseInt(categoriaSelecionada),
-                }),
+                body: JSON.stringify({ id_livro, id_editora: parseInt(editoraSelecionada) }),
             });
-            if (!associarCategoria.ok)
-                throw new Error("Erro ao associar categoria");
 
-            const associarEditora = await fetch(
-                "http://localhost:3333/associarEditoraAoLivro",
-                {
+            for (const id_autor of autoresSelecionados) {
+                await fetch("http://localhost:3333/associarAutorAoLivro", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        id_livro,
-                        id_editora: parseInt(editoraSelecionada),
-                    }),
-                }
-            );
-            if (!associarEditora.ok)
-                throw new Error("Erro ao associar editora");
-
-            const associarAutor = await fetch(
-                "http://localhost:3333/associarAutorAoLivro",
-                {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        id_livro,
-                        id_autor: parseInt(autorSelecionado),
-                    }),
-                }
-            );
-            if (!associarAutor.ok) throw new Error("Erro ao associar autor");
+                    body: JSON.stringify({ id_livro, id_autor: parseInt(id_autor) }),
+                });
+            }
 
             alert("Livro cadastrado com sucesso!");
             navigate("/livros");
         } catch (erro) {
-            console.error("Erro ao cadastrar:", erro.message);
+            console.error("Erro ao cadastrar livro:", erro);
             alert("Erro ao cadastrar livro.");
         }
     };
@@ -286,62 +280,67 @@ function CadastrarLivro() {
                                 required
                             />
                         </div>
-
-
-                        <div className="w-full mt-5 flex items-center space-x-2">
-                            <div className="bg-[#9f6d3d]/19 rounded-full h-10 w-full flex items-center px-5">
-                                <label className="mr-2">Categorias:</label>
-                                <select
-                                    className="h-full w-full bg-transparent outline-none"
-                                    value={categoriaSelecionada}
-                                    onChange={(e) => setCategoriaSelecionada(e.target.value)}
-                                    required
+                        <div className="w-full mt-5">
+                            <h2 className="mb-2">Categorias:</h2>
+                            <div className="flex flex-wrap gap-3 items-center">
+                                {categoriasSelecionadas.map((cat, i) => (
+                                    <select
+                                        key={i}
+                                        value={cat}
+                                        onChange={(e) => atualizarCategoria(i, e.target.value)}
+                                        required
+                                        className="bg-[#9f6d3d]/19 rounded-full h-10 px-4 outline-none cursor-pointer"
+                                    >
+                                        <option value="">Selecione</option>
+                                        {categorias.map((c) => (
+                                            <option key={c.id_categoria} value={c.id_categoria}>
+                                                {c.nome_categoria}
+                                            </option>
+                                        ))}
+                                    </select>
+                                ))}
+                                <button
+                                    type="button"
+                                    onClick={adicionarCampoCategoria}
+                                    className="bg-[#9f6d3d]/80 text-white rounded-full px-4 h-10 hover:bg-[#9f6d3d]/48 transition"
                                 >
-                                    <option value="">Selecione uma categoria</option>
-                                    {categorias.map((categoria) => (
-                                        <option
-                                            key={categoria.id_categoria}
-                                            value={categoria.id_categoria}
-                                        >
-                                            {categoria.nome_categoria}
-                                        </option>
-                                    ))}
-                                </select>
+                                    + categoria
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setMostrarNovaCategoria(true)}
+                                    className="bg-[#9f6d3d]/80 text-white rounded-full px-4 h-10 hover:bg-[#9f6d3d]/48 transition"
+                                >
+                                    + nova categoria
+                                </button>
                             </div>
-                            <button
-                                type="button"
-                                onClick={() => setMostrarNovaCategoria(true)}
-                                className="bg-[#9f6d3d]/80 text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-[#9f6d3d]/48 cursor-pointer"
-                            >
-                                +
-                            </button>
+
+                            {mostrarNovaCategoria && (
+                                <div className="flex mt-3 gap-2 items-center">
+                                    <input
+                                        type="text"
+                                        placeholder="Nome da nova categoria"
+                                        value={novaCategoria.nome}
+                                        onChange={(e) => setNovaCategoria({ nome: e.target.value })}
+                                        className="border border-gray-300 rounded-full py-1 px-4 w-full outline-none"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={cadastrarCategoria}
+                                        className="bg-[#9f6d3d]/80 text-white px-4 py-1 rounded-full hover:bg-[#9f6d3d]/48 transition"
+                                    >
+                                        Salvar
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setMostrarNovaCategoria(false)}
+                                        className="bg-gray-500 text-white px-4 py-1 rounded-full hover:bg-gray-400 transition"
+                                    >
+                                        Cancelar
+                                    </button>
+                                </div>
+                            )}
                         </div>
-
-                        {mostrarNovaCategoria && (
-                            <div className="flex items-center mt-2 space-x-2">
-                                <input
-                                    type="text"
-                                    placeholder="Nova categoria"
-                                    value={novaCategoria.nome}
-                                    onChange={(e) => setNovaCategoria({ nome: e.target.value })}
-                                    className="border border-gray-300 rounded-full py-1 px-2 w-[70%] outline-none"
-                                />
-                                <button
-                                    type="button"
-                                    onClick={cadastrarCategoria}
-                                    className="bg-[#9f6d3d]/80 text-white w-[90px] py-1 rounded-full hover:bg-[#9f6d3d]/48 cursor-pointer"
-                                >
-                                    Salvar
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setMostrarNovaCategoria(false)}
-                                    className="bg-[#848484] text-white w-[90px] py-1 rounded-full hover:bg-gray-300 cursor-pointer"
-                                >
-                                    Cancelar
-                                </button>
-                            </div>
-                        )}
                         <div className="w-full mt-5 flex items-center space-x-2">
 
                             <div className="bg-[#9f6d3d]/19 rounded-full h-10 w-full flex items-center px-5">
@@ -395,59 +394,67 @@ function CadastrarLivro() {
                             </div>
                         )}
 
-                        <div className="w-full mt-5 flex items-center">
-
-                            <div className="bg-[#9f6d3d]/19 rounded-full h-10 w-full flex items-center px-5">
-                                <label className="mr-2">Autor:</label>
-                                <select
-                                    className="h-full w-full bg-transparent outline-none"
-                                    value={autorSelecionado}
-                                    onChange={(e) => setAutorSelecionado(e.target.value)}
-                                    required
+                        <div className="w-full mt-8">
+                            <h2 className="mb-2">Autores:</h2>
+                            <div className="flex flex-wrap gap-3 items-center">
+                                {autoresSelecionados.map((aut, i) => (
+                                    <select
+                                        key={i}
+                                        value={aut}
+                                        onChange={(e) => atualizarAutor(i, e.target.value)}
+                                        required
+                                        className="bg-[#9f6d3d]/19 rounded-full h-10 px-4 outline-none cursor-pointer"
+                                    >
+                                        <option value="">Selecione</option>
+                                        {autores.map((a) => (
+                                            <option key={a.id_autor} value={a.id_autor}>
+                                                {a.nome_autor}
+                                            </option>
+                                        ))}
+                                    </select>
+                                ))}
+                                <button
+                                    type="button"
+                                    onClick={adicionarCampoAutor}
+                                    className="bg-[#9f6d3d]/80 text-white rounded-full px-4 h-10 hover:bg-[#9f6d3d]/48 transition"
                                 >
-                                    <option value="">Selecione um autor</option>
-                                    {autores.map((autor) => (
-                                        <option key={autor.id_autor} value={autor.id_autor}>
-                                            {autor.nome_autor}
-                                        </option>
-                                    ))}
-                                </select>
+                                    + autor
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setMostrarNovoAutor(true)}
+                                    className="bg-[#9f6d3d]/80 text-white rounded-full px-4 h-10 hover:bg-[#9f6d3d]/48 transition"
+                                >
+                                    + novo autor
+                                </button>
                             </div>
-                            <button
-                                type="button"
-                                onClick={() => setMostrarNovoAutor(true)}
-                                className="bg-[#9f6d3d]/80 text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-[#9f6d3d]/48 cursor-pointer"
-                            >
-                                +
-                            </button>
+
+                            {mostrarNovoAutor && (
+                                <div className="flex mt-3 gap-2 items-center">
+                                    <input
+                                        type="text"
+                                        placeholder="Nome do novo autor"
+                                        value={novoAutor.nome}
+                                        onChange={(e) => setNovoAutor({ nome: e.target.value })}
+                                        className="border border-gray-300 rounded-full py-1 px-4 w-full outline-none"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={cadastrarAutor}
+                                        className="bg-[#9f6d3d]/80 text-white px-4 py-1 rounded-full hover:bg-[#9f6d3d]/48 transition"
+                                    >
+                                        Salvar
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setMostrarNovoAutor(false)}
+                                        className="bg-gray-500 text-white px-4 py-1 rounded-full hover:bg-gray-400 transition"
+                                    >
+                                        Cancelar
+                                    </button>
+                                </div>
+                            )}
                         </div>
-
-                        {mostrarNovoAutor && (
-                            <div className="flex items-center mt-2 space-x-2">
-                                <input
-                                    type="text"
-                                    placeholder="Novo autor"
-                                    value={novoAutor.nome}
-                                    onChange={(e) => setNovoAutor({ nome: e.target.value })}
-                                    className="border border-gray-300 rounded-full py-1 px-2 w-[70%] outline-none"
-                                />
-                                <button
-                                    type="button"
-                                    onClick={cadastrarAutor}
-                                    className="bg-[#9f6d3d]/80 text-white w-[90px] py-1 rounded-full hover:bg-[#9f6d3d]/48 cursor-pointer"
-                                >
-                                    Salvar
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setMostrarNovoAutor(false)}
-                                    className="bg-[#848484] text-white w-[90px] py-1 rounded-full hover:bg-gray-300 cursor-pointer"
-                                >
-                                    Cancelar
-                                </button>
-                            </div>
-                        )}
-
                         <div className="bg-[#9f6d3d]/19 rounded-full h-10 mt-5 flex items-center mr-3 px-5">
                             <label className="mr-2 ">Foto da capa:</label>
                             <input
