@@ -35,19 +35,19 @@ function CardLivro({
     };
 
     return (
-        <div className="flex flex-col md:flex-row bg-white w-full md:w-[45%] h-auto md:h-[380px] mb-5 rounded-md p-4">
-            <div className="flex justify-center">
-                <img src={`http://localhost:3333/imagens/${id_livro}.${caminho_foto_capa}`} alt="Capa do Livro" className="max-h-[200px] max-w-[150px] w-auto h-auto md:max-h-[350px] md:max-w-[300px]" />
+        <div className="flex flex-col md:flex-row bg-white w-full md:w-[45%] h-auto mb-5 rounded-md p-4">
+            <div className="flex justify-center md:w-[32%]">
+                <img src={`http://localhost:3333/imagens/${id_livro}.${caminho_foto_capa}`} alt="Capa do Livro" className="h-[200px] w-[140px] md:h-[300px] md:w-full" />
             </div>
-            <div className="ml-5 h-[90%] mt-4 flex flex-col">
-                <h1 className="text-xl font-bold mb-2 text-center break-words">{titulo}</h1>
+            <div className="md:ml-5 h-[90%] w-full md:w-[68%] mt-4 md:mt-0 flex flex-col">
+                <h1 className="text-xl font-bold mb-4 text-center break-words">{titulo}</h1>
                 <p className="mb-2"><span className="font-bold">ISBN:</span> {isbn}</p>
                 <p className="mb-2"><span className="font-bold">Edição:</span> {edicao}</p>
                 <p><span className="font-bold">Quantidade Disponível:</span> {qtde_disponivel}</p> <br />
                 <div className="flex flex-col justify-center md:justify-end h-full">
                     <button
                         onClick={() => setVerMais(!verMais)}
-                        className="text-black underline font-bold flex justify-center mt-2 hover:text-[#5b3011]"
+                        className="text-black underline font-bold flex justify-center md:mt-2 hover:text-[#5b3011]"
                     >
                         {verMais ? "Ver menos" : "Ver mais"}
                     </button>
@@ -148,23 +148,36 @@ function Consulta() {
 
     return (
 
-        <div className='flex w-full min-h-screen font-poppins'>
+        <div className='flex flex-1 min-h-screen font-poppins'>
 
             <div className='bg-[#f0e7c2] flex flex-1 flex-col w-full font-poppins items-center'>
-                <div className="mb-20 w-full px-10 flex flex-col">
+                <div className="mb-20 w-full px-2 md:px-10 flex flex-col">
                     <form action="get"
-                        className="flex w-full justify-center gap-4 mt-12 flex-wrap"
+                        className="flex w-full justify-center md:gap-4 mt-24 md:mt-12 flex-wrap"
                         onSubmit={(e) => {
                             e.preventDefault();
                         }}
                     >
-                        <input
-                            className="bg-[#5b3011]/48 rounded-full w-[74%] h-12 placeholder:text-[#5b3011]/44 px-3"
+                    <input
+                            className="bg-[#5b3011]/48 rounded-full md:w-[74%] h-12 placeholder:text-[#5b3011]/44 px-3 hidden md:flex"
                             type="text"
                             placeholder="Pesquise por um livro"
                             onChange={(e) => setBusca(e.target.value)}
                         />
-                        <select name="select" id="0" className="bg-[#5b3011]/48 text-white rounded-full h-12 w-40 font-poppins px-3 cursor-pointer">
+                    <div className="w-full md:hidden flex justify-center space-x-2 h-12 mb-4">
+                        <input
+                            className="bg-[#5b3011]/48 rounded-full w-[80%] h-12 placeholder:text-[#5b3011]/44 px-3 flex md:hidden"
+                            type="text"
+                            placeholder="Pesquise por um livro"
+                            onChange={(e) => setBusca(e.target.value)}
+                        />
+                        <button
+                            className="bg-[#5b3011]/48 text-white rounded-full h-12 w-12 flex items-center justify-center cursor-pointer md:hidden"
+                        >
+                            <span className="material-icons">search</span>
+                        </button>
+                    </div>
+                        <select name="select" id="0" className="bg-[#5b3011]/48 text-white rounded-full h-12 w-36 md:w-40 font-poppins px-3 cursor-pointer">
                             <option value="0">Busca livre</option>
                             <option value="1">Título</option>
                             <option value="2">Autor</option>
@@ -172,12 +185,12 @@ function Consulta() {
                             <option value="4">Categoria</option>
                             <option value="5">Subcategoria</option>
                         </select>
-                        <button className="bg-[#5b3011]/48 text-white rounded-full h-12 w-12 flex items-center justify-center cursor-pointer">
+                        <button className="bg-[#5b3011]/48 text-white rounded-full h-12 w-12 items-center justify-center cursor-pointer hidden md:flex">
                             <span className="material-icons">search</span>
                         </button>
                     </form>
                 </div>
-                <div className="flex flex-col w-[90%] rounded-md mt-10 mb-5">
+                <div className="flex flex-col w-[90%] md:w-[95%] rounded-md md:mt-10 mb-5">
                     <div className="flex justify-center gap-5 flex-wrap ">
                         {
                             carregando ? (
