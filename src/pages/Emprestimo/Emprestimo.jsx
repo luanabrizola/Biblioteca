@@ -7,6 +7,7 @@ function CardEmprestimo({
   registro_academico,
   data_emprestimo,
   data_devolucao,
+  data_devolucao_efetiva,
   foi_devolvido,
   onExcluir,
   onDevolver,
@@ -16,10 +17,23 @@ function CardEmprestimo({
   const calcularAtrasoEDivida = () => {
     const hoje = new Date();
     const devolucao = new Date(data_devolucao);
+
     const diffTime = hoje - devolucao;
     const diffDias = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-    if (diffDias > 0) {
+    const diffTimeDev = data_devolucao_efetiva
+      ? new Date(data_devolucao_efetiva) - devolucao
+      : 0;
+    const diffDiasDev = Math.floor(diffTimeDev / (1000 * 60 * 60 * 24));
+
+    if (foi_devolvido && diffDiasDev > 0) {
+      return {
+        diasAtraso: diffDiasDev,
+        valorDivida: diffDiasDev * 1.0,
+      };
+    }
+
+    if (diffDias > 0 && !foi_devolvido) {
       return {
         diasAtraso: diffDias,
         valorDivida: diffDias * 1.0,
@@ -35,7 +49,16 @@ function CardEmprestimo({
   const { diasAtraso, valorDivida } = calcularAtrasoEDivida();
 
   const definirStatus = () => {
-    if (foi_devolvido) return "Concluído";
+    if (foi_devolvido && data_devolucao && data_devolucao_efetiva) {
+      const prevista = new Date(data_devolucao).toISOString().split("T")[0];
+      const efetiva = new Date(data_devolucao_efetiva).toISOString().split("T")[0];
+
+      if (efetiva > prevista) {
+        return "Pagamento necessário";
+      } else {
+        return "Concluído";
+      }
+    }
 
     const hoje = new Date();
     const dataDev = new Date(data_devolucao);
@@ -46,22 +69,23 @@ function CardEmprestimo({
 
   return (
     <div className="flex flex-col bg-white w-[30%] h-auto mb-5 rounded-md p-4">
-      <h1 className="text-xl font-bold mb-2 text-center break-words">{registro_academico}</h1>
+      <h1 className="text-xl font-bold mb-2 text-center break-words">
+        {registro_academico}
+      </h1>
       <p><span className="font-bold">Livro:</span> {titulo}</p>
       <p><span className="font-bold">Data Empréstimo:</span> {data_emprestimo.split('T')[0]}</p>
       <p><span className="font-bold">Data Devolução:</span> {data_devolucao.split('T')[0]}</p>
       <p>
         <span className="font-bold">Status:</span>{" "}
-        {status === "Concluído" ? (
-          <span className="text-black">Concluído</span>
-        ) : status === "Atrasado" ? (
-          <span className="text-black">Atrasado</span>
-        ) : (
-          <span className="text-black">Em andamento</span>
+        {status === "Concluído" && <span className="text-black">Concluído</span>}
+        {status === "Atrasado" && <span className="text-black">Atrasado</span>}
+        {status === "Em andamento" && <span className="text-black">Em andamento</span>}
+        {status === "Pagamento necessário" && (
+          <span className="text-red-600">Multa Pendente</span>
         )}
       </p>
 
-      {verMais && diasAtraso > 0 && !foi_devolvido && (
+      {verMais && diasAtraso > 0 && (
         <div className="mt-2 text-red-600">
           <p><span className="font-bold">Dias de atraso:</span> {diasAtraso}</p>
           <p><span className="font-bold">Valor da dívida:</span> R$ {valorDivida.toFixed(2)}</p>
@@ -75,7 +99,7 @@ function CardEmprestimo({
       <div className="flex justify-between items-center mt-4">
         <button
           onClick={() => setVerMais(!verMais)}
-          className="text-sm font-bold  text-black hover:underline"
+          className="text-sm font-bold text-black hover:underline"
         >
           {verMais ? "Ver menos" : "Ver mais"}
         </button>
@@ -145,7 +169,9 @@ function Emprestimo() {
 
       if (!resposta.ok) throw new Error("Erro ao excluir empréstimo");
 
-      setEmprestimos((prev) => prev.filter((emp) => emp.id_emprestimo !== id_emprestimo));
+      setEmprestimos((prev) =>
+        prev.filter((emp) => emp.id_emprestimo !== id_emprestimo)
+      );
     } catch (erro) {
       console.error("Erro ao excluir empréstimo:", erro);
       alert("Erro ao excluir empréstimo.");
@@ -171,7 +197,9 @@ function Emprestimo() {
 
       setEmprestimos((prev) =>
         prev.map((emp) =>
-          emp.id_emprestimo === id_emprestimo ? { ...emp, foi_devolvido: true } : emp
+          emp.id_emprestimo === id_emprestimo
+            ? { ...emp, foi_devolvido: true }
+            : emp
         )
       );
     } catch (erro) {
@@ -211,32 +239,34 @@ function Emprestimo() {
 
         <div className="flex flex-col w-full rounded-md mt-10 mb-5">
           <div className="flex justify-center gap-5 flex-wrap w-full">
-            {
-              carregando ? (
-                <p className="text-center w-full text-gray-600 mt-8" > Carregando empréstimos...</p>
-              ) : emprestimosFiltrados.length > 0 ? (
-                emprestimosFiltrados.map((emp) => (
-                  <CardEmprestimo
-                    key={emp.id_emprestimo}
-                    id_emprestimo={emp.id_emprestimo}
-                    titulo={emp.titulo}
-                    registro_academico={emp.registro_academico}
-                    data_emprestimo={emp.data_emprestimo}
-                    data_devolucao={emp.data_devolucao}
-                    foi_devolvido={emp.foi_devolvido}
-                    onExcluir={handleExcluirEmprestimo}
-                    onDevolver={handleDevolverEmprestimo}
-                  />
-                ))
-              ) : (
-                <p className="text-center w-full text-gray-600 mt-8">
-                  Nenhum empréstimo encontrado.
-                </p>
-              )}
+            {carregando ? (
+              <p className="text-center w-full text-gray-600 mt-8">
+                Carregando empréstimos...
+              </p>
+            ) : emprestimosFiltrados.length > 0 ? (
+              emprestimosFiltrados.map((emp) => (
+                <CardEmprestimo
+                  key={emp.id_emprestimo}
+                  id_emprestimo={emp.id_emprestimo}
+                  titulo={emp.titulo}
+                  registro_academico={emp.registro_academico}
+                  data_emprestimo={emp.data_emprestimo}
+                  data_devolucao={emp.data_devolucao}
+                  data_devolucao_efetiva={emp.data_devolucao_efetiva}
+                  foi_devolvido={emp.foi_devolvido}
+                  onExcluir={handleExcluirEmprestimo}
+                  onDevolver={handleDevolverEmprestimo}
+                />
+              ))
+            ) : (
+              <p className="text-center w-full text-gray-600 mt-8">
+                Nenhum empréstimo encontrado.
+              </p>
+            )}
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 }
 
