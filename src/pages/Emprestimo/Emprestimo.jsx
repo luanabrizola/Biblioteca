@@ -11,6 +11,8 @@ function CardEmprestimo({
   foi_devolvido,
   onExcluir,
   onDevolver,
+  foi_pago,
+  onPagar,
 }) {
   const [verMais, setVerMais] = useState(false);
 
@@ -49,7 +51,7 @@ function CardEmprestimo({
   const { diasAtraso, valorDivida } = calcularAtrasoEDivida();
 
   const definirStatus = () => {
-    if (foi_devolvido && data_devolucao && data_devolucao_efetiva) {
+    if (foi_devolvido, data_devolucao, data_devolucao_efetiva) {
       const prevista = new Date(data_devolucao).toISOString().split("T")[0];
       const efetiva = new Date(data_devolucao_efetiva).toISOString().split("T")[0];
 
@@ -58,6 +60,10 @@ function CardEmprestimo({
       } else {
         return "Concluído";
       }
+    }
+
+    if(foi_pago){
+      return "Concluído"
     }
 
     const hoje = new Date();
@@ -85,11 +91,31 @@ function CardEmprestimo({
         )}
       </p>
 
+
+      {verMais && valorDivida > 0 && foi_devolvido && (
+        <>
+          {!foi_pago ? (
+            <button
+              onClick={() => onPagar(id_emprestimo)}
+              className="mt-2 px-3 py-1 text-sm text-white bg-green-600 rounded hover:bg-green-700"
+            >
+              Marcar como paga
+            </button>
+          ) : (
+            <p className="text-green-700 mt-2">Dívida paga.</p>
+          )}
+        </>
+      )}
+
       {verMais && diasAtraso > 0 && (
         <div className="mt-2 text-red-600">
           <p><span className="font-bold">Dias de atraso:</span> {diasAtraso}</p>
           <p><span className="font-bold">Valor da dívida:</span> R$ {valorDivida.toFixed(2)}</p>
         </div>
+      )}
+
+      {verMais && foi_pago && (
+        <p className="mt-2 text-black">Devolução em dia.</p>
       )}
 
       {verMais && diasAtraso === 0 && foi_devolvido && (
@@ -208,6 +234,33 @@ function Emprestimo() {
     }
   };
 
+
+  const handlePagarDivida = async (id_emprestimo) => {
+    if (!window.confirm("Confirma o pagamento da dívida?")) return;
+
+    try {
+      const resposta = await fetch("http://localhost:3333/pagarDivida", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_emprestimo }),
+      });
+
+      const dados = await resposta.json();
+      if (!resposta.ok) throw new Error(dados.erro || "Erro ao pagar dívida");
+
+      setEmprestimos((prev) =>
+        prev.map((emp) =>
+          emp.id_emprestimo === id_emprestimo
+            ? { ...emp, foi_pago: true }
+            : emp
+        )
+      );
+    } catch (erro) {
+      console.error("Erro ao pagar dívida:", erro);
+      alert("Erro ao pagar dívida.");
+    }
+  };
+
   return (
     <div className="flex flex-1 w-full min-h-screen font-poppins bg-[#f0e7c2]">
       <div className="w-full px-10 flex flex-col items-center">
@@ -256,6 +309,8 @@ function Emprestimo() {
                   foi_devolvido={emp.foi_devolvido}
                   onExcluir={handleExcluirEmprestimo}
                   onDevolver={handleDevolverEmprestimo}
+                  onPagar={handlePagarDivida} 
+                  foi_pago={emp.foi_pago}
                 />
               ))
             ) : (
