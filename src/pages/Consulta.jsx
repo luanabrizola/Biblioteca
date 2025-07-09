@@ -122,7 +122,15 @@ function Consulta() {
 
     const [livros, setLivros] = useState([]);
     const [busca, setBusca] = useState("");
+    const [tipoBusca, setTipoBusca] = useState("titulo");
+    const [buscaFinal, setBuscaFinal] = useState("");
     const [carregando, setCarregando] = useState(true);
+
+    useEffect(() => {
+        if (busca.trim() === "") {
+            setBuscaFinal("");
+        }
+    }, [busca]);
 
     useEffect(() => {
         async function carregarLivros() {
@@ -142,9 +150,36 @@ function Consulta() {
         carregarLivros();
     }, [])
 
-    const livrosFiltrados = livros.filter((livro) =>
-        livro.titulo.toLowerCase().includes(busca.toLowerCase())
-    );
+    const removerAcentos = (texto) => {
+        // texto.normalize("NFD").replace(/[^a-zA-Z\s]/g, "");
+        return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    }
+
+    const livrosFiltrados = livros.filter((livro) => {
+        const buscaLower = removerAcentos(buscaFinal.toLowerCase());
+      
+        switch (tipoBusca) {
+          case "titulo":
+            return removerAcentos(livro.titulo).includes(buscaLower);
+      
+          case "autor":
+            return livro.autores?.some((autor) =>
+              removerAcentos(autor.nome_autor).includes(buscaLower)
+            );
+      
+          case "editora":
+            return livro.editora && removerAcentos(livro.editora.nome).includes(buscaLower);
+      
+          case "categoria":
+            return livro.categorias?.some((categoria) =>
+              removerAcentos(categoria.nome_categoria).includes(buscaLower)
+            );
+      
+          default:
+            return false;
+        }
+      });
+      
 
     return (
 
@@ -156,34 +191,39 @@ function Consulta() {
                         className="flex w-full justify-center md:gap-4 mt-24 md:mt-12 flex-wrap"
                         onSubmit={(e) => {
                             e.preventDefault();
+                            setBuscaFinal(busca);
                         }}
                     >
-                    <input
+                        <input
                             className="bg-[#5b3011]/48 rounded-full md:w-[74%] h-12 placeholder:text-[#5b3011]/44 px-3 hidden md:flex"
                             type="text"
                             placeholder="Pesquise por um livro"
+                            value={busca}
                             onChange={(e) => setBusca(e.target.value)}
                         />
-                    <div className="w-full md:hidden flex justify-center space-x-2 h-12 mb-4">
-                        <input
-                            className="bg-[#5b3011]/48 rounded-full w-[80%] h-12 placeholder:text-[#5b3011]/44 px-3 flex md:hidden"
-                            type="text"
-                            placeholder="Pesquise por um livro"
-                            onChange={(e) => setBusca(e.target.value)}
-                        />
-                        <button
-                            className="bg-[#5b3011]/48 text-white rounded-full h-12 w-12 flex items-center justify-center cursor-pointer md:hidden"
-                        >
-                            <span className="material-icons">search</span>
-                        </button>
-                    </div>
-                        <select name="select" id="0" className="bg-[#5b3011]/48 text-white rounded-full h-12 w-36 md:w-40 font-poppins px-3 cursor-pointer">
-                            <option value="0">Busca livre</option>
-                            <option value="1">Título</option>
-                            <option value="2">Autor</option>
-                            <option value="3">Editora</option>
-                            <option value="4">Categoria</option>
-                            <option value="5">Subcategoria</option>
+                        <div className="w-full md:hidden flex justify-center space-x-2 h-12 mb-4">
+                            <input
+                                className="bg-[#5b3011]/48 rounded-full w-[80%] h-12 placeholder:text-[#5b3011]/44 px-3 flex md:hidden"
+                                type="text"
+                                placeholder="Pesquise por um livro"
+                                value={busca}
+                                onChange={(e) => setBusca(e.target.value)}
+                            />
+                            <button
+                                className="bg-[#5b3011]/48 text-white rounded-full h-12 w-12 flex items-center justify-center cursor-pointer md:hidden"
+                            >
+                                <span className="material-icons">search</span>
+                            </button>
+                        </div>
+                        <select name="select" 
+                            id="0" 
+                            value={tipoBusca}
+                            onChange={(e) => setTipoBusca(e.target.value)} 
+                            className="bg-[#5b3011]/48 text-white rounded-full h-12 w-36 md:w-40 font-poppins px-3 cursor-pointer">
+                            <option value="titulo">Título</option>
+                            <option value="autor">Autor</option>
+                            <option value="editora">Editora</option>
+                            <option value="categoria">Categoria</option>
                         </select>
                         <button className="bg-[#5b3011]/48 text-white rounded-full h-12 w-12 items-center justify-center cursor-pointer hidden md:flex">
                             <span className="material-icons">search</span>
@@ -195,8 +235,8 @@ function Consulta() {
                         {
                             carregando ? (
                                 <p className="text-center w-full text-gray-600 mt-8" > Carregando livros...</p>
-                            ) : livros.length > 0 ? (
-                                livros.map((livro) => (
+                            ) : livrosFiltrados.length > 0 ? (
+                                livrosFiltrados.map((livro) => (
                                     <CardLivro key={livro.id_livro} {...livro} />
                                 ))
                             ) : (

@@ -55,7 +55,7 @@ function CardEmprestimo({
       const prevista = new Date(data_devolucao).toISOString().split("T")[0];
       const efetiva = new Date(data_devolucao_efetiva).toISOString().split("T")[0];
 
-      if (efetiva > prevista) {
+      if (efetiva > prevista && !foi_pago) {
         return "Pagamento necessário";
       } else {
         return "Concluído";
@@ -107,7 +107,7 @@ function CardEmprestimo({
         </>
       )}
 
-      {verMais && diasAtraso > 0 && (
+      {verMais && diasAtraso > 0 && !foi_pago &&(
         <div className="mt-2 text-red-600">
           <p><span className="font-bold">Dias de atraso:</span> {diasAtraso}</p>
           <p><span className="font-bold">Valor da dívida:</span> R$ {valorDivida.toFixed(2)}</p>

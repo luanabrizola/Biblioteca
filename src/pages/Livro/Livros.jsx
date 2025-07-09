@@ -38,8 +38,8 @@ function CardLivro({
   };
 
   async function handleSalvar() {
+    const formData = new FormData();
     try {
-      const formData = new FormData();
       formData.append("id_livro", id_livro);
       formData.append("titulo", form.titulo);
       formData.append("qtde_disponivel", form.qtde_disponivel);

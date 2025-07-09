@@ -219,8 +219,8 @@ function CadastrarLivro() {
     };
 
     return (
-        <div className="flex w-full h-full">
-            <div className="bg-[#f0e7c2] w-full h-full flex flex-col items-center justify-center">
+        <div className="flex flex-1 min-h-screen bg-[#f0e7c2]">
+            <div className=" w-full flex flex-col items-center justify-center">
                 <div className="flex flex-col items-center space-y-4 justify-center h-auto w-[60%] bg-white rounded-xl p-3">
                     <div className="flex items-center mt-2">
                         <img

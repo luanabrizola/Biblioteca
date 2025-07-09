@@ -69,13 +69,13 @@ function CardLivro({
         <div className="flex flex-col bg-white w-full sm:w-full md:w-full lg:w-[48%] h-auto mb-5 rounded-md p-4">
             <div className="flex">
                 <div className="flex justify-center items-center md:w-[30%] max-w-screen">
-                    <img src={`http://localhost:3333/imagens/${id_livro}.${caminho_foto_capa}`} alt="Capa do Livro" className="h-[220px] w-auto md:h-[250px] max-w-[250px]" />
+                    <img src={`http://localhost:3333/imagens/${id_livro}.${caminho_foto_capa}`} alt="Capa do Livro" className="h-[220px] w-auto md:ml-4 md:h-[250px] max-w-[250px]" />
                 </div>
                 <div className="ml-5 h-[100%] md:w-[70%] flex flex-col">
                     <h1 className="text-xl font-bold mb-2 text-center break-words">{titulo}</h1>
-                    <p className="mb-1"><span className="font-bold">ISBN:</span> {isbn}</p>
-                    <p className="mb-1"><span className="font-bold">Edição:</span> {edicao}</p>
-                    <p><span className="font-bold">Quantidade Disponível:</span> {qtde_disponivel}</p>
+                    <p className="mb-1 md:ml-2"><span className="font-bold">ISBN:</span> {isbn}</p>
+                    <p className="mb-1 md:ml-2"><span className="font-bold">Edição:</span> {edicao}</p>
+                    <p><span className="font-bold md:ml-2">Quantidade Disponível:</span> {qtde_disponivel}</p>
 
                     <div className="flex flex-col justify-end h-full">
                         <button
